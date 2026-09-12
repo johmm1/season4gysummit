@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+GY Summit 2026 | System Settings
+
+</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="../assets/css/settings.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- =====================================================
+SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img src="../assets/images/logo.png" alt="GY Summit">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Admin Panel
+
+</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-transfer"></i>
+
+Finance
+
+</a>
+
+<a href="admissions.html">
+
+<i class="fa-solid fa-qrcode"></i>
+
+Admissions
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a class="active" href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<p>
+
+PCEA Githunguri Presbytery
+
+</p>
+
+<small>
+
+GY Summit 2026
+
+</small>
+
+</div>
+
+</aside>
+
+<!-- =====================================================
+MAIN CONTENT
+===================================================== -->
+
+<main class="admin-main">
+
+<header class="admin-header">
+
+<div>
+
+<h1>
+
+System Settings
+
+</h1>
+
+<p>
+
+Platform-wide configuration — authentication, backups, and monitoring. Everything else moved to the page it belongs to (Finance settings on Finance, Sports rules on Sports, and so on).
+
+</p>
+
+</div>
+
+<div class="admin-profile">
+
+<img src="../assets/images/admin.png"
+alt="Admin">
+
+<div>
+
+<h4 id="adminName">
+
+Admin
+
+</h4>
+
+<span id="adminRole">
+
+Online
+
+</span>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</header>
+
+<!-- =====================================================
+SAVE BAR
+===================================================== -->
+
+<div class="settings-save-bar">
+
+<div>
+
+<h3>
+
+System Configuration
+
+</h3>
+
+<p>
+
+Changes are saved directly to the database.
+
+</p>
+
+</div>
+
+<div class="save-actions">
+
+<button
+class="btn btn-outline"
+id="resetSettings">
+
+<i class="fa-solid fa-rotate-left"></i>
+
+Reset
+
+</button>
+
+<button
+class="btn btn-primary"
+id="saveSettings">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Changes
+
+</button>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+SETTINGS NAVIGATION
+===================================================== -->
+
+<div class="settings-tabs">
+
+<button class="settings-tab active"
+data-tab="security">
+
+Security
+
+</button>
+
+<button class="settings-tab"
+data-tab="backup">
+
+Backup
+
+</button>
+
+<button class="settings-tab"
+data-tab="system">
+
+System
+
+</button>
+
+<button class="settings-tab"
+data-tab="logs">
+
+Logs
+
+</button>
+
+</div>
+
+<section id="securityTab" class="settings-section active-section">
+
+<!-- =====================================================
+LOGIN SECURITY
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Authentication
+
+</h2>
+
+</div>
+
+<form id="authenticationForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Two-Factor Authentication (2FA)
+
+</strong>
+
+<p>
+
+Not available yet — no authenticator-app integration exists. Enabling this toggle would not actually protect accounts.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enable2FA"
+disabled>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Email Verification Required
+
+</strong>
+
+<p>
+
+All administrators must verify their email before logging in.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="emailVerification"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Remember Login
+
+</strong>
+
+<p>
+
+Allow trusted devices to stay signed in.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="rememberLogin">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_authenticationForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<!-- =====================================================
+PASSWORD POLICY
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Password Policy
+
+</h2>
+
+</div>
+
+<form id="passwordPolicyForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Minimum Password Length
+
+</label>
+
+<input
+type="number"
+id="passwordLength"
+value="8"
+min="6">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Password Expiry (Days)
+
+</label>
+
+<input
+type="number"
+id="passwordExpiry"
+value="90">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Maximum Login Attempts
+
+</label>
+
+<input
+type="number"
+id="loginAttempts"
+value="5">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Lockout Duration (Minutes)
+
+</label>
+
+<input
+type="number"
+id="lockoutDuration"
+value="15">
+
+</div>
+
+</div>
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Uppercase Letters
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="requireUppercase" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Numbers
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="requireNumbers" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Special Characters
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="requireSpecialChars" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_passwordPolicyForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<!-- =====================================================
+SESSION MANAGEMENT
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Session Management
+
+</h2>
+
+</div>
+
+<form id="sessionManagementForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Session Timeout (Minutes)
+
+</label>
+
+<input
+type="number"
+id="sessionTimeout"
+value="30">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Idle Logout (Minutes)
+
+</label>
+
+<input
+type="number"
+id="idleTimeout"
+value="20">
+
+</div>
+
+</div>
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Force Logout on Password Change
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="forceLogoutOnPasswordChange" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Multiple Sessions
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="allowMultipleSessions">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_sessionManagementForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<!-- =====================================================
+AUDIT & SECURITY LOGS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Security Monitoring
+
+</h2>
+
+</div>
+
+<form id="securityMonitoringForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Record Login History
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="recordLoginHistory" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Record IP Addresses
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="recordIpAddresses" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Notify on Suspicious Login
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="notifySuspiciousLogin" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Audit Logs
+
+</strong>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="enableAuditLogs" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_securityMonitoringForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section><!-- =====================================================
+BACKUP & RESTORE
+===================================================== -->
+
+<section id="backupTab" class="settings-section">
+
+<!-- =====================================================
+AUTOMATIC BACKUPS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Automatic Backups
+
+</h2>
+
+</div>
+
+<form id="automaticBackupsForm">
+
+<p style="padding:0 4px 12px;color:#888;font-size:.85rem;">
+
+These preferences are saved for when scheduled backups are enabled. Right now, backups only happen when you click "Run Backup Now" below.
+
+</p>
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Automatic Backups
+
+</strong>
+
+<p>
+
+Automatically backup the database.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="autoBackup"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Backup Uploaded Files
+
+</strong>
+
+<p>
+
+Include gallery, certificates and documents.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="backupStorage"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Backup Authentication Records
+
+</strong>
+
+<p>
+
+Store administrator and participant login records.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="backupAuth"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Backup Frequency
+
+</label>
+
+<select id="backupFrequency">
+
+<option value="daily">
+
+Daily
+
+</option>
+
+<option value="weekly">
+
+Weekly
+
+</option>
+
+<option value="monthly">
+
+Monthly
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Retention Period (Days)
+
+</label>
+
+<input
+type="number"
+id="backupRetention"
+value="30">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_automaticBackupsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<!-- =====================================================
+MANUAL BACKUPS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Manual Backup
+
+</h2>
+
+</div>
+
+<div class="quick-actions">
+
+<button class="btn btn-primary" id="createBackupBtn">
+
+<i class="fa-solid fa-database"></i>
+
+Create Database Backup
+
+</button>
+
+<button class="btn btn-outline" disabled title="Storage already keeps gallery originals — a separate gallery backup isn't implemented">
+
+<i class="fa-solid fa-images"></i>
+
+Backup Gallery
+
+</button>
+
+<button class="btn btn-outline" disabled title="Certificates are generated on demand, not stored — nothing to back up">
+
+<i class="fa-solid fa-file"></i>
+
+Backup Certificates
+
+</button>
+
+<button class="btn btn-outline" disabled title="Not implemented — use the database backup above">
+
+<i class="fa-solid fa-download"></i>
+
+Download Full Backup
+
+</button>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+RESTORE
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Restore System
+
+</h2>
+
+</div>
+
+<p style="padding:0 4px 16px;color:#888;font-size:.9rem;">
+
+Restoring overwrites live data and can't be undone from this screen. This isn't wired up — if you need to restore a backup, do it directly against the database with your database administrator.
+
+</p>
+
+<div class="form-grid">
+
+<div class="form-group full-width">
+
+<label>
+
+Restore Backup File
+
+</label>
+
+<input
+type="file"
+accept=".zip,.sql,.json"
+disabled>
+
+</div>
+
+</div>
+
+<div class="quick-actions">
+
+<button class="btn btn-danger" disabled title="Not available — restore directly against the database instead">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+Restore System
+
+</button>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+LAST BACKUPS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Backup History
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Type</th>
+
+<th>Size</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="backupHistory">
+
+<!-- Database & Storage -->
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section><!-- =====================================================
+SYSTEM SETTINGS
+===================================================== -->
+
+<section id="systemTab" class="settings-section">
+
+<!-- =====================================================
+SYSTEM INFORMATION
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+System Information
+
+</h2>
+
+</div>
+
+<div class="system-grid">
+
+<div class="system-card">
+
+<h4>Application Version</h4>
+
+<p id="systemVersion">GY Summit v1.0.0</p>
+
+</div>
+
+<div class="system-card">
+
+<h4>Environment</h4>
+
+<p id="environment">Production</p>
+
+</div>
+
+<div class="system-card">
+
+<h4>Deployment</h4>
+
+<p id="deploymentInfo">Node.js / Express</p>
+
+</div>
+
+<div class="system-card">
+
+<h4>Database</h4>
+
+<p id="databaseInfo">PostgreSQL (Supabase)</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+BACKEND SERVICES
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Backend Services
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Service</th>
+
+<th>Status</th>
+
+<th>Last Check</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Database</td>
+
+<td><span class="status" id="dbStatus">Checking…</span></td>
+
+<td id="dbStatusTime">--</td>
+
+</tr>
+
+<tr>
+
+<td>Authentication</td>
+
+<td><span class="status" id="authStatus">Checking…</span></td>
+
+<td id="authStatusTime">--</td>
+
+</tr>
+
+<tr>
+
+<td>Storage</td>
+
+<td><span class="status" id="storageStatus">Checking…</span></td>
+
+<td id="storageStatusTime">--</td>
+
+</tr>
+
+<tr>
+
+<td>Storage (Media)</td>
+
+<td><span class="status" id="cloudinaryStatus">Checking…</span></td>
+
+<td id="cloudinaryStatusTime">--</td>
+
+</tr>
+
+<tr>
+
+<td>M-Pesa (Daraja)</td>
+
+<td><span class="status" id="mpesaStatus">Checking…</span></td>
+
+<td id="mpesaStatusTime">--</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+SYSTEM PERFORMANCE
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Performance
+
+</h2>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h3 id="storageUsed">
+
+--
+
+</h3>
+
+<p>
+
+Storage Used
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3 id="databaseSize">
+
+--
+
+</h3>
+
+<p>
+
+Database Size
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3 id="activeUsers">
+
+--
+
+</h3>
+
+<p>
+
+Registered Participants
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3 id="apiRequests">
+
+--
+
+</h3>
+
+<p>
+
+Today's API Requests
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+CACHE
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+System Cache
+
+</h2>
+
+</div>
+
+<div class="quick-actions">
+
+<button class="btn btn-outline" disabled title="No caching layer exists in this stack — there's nothing to clear">
+
+<i class="fa-solid fa-broom"></i>
+
+Clear Cache
+
+</button>
+
+<button class="btn btn-outline" disabled title="Media is served directly from storage — no local image cache exists">
+
+<i class="fa-solid fa-image"></i>
+
+Clear Image Cache
+
+</button>
+
+<button class="btn btn-outline" disabled title="No temporary file storage exists to clear">
+
+<i class="fa-solid fa-file"></i>
+
+Clear Temporary Files
+
+</button>
+
+<button class="btn btn-outline" disabled title="Restarting the server from within itself isn't safe to expose here — restart it from your process manager (PM2, systemd, etc.)">
+
+<i class="fa-solid fa-rotate"></i>
+
+Restart Services
+
+</button>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+SYSTEM HEALTH
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Health Monitor
+
+</h2>
+
+</div>
+
+<div class="health-grid">
+
+<div class="health-item">
+
+<label>CPU</label>
+
+<progress value="0" max="100" id="cpuUsage"></progress>
+
+<span id="cpuValue">--%</span>
+
+</div>
+
+<div class="health-item">
+
+<label>Memory</label>
+
+<progress value="0" max="100" id="memoryUsage"></progress>
+
+<span id="memoryValue">--%</span>
+
+</div>
+
+<div class="health-item">
+
+<label>Storage</label>
+
+<progress value="0" max="100" id="diskUsage"></progress>
+
+<span id="diskValue">--%</span>
+
+</div>
+
+<div class="health-item">
+
+<label>Bandwidth</label>
+
+<progress value="0" max="100" id="networkUsage"></progress>
+
+<span id="networkValue">--%</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+MAINTENANCE
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Maintenance
+
+</h2>
+
+</div>
+
+<form id="maintenanceForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Maintenance Mode
+
+</strong>
+
+<p>
+
+Temporarily disable participant access.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="maintenance">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Read Only Mode
+
+</strong>
+
+<p>
+
+Prevent data modifications.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="readonlyMode">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_maintenanceForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section><!-- =====================================================
+AUDIT LOGS
+===================================================== -->
+
+<section id="auditTab" class="settings-section">
+
+<!-- =====================================================
+AUDIT FILTERS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Audit Logs
+
+</h2>
+
+<p>
+
+Tracks logins, settings changes, admin account creation, gallery approvals/deletions, sports roster changes, and backups. Other modules aren't instrumented yet.
+
+</p>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Administrator
+
+</label>
+
+<select id="auditAdminFilter">
+
+<option value="">All Administrators</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Module
+
+</label>
+
+<select id="auditModuleFilter">
+
+<option value="">All Modules</option>
+
+<option value="auth">Authentication</option>
+
+<option value="settings">Settings</option>
+
+<option value="gallery">Gallery</option>
+
+<option value="sports_roster">Sports Roster</option>
+
+<option value="admin_account">Admin Accounts</option>
+
+<option value="backup">Backup</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Action
+
+</label>
+
+<select id="auditActionFilter">
+
+<option value="">All Actions</option>
+
+<option value="LOGIN">Login</option>
+
+<option value="LOGIN_FAILED">Login Failed</option>
+
+<option value="SETTINGS_UPDATED">Settings Updated</option>
+
+<option value="ADMIN_CREATED">Admin Created</option>
+
+<option value="GALLERY_APPROVED">Gallery Approved</option>
+
+<option value="GALLERY_DELETED">Gallery Deleted</option>
+
+<option value="ROSTER_MEMBER_ADDED">Roster Member Added</option>
+
+<option value="ROSTER_MEMBER_REMOVED">Roster Member Removed</option>
+
+<option value="BACKUP_CREATED">Backup Created</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Date
+
+</label>
+
+<input
+type="date"
+id="auditDateFilter">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+AUDIT TABLE
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Activity Log
+
+</h2>
+
+<button class="btn btn-outline" id="exportAuditLogs">
+
+<i class="fa-solid fa-file-export"></i>
+
+Export Logs
+
+</button>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Date & Time</th>
+
+<th>Administrator</th>
+
+<th>Module</th>
+
+<th>Action</th>
+
+<th>Description</th>
+
+<th>IP Address</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="auditLogsTable">
+
+<!-- Loaded from the API -->
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+SECURITY EVENTS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Security Events
+
+</h2>
+
+</div>
+
+<div class="timeline">
+
+<div id="securityEvents">
+
+<!-- Dynamic -->
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+SYSTEM STATISTICS
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Audit Statistics
+
+</h2>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h3 id="todayLogs">
+
+0
+
+</h3>
+
+<p>
+
+Today's Activities
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3 id="failedLogins">
+
+0
+
+</h3>
+
+<p>
+
+Failed Logins
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3 id="activeAdmins">
+
+0
+
+</h3>
+
+<p>
+
+Admins Active (24h)
+
+</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3 id="securityAlerts">
+
+0
+
+</h3>
+
+<p>
+
+Security Alerts
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+LOG RETENTION
+===================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Audit Log Retention
+
+</h2>
+
+</div>
+
+<form id="auditRetentionForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Keep Logs For
+
+</label>
+
+<select id="logRetention">
+
+<option value="30">30 Days</option>
+
+<option value="90">90 Days</option>
+
+<option value="180">180 Days</option>
+
+<option value="365">1 Year</option>
+
+<option value="-1">Never Delete</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Maximum Records
+
+</label>
+
+<input
+type="number"
+id="maximumAuditRecords"
+value="100000">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_auditRetentionForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+<div class="quick-actions">
+
+<button class="btn btn-danger" id="deleteOldLogsBtn">
+
+<i class="fa-solid fa-trash"></i>
+
+Delete Old Logs
+
+</button>
+
+<button class="btn btn-primary" id="downloadAuditReportBtn">
+
+<i class="fa-solid fa-download"></i>
+
+Download Full Audit Report
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module" src="../assets/js/settings.js"></script>
+
+</body>
+</html>

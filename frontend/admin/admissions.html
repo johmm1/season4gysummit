@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admissions | GY Summit 2026</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="../assets/css/admissions.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img src="../assets/images/logo.png" alt="GY Summit">
+
+<h2>GY Summit</h2>
+
+<p>Admission Centre</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-transfer"></i>
+
+Finance
+
+</a>
+
+<a class="active" href="admissions.html">
+
+<i class="fa-solid fa-door-open"></i>
+
+Admissions
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<main class="admin-main">
+
+<header class="admin-header">
+
+<div>
+
+<h1>
+
+Admission Control Centre
+
+</h1>
+
+<p>
+
+Scan, verify and admit participants in real time.
+
+</p>
+
+</div>
+
+<div class="header-status">
+
+<div class="live-indicator">
+
+<span class="live-dot"></span>
+
+LIVE
+
+</div>
+
+<div class="current-time">
+
+<h3 id="liveClock">
+
+09:30:00
+
+</h3>
+
+<small>
+
+GY Summit 2026
+
+</small>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out" style="margin-left:16px;">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</header>
+
+<!-- ======================================================
+SEARCH BAR
+====================================================== -->
+
+<div class="dashboard-search">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+type="text"
+id="globalSearch"
+placeholder="Search participant, admission code or phone number...">
+
+</div>
+
+<!-- ======================================================
+LIVE STATISTICS
+====================================================== -->
+
+<section class="overview-grid">
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div>
+
+<h2 id="expectedCount">
+
+0
+
+</h2>
+
+<p>
+
+Expected Participants
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-user-check"></i>
+
+</div>
+
+<div>
+
+<h2 id="checkedInCount">
+
+0
+
+</h2>
+
+<p>
+
+Checked In
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-hourglass-half"></i>
+
+</div>
+
+<div>
+
+<h2 id="remainingCount">
+
+0
+
+</h2>
+
+<p>
+
+Remaining
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-right-to-bracket"></i>
+
+</div>
+
+<div>
+
+<h2 id="reEntryCount">
+
+0
+
+</h2>
+
+<p>
+
+Re-Entries
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+</div>
+
+<div>
+
+<h2 id="rejectedCount">
+
+0
+
+</h2>
+
+<p>
+
+Rejected
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+</div>
+
+<div>
+
+<h2 id="medicalCount">
+
+0
+
+</h2>
+
+<p>
+
+Medical Alerts
+
+</p>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+ADMISSION DESK
+====================================================== -->
+
+<section class="admission-workspace">
+
+<!-- ======================================================
+QR SCANNER
+====================================================== -->
+
+<div class="scanner-card">
+
+<div class="card-header">
+
+<h2>
+
+QR Code Scanner
+
+</h2>
+
+<span class="status active">
+
+READY
+
+</span>
+
+</div>
+
+<div class="scanner-window">
+
+<div class="scanner-frame">
+
+<div class="scan-line"></div>
+
+</div>
+
+<i class="fa-solid fa-qrcode scanner-icon"></i>
+
+<p>
+
+Scan the participant's Admission Pass QR Code.
+
+</p>
+
+</div>
+
+<div class="scanner-actions">
+
+<button class="btn btn-primary"
+id="startScanner">
+
+<i class="fa-solid fa-camera"></i>
+
+Start Camera
+
+</button>
+
+<button class="btn btn-outline"
+id="stopScanner">
+
+<i class="fa-solid fa-stop"></i>
+
+Stop
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+MANUAL VERIFICATION
+====================================================== -->
+
+<div class="manual-card">
+
+<div class="card-header">
+
+<h2>
+
+Manual Verification
+
+</h2>
+
+</div>
+
+<label>
+
+Admission Code
+
+</label>
+
+<div class="manual-search">
+
+<input
+type="text"
+id="admissionCode"
+placeholder="GY26-00045">
+
+<button
+class="btn btn-primary"
+id="verifyCode">
+
+Verify
+
+</button>
+
+</div>
+
+<label>
+
+Participant Name
+
+</label>
+
+<div class="manual-search">
+
+<input
+type="text"
+id="participantNameSearch"
+placeholder="Search by participant name">
+
+<button
+class="btn btn-outline">
+
+Search
+
+</button>
+
+</div>
+
+<label>
+
+Phone Number
+
+</label>
+
+<div class="manual-search">
+
+<input
+type="text"
+id="phoneSearch"
+placeholder="07XXXXXXXX">
+
+<button
+class="btn btn-outline">
+
+Search
+
+</button>
+
+</div>
+
+<div class="quick-information">
+
+<div>
+
+<strong>
+
+Scanner
+
+</strong>
+
+<p class="success">
+
+Ready
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Internet
+
+</strong>
+
+<p class="success">
+
+Connected
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Database
+
+</strong>
+
+<p class="success">
+
+Online
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Today's Admissions
+
+</strong>
+
+<p id="todayAdmissions">
+
+0
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+READY TO SCAN
+====================================================== -->
+
+<section
+id="readyState"
+class="dashboard-panel">
+
+<div class="ready-state">
+
+<div class="ready-icon">
+
+<i class="fa-solid fa-qrcode"></i>
+
+</div>
+
+<h2>
+
+Ready to Scan
+
+</h2>
+
+<p>
+
+Scan a QR Code or enter an Admission Code to retrieve participant details.
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+PARTICIPANT PANEL
+(HIDDEN UNTIL A PARTICIPANT IS FOUND)
+====================================================== -->
+
+<section
+id="verificationPanel"
+class="verification-panel hidden"><!-- ======================================================
+PARTICIPANT VERIFICATION
+====================================================== -->
+
+<div class="card-header">
+
+<h2>
+
+Participant Verification
+
+</h2>
+
+<span id="verificationBadge"
+class="status active">
+
+READY FOR ADMISSION
+
+</span>
+
+</div>
+
+<div class="verification-layout">
+
+<!-- PHOTO -->
+
+<div class="verification-photo">
+
+<img
+
+id="participantPhoto"
+
+src="../assets/images/default-user.png"
+
+alt="Participant">
+
+</div>
+
+<!-- DETAILS -->
+
+<div class="verification-details">
+
+<h2 id="participantName">
+
+Participant Name
+
+</h2>
+
+<div class="detail-grid">
+
+<div>
+
+<label>Admission Code</label>
+
+<p id="participantCode">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Parish</label>
+
+<p id="participantParish">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Church</label>
+
+<p id="participantChurch">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Gender</label>
+
+<p id="participantGender">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Age</label>
+
+<p id="participantAge">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Phone Number</label>
+
+<p id="participantPhone">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Email</label>
+
+<p id="participantEmail">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>ID Number</label>
+
+<p id="participantId">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Payment Status</label>
+
+<p>
+
+<span id="paymentStatus"
+
+class="badge success">
+
+PAID
+
+</span>
+
+</p>
+
+</div>
+
+<div>
+
+<label>Registration</label>
+
+<p>
+
+<span id="registrationStatus"
+
+class="badge success">
+
+REGISTERED
+
+</span>
+
+</p>
+
+</div>
+
+<div>
+
+<label>Admission Status</label>
+
+<p>
+
+<span id="admissionStatus"
+
+class="badge warning">
+
+NOT ADMITTED
+
+</span>
+
+</p>
+
+</div>
+
+<div>
+
+<label>Arrival Time</label>
+
+<p id="arrivalTime">
+
+--
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+MEDICAL INFORMATION
+====================================================== -->
+
+<div id="medicalAlert"
+
+class="medical-alert hidden">
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+<div>
+
+<h3>
+
+Medical Information
+
+</h3>
+
+<p id="medicalCondition">
+
+No medical condition recorded.
+
+</p>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+EMERGENCY CONTACT
+====================================================== -->
+
+<div class="emergency-card">
+
+<h3>
+
+Emergency Contact
+
+</h3>
+
+<div class="detail-grid">
+
+<div>
+
+<label>Contact Person</label>
+
+<p id="emergencyName">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Relationship</label>
+
+<p id="emergencyRelationship">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Phone Number</label>
+
+<p id="emergencyPhone">
+
+—
+
+</p>
+
+</div>
+
+<div>
+
+<label>Alternative Phone</label>
+
+<p id="emergencyPhone2">
+
+—
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+EVENT PARTICIPATION
+====================================================== -->
+
+<div class="event-card">
+
+<h3>
+
+Activities Registration
+
+</h3>
+
+<div class="detail-grid">
+
+<div>
+
+<label>Football</label>
+
+<p id="footballTeam">
+
+Not Registered
+
+</p>
+
+</div>
+
+<div>
+
+<label>Volleyball</label>
+
+<p id="volleyballTeam">
+
+Not Registered
+
+</p>
+
+</div>
+
+<div>
+
+<label>Dance Ministry</label>
+
+<p id="danceTeam">
+
+Not Registered
+
+</p>
+
+</div>
+
+<div>
+
+<label>Choir</label>
+
+<p id="choirTeam">
+
+Not Registered
+
+</p>
+
+</div>
+
+</div>
+
+</div><!-- ======================================================
+ADMISSION ACTION CENTRE
+====================================================== -->
+
+<section id="admissionActions"
+class="dashboard-panel hidden">
+
+<div class="card-header">
+
+<h2>
+
+Admission Decision Centre
+
+</h2>
+
+<span class="status active">
+
+Verification Complete
+
+</span>
+
+</div>
+
+<div class="action-grid">
+
+<!-- ADMIT -->
+
+<button
+id="btnAdmit"
+class="action-card admit">
+
+<i class="fa-solid fa-user-check"></i>
+
+<h3>
+
+Admit
+
+</h3>
+
+<p>
+
+Grant access to the summit.
+
+</p>
+
+</button>
+
+<!-- RE-ENTRY -->
+
+<button
+id="btnReEntry"
+class="action-card reentry">
+
+<i class="fa-solid fa-right-to-bracket"></i>
+
+<h3>
+
+Re-entry
+
+</h3>
+
+<p>
+
+Participant returning after leaving.
+
+</p>
+
+</button>
+
+<!-- HOLD -->
+
+<button
+id="btnHold"
+class="action-card hold">
+
+<i class="fa-solid fa-circle-pause"></i>
+
+<h3>
+
+Hold
+
+</h3>
+
+<p>
+
+Temporarily hold participant.
+
+</p>
+
+</button>
+
+<!-- REJECT -->
+
+<button
+id="btnReject"
+class="action-card reject">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+<h3>
+
+Reject
+
+</h3>
+
+<p>
+
+Deny admission.
+
+</p>
+
+</button>
+
+</div>
+
+<!-- ======================================================
+OFFICER NOTES
+====================================================== -->
+
+<div class="dashboard-panel mt-25">
+
+<h3>
+
+Admission Officer Notes
+
+</h3>
+
+<textarea
+
+id="officerNotes"
+
+rows="4"
+
+placeholder="Write any notes regarding this participant...">
+
+</textarea>
+
+</div>
+
+<!-- ======================================================
+ACTION SUMMARY
+====================================================== -->
+
+<div class="action-summary">
+
+<div>
+
+<label>
+
+Admission Officer
+
+</label>
+
+<p id="officerName">
+
+Super Administrator
+
+</p>
+
+</div>
+
+<div>
+
+<label>
+
+Decision Time
+
+</label>
+
+<p id="decisionTime">
+
+--
+
+</p>
+
+</div>
+
+<div>
+
+<label>
+
+Current Status
+
+</label>
+
+<p>
+
+<span
+id="decisionStatus"
+class="badge warning">
+
+Awaiting Decision
+
+</span>
+
+</p>
+
+</div>
+
+<div>
+
+<label>
+
+Scanning Device
+
+</label>
+
+<p>
+
+Main Gate Scanner
+
+</p>
+
+</div>
+
+<div>
+
+<label>
+
+Verification Method
+
+</label>
+
+<p id="verificationMethod">
+
+QR Code
+
+</p>
+
+</div>
+
+<div>
+
+<label>
+
+Admission Gate
+
+</label>
+
+<p>
+
+Gate A
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+TODAY'S OPERATIONS
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="card-header">
+
+<h2>
+
+Today's Operations
+
+</h2>
+
+</div>
+
+<div class="operations-overview">
+
+<div class="operation-box">
+
+<i class="fa-solid fa-stopwatch"></i>
+
+<div>
+
+<h3 id="averageAdmissionTime">
+
+6 sec
+
+</h3>
+
+<p>
+
+Average Admission Time
+
+</p>
+
+</div>
+
+</div>
+
+<div class="operation-box">
+
+<i class="fa-solid fa-user-shield"></i>
+
+<div>
+
+<h3 id="activeOfficers">
+
+2
+
+</h3>
+
+<p>
+
+Admission Officers
+
+</p>
+
+</div>
+
+</div>
+
+<div class="operation-box">
+
+<i class="fa-solid fa-wifi"></i>
+
+<div>
+
+<h3 id="syncStatus">
+
+Synced
+
+</h3>
+
+<p>
+
+Database Status
+
+</p>
+
+</div>
+
+</div>
+
+<div class="operation-box">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+<div>
+
+<h3 id="lastSync">
+
+Just Now
+
+</h3>
+
+<p>
+
+Last Synchronization
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+LIVE ADMISSION FEED + PARISH ATTENDANCE
+====================================================== -->
+
+<section class="operations-grid">
+
+<!-- ======================================================
+LIVE ACTIVITY FEED
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="card-header">
+
+<h2>
+
+Live Admission Feed
+
+</h2>
+
+<span class="status active">
+
+LIVE
+
+</span>
+
+</div>
+
+<div id="admissionFeed" class="activity-feed">
+
+<div class="feed-empty">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+<h3>
+
+No Admissions Yet
+
+</h3>
+
+<p>
+
+Admission activities will appear here once participants begin checking in.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+PARISH ATTENDANCE
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="card-header">
+
+<h2>
+
+Parish Attendance
+
+</h2>
+
+<span class="status active">
+
+REAL TIME
+
+</span>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="attendance-table">
+
+<thead>
+
+<tr>
+
+<th>Parish</th>
+
+<th>Expected</th>
+
+<th>Checked In</th>
+
+<th>Remaining</th>
+
+</tr>
+
+</thead>
+
+<tbody id="attendanceTableBody">
+
+<!-- Generated automatically by admissions.js -->
+
+</tbody>
+
+<tfoot>
+
+<tr>
+
+<th>TOTAL</th>
+
+<th id="totalExpected">0</th>
+
+<th id="totalCheckedIn">0</th>
+
+<th id="totalRemaining">0</th>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+SYSTEM NOTIFICATION
+====================================================== -->
+
+<div
+id="notification"
+class="notification hidden">
+
+<i class="fa-solid fa-circle-check"></i>
+
+<span id="notificationMessage">
+
+Success
+
+</span>
+
+</div>
+
+<!-- ======================================================
+LOADING OVERLAY
+====================================================== -->
+
+<div
+id="loadingOverlay"
+class="loading-overlay hidden">
+
+<div class="loader-box">
+
+<div class="loader"></div>
+
+<h3>
+
+Processing...
+
+</h3>
+
+<p>
+
+Please wait.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+FOOTER
+====================================================== -->
+
+
+
+<!-- ======================================================
+ADMISSION SETTINGS (moved from the old monolithic Settings page)
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-gear"></i>
+
+Admission Settings
+
+</h2>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Admission Configuration
+
+</h2>
+
+</div>
+
+<form id="admissionSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Admission Code Prefix
+
+</label>
+
+<input
+type="text"
+id="admissionPrefix"
+placeholder="GY26">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Starting Admission Number
+
+</label>
+
+<input
+type="number"
+id="admissionStartNumber"
+min="1">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+QR Code Size (px)
+
+</label>
+
+<input
+type="number"
+id="qrSize"
+value="300">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Badge Size
+
+</label>
+
+<select id="badgeSize">
+
+<option value="a6">A6</option>
+<option value="a7">A7</option>
+<option value="credit-card">Card Size</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_admissionSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Check-in Rules
+
+</h2>
+
+</div>
+
+<form id="checkinRulesForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable QR Check-in
+
+</strong>
+
+<p>
+
+Participants can be admitted by scanning QR codes.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="enableQrCheckin">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Manual Check-in
+
+</strong>
+
+<p>
+
+Officials may admit participants manually.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="manualCheckin">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Re-entry
+
+</strong>
+
+<p>
+
+Participants can leave and return.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="allowReentry">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Prevent Duplicate Check-in
+
+</strong>
+
+<p>
+
+Blocks multiple admissions using the same QR code.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="preventDuplicate">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Payment Before Admission
+
+</strong>
+
+<p>
+
+Only verified payments may enter.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="requirePayment">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Profile Completion
+
+</strong>
+
+<p>
+
+Incomplete profiles cannot generate admission cards.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="requireProfile">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_checkinRulesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Admission Badge
+
+</h2>
+
+</div>
+
+<form id="badgeSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Badge Background
+
+</label>
+
+<input
+type="file"
+id="badgeBackground"
+accept=".png,.jpg,.jpeg">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Badge Logo
+
+</label>
+
+<input
+type="file"
+id="badgeLogo"
+accept=".png,.svg">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Primary Color
+
+</label>
+
+<input
+type="color"
+id="badgePrimaryColor">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Accent Color
+
+</label>
+
+<input
+type="color"
+id="badgeAccentColor">
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Footer Text
+
+</label>
+
+<textarea
+id="badgeFooter"
+rows="3"></textarea>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_badgeSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Gate Management
+
+</h2>
+
+</div>
+
+<form id="gateSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Number of Gates
+
+</label>
+
+<input
+type="number"
+id="numberOfGates"
+min="1">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Default Gate
+
+</label>
+
+<input
+type="text"
+id="defaultGate">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Maximum Concurrent Scanners
+
+</label>
+
+<input
+type="number"
+id="maxScanners">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Gate Closing Time
+
+</label>
+
+<input
+type="time"
+id="gateClosingTime">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_gateSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+<footer class="admin-footer">
+
+<p>
+
+© 2026 GY Summit Management System
+
+</p>
+
+<p>
+
+PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<!-- ======================================================
+JAVASCRIPT
+====================================================== -->
+
+<script type="module" src="../assets/js/admissions.js"></script>
+
+</body>
+
+</html>

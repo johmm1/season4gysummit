@@ -1,0 +1,834 @@
+/* =====================================================
+GY SUMMIT 2026
+ADMIN PANEL COMPLETE CSS
+===================================================== */
+
+
+/* ===============================
+GLOBAL ADMIN RESET
+================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin:0;
+
+    font-family:
+    "Inter",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+    background:#f6f8fb;
+
+    color:#111827;
+
+}
+
+
+
+/* ===============================
+ADMIN LAYOUT
+================================ */
+
+
+.admin-layout {
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+
+
+/* ===============================
+SIDEBAR
+================================ */
+
+
+.sidebar {
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    width:270px;
+
+    height:100vh;
+
+    background:#ffffff;
+
+    border-right:1px solid #e5e7eb;
+
+    padding:25px 18px;
+
+    overflow-y:auto;
+
+    z-index:1000;
+
+}
+
+
+
+.sidebar-logo {
+
+    text-align:center;
+
+    padding-bottom:25px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+.sidebar-logo img {
+
+    width:80px;
+
+    height:80px;
+
+    object-fit:contain;
+
+}
+
+
+
+.sidebar-logo h2 {
+
+    margin:12px 0 4px;
+
+    font-size:22px;
+
+}
+
+
+
+.sidebar-logo p {
+
+    margin:0;
+
+    color:#6b7280;
+
+    font-size:14px;
+
+}
+
+
+
+
+.sidebar nav {
+
+    margin-top:25px;
+
+}
+
+
+
+.sidebar nav a {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:14px 16px;
+
+    margin-bottom:8px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    color:#374151;
+
+    font-weight:500;
+
+    transition:.3s;
+
+}
+
+
+
+.sidebar nav a i {
+
+    width:22px;
+
+}
+
+
+
+.sidebar nav a:hover,
+
+.sidebar nav a.active {
+
+    background:#0b6b3a;
+
+    color:white;
+
+}
+
+
+
+
+.sidebar-footer {
+
+    margin-top:40px;
+
+    text-align:center;
+
+    color:#6b7280;
+
+    font-size:13px;
+
+}
+
+
+
+
+/* ===============================
+MAIN CONTENT
+================================ */
+
+
+.admin-main {
+
+    margin-left:270px;
+
+    width:calc(100% - 270px);
+
+    padding:30px;
+
+    min-width:0;
+
+}
+
+
+
+/* ===============================
+HEADER
+================================ */
+
+
+.admin-header {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.admin-header h1 {
+
+    margin:0;
+
+    font-size:32px;
+
+}
+
+
+
+.admin-header p {
+
+    color:#6b7280;
+
+}
+
+
+
+.admin-profile {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:white;
+
+    padding:10px 15px;
+
+    border-radius:15px;
+
+}
+
+
+
+.admin-profile img {
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+
+
+
+/* ===============================
+SEARCH
+================================ */
+
+
+.dashboard-search {
+
+    background:white;
+
+    padding:16px 20px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:30px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,.05);
+
+}
+
+
+
+.dashboard-search input {
+
+    border:none;
+
+    outline:none;
+
+    width:100%;
+
+    font-size:16px;
+
+}
+
+
+
+/* ===============================
+STATISTIC CARDS
+================================ */
+
+
+.overview-cards {
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+
+    width:100%;
+
+}
+
+
+
+.overview-card {
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:22px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.06);
+
+    min-width:0;
+
+}
+
+
+
+.overview-card i {
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:18px;
+
+    background:#dcfce7;
+
+    color:#0b6b3a;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:25px;
+
+}
+
+
+
+.overview-card h3 {
+
+    margin:0;
+
+    font-size:30px;
+
+}
+
+
+
+.overview-card p {
+
+    margin:5px 0 0;
+
+    color:#6b7280;
+
+}
+
+
+
+/* ===============================
+PARISH CARDS
+================================ */
+
+
+.parish-grid {
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:25px;
+
+    width:100%;
+
+}
+
+
+
+.parish-card {
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.06);
+
+    min-width:0;
+
+    transition:.3s;
+
+}
+
+
+
+.parish-card:hover {
+
+    transform:translateY(-5px);
+
+}
+
+
+
+.parish-top {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+
+.parish-icon {
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:15px;
+
+    background:#0b6b3a;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+
+.status {
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+}
+
+
+
+.status.active {
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+
+.parish-stats {
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+}
+
+
+
+.parish-stats div {
+
+    background:#f8fafc;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+}
+
+
+
+.parish-stats strong {
+
+    display:block;
+
+    font-size:22px;
+
+}
+
+
+
+.parish-stats small {
+
+    color:#6b7280;
+
+}
+
+
+
+/* ===============================
+PANELS
+================================ */
+
+
+.dashboard-panel {
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:25px;
+
+    margin-top:30px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.05);
+
+}
+
+
+
+.panel-header {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+
+/* ===============================
+BUTTONS
+================================ */
+
+
+.btn {
+
+    border:none;
+
+    cursor:pointer;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+
+
+.btn-primary {
+
+    background:#0b6b3a;
+
+    color:white;
+
+}
+
+
+
+.btn-outline {
+
+    background:white;
+
+    border:1px solid #0b6b3a;
+
+    color:#0b6b3a;
+
+}
+
+
+
+/* ===============================
+RESPONSIVE
+================================ */
+
+
+@media(max-width:900px){
+
+
+.sidebar {
+
+    position:relative;
+
+    width:100%;
+
+    height:auto;
+
+}
+
+
+.admin-layout {
+
+    display:block;
+
+}
+
+
+
+.admin-main {
+
+    margin-left:0;
+
+    width:100%;
+
+    padding:20px;
+
+}
+
+
+
+.admin-header {
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+
+}
+/* ==========================================================
+   SETTINGS COMPONENTS (moved from settings.html's phantom
+   settings.css, which never actually existed — these were
+   rendering completely unstyled everywhere they were used)
+   ========================================================== */
+
+.settings-card{
+background:#fff;
+border-radius:16px;
+padding:22px 24px;
+margin-top:18px;
+border:1px solid #ececec;
+}
+
+.settings-card h3{
+font-size:1rem;
+margin-bottom:14px;
+color:#222;
+}
+
+.settings-switches{
+display:flex;
+flex-direction:column;
+gap:16px;
+}
+
+.switch-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:16px;
+padding:12px 0;
+border-bottom:1px solid #f0f0f0;
+}
+
+.switch-row:last-child{
+border-bottom:none;
+padding-bottom:0;
+}
+
+.switch-row > div strong{
+display:block;
+font-size:.92rem;
+color:#222;
+margin-bottom:2px;
+}
+
+.switch-row > div p{
+font-size:.8rem;
+color:#888;
+margin:0;
+}
+
+.switch{
+position:relative;
+display:inline-block;
+width:46px;
+height:26px;
+flex-shrink:0;
+cursor:pointer;
+}
+
+.switch input{
+opacity:0;
+width:0;
+height:0;
+}
+
+.switch .slider{
+position:absolute;
+inset:0;
+background:#ccc;
+border-radius:26px;
+transition:.25s;
+}
+
+.switch .slider::before{
+content:"";
+position:absolute;
+height:20px;
+width:20px;
+left:3px;
+top:3px;
+background:#fff;
+border-radius:50%;
+transition:.25s;
+box-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+
+.switch input:checked + .slider{
+background:var(--primary, #C8A24A);
+}
+
+.switch input:checked + .slider::before{
+transform:translateX(20px);
+}
+
+.switch input:disabled + .slider{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.form-save-row{
+display:flex;
+justify-content:flex-end;
+margin-top:16px;
+padding-top:12px;
+border-top:1px solid #eee;
+}
+
+.form-save-row .btn{
+padding:9px 20px;
+font-size:.85rem;
+}
+
+.settings-section{
+display:none;
+}
+
+.settings-section.active-section{
+display:block;
+animation:fadeIn .3s ease;
+}
+
+.settings-tab{
+padding:10px 20px;
+border-radius:10px;
+border:1px solid #e0e0e0;
+background:#fff;
+color:#555;
+font-size:.85rem;
+font-weight:600;
+cursor:pointer;
+transition:.2s;
+}
+
+.settings-tab:hover{
+border-color:var(--primary, #C8A24A);
+}
+
+.settings-tab.active{
+background:var(--primary, #C8A24A);
+border-color:var(--primary, #C8A24A);
+color:#fff;
+}

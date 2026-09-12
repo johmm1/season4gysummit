@@ -1,0 +1,201 @@
+/* ===========================================
+   GY SUMMIT 2026 — DASHBOARD PAGES
+   Refined typography and component polish for
+   every admin/ and participant/ page. Layers on
+   top of each page's existing CSS — doesn't
+   touch layout structure or JS-dependent classes.
+=========================================== */
+
+:root {
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', var(--font-main);
+  --hairline: rgba(200, 162, 74, 0.28);
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3,
+.dashboard-header h1,
+.panel-header h2,
+.panel-header h3,
+.section-header h2,
+.section-header h3,
+.sidebar-logo span,
+.sidebar-logo h1,
+.sidebar-header h1,
+.sidebar-header span {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ---- Sidebar: quieter, more premium ---- */
+.sidebar {
+  border-right: 1px solid var(--hairline);
+}
+
+.sidebar-logo,
+.sidebar-header {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sidebar-nav a,
+.sidebar a {
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.sidebar-nav a.active,
+.sidebar a.active {
+  background: linear-gradient(90deg, rgba(200, 162, 74, 0.14), transparent);
+  border-left: 3px solid var(--primary);
+  font-weight: var(--fw-semibold);
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--hairline);
+}
+
+/* ---- Cards / panels: consistent elevation instead of flat borders ---- */
+.dashboard-panel,
+.kpi-card,
+.overview-card,
+.search-card,
+.department-card,
+.event-item,
+.parish-grid > *,
+.stat-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-fast);
+}
+
+.dashboard-panel:hover,
+.kpi-card:hover,
+.department-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary), var(--primary-light));
+  opacity: 0.85;
+}
+
+.kpi-icon {
+  border-radius: var(--radius-sm);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  border-radius: var(--radius-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.01em;
+  transition: var(--transition-fast);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border: none;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.quick-btn,
+.view-btn {
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.quick-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+/* ---- Badges / status pills ---- */
+.badge,
+.status {
+  border-radius: var(--radius-full, 999px);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.01em;
+  padding: 4px 12px;
+}
+
+.badge.success, .status.success { background: #EAF6EC; color: #1E7A34; }
+.badge.warning, .status.warning { background: #FBF2E3; color: #A66A00; }
+.badge.danger,  .status.danger  { background: #FBEAEA; color: #B3261E; }
+.badge.info,    .status.info    { background: #EAF4FB; color: #0A5A96; }
+
+/* ---- Tables ---- */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+thead th {
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft, var(--text-medium));
+  border-bottom: 2px solid var(--hairline);
+}
+
+tbody tr {
+  transition: var(--transition-fast);
+}
+
+tbody tr:hover {
+  background: rgba(200, 162, 74, 0.05);
+}
+
+/* ---- Forms ---- */
+input, select, textarea {
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200, 162, 74, 0.15);
+  outline: none;
+}
+
+/* ---- Live clock / notification touches ---- */
+.live-clock {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.notification-btn {
+  transition: var(--transition-fast);
+}
+
+.notification-btn:hover {
+  color: var(--primary);
+}
+
+/* ---- Reduced motion respected ---- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

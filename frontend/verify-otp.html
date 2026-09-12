@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Verify Your Account | GY Summit 2026</title>
+
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/animations.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+<link rel="stylesheet" href="assets/css/mobile.css">
+
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<section class="form-section">
+
+<div class="login-card fade-up">
+
+<div style="text-align:center;">
+
+<img src="assets/images/logo.png"
+class="login-logo">
+
+<h1>Verify Your Account</h1>
+
+<p id="verifyIntro">
+
+Enter the 6-digit code we sent you.
+
+</p>
+
+</div>
+
+<form id="verifyForm">
+
+<div class="input-group">
+
+<label>Verification Code</label>
+
+<input
+
+type="text"
+
+id="otp"
+
+inputmode="numeric"
+
+pattern="[0-9]{6}"
+
+maxlength="6"
+
+placeholder="123456"
+
+autocomplete="one-time-code"
+
+required
+
+style="letter-spacing:6px; text-align:center; font-size:20px;">
+
+</div>
+
+<button
+
+type="submit"
+
+class="btn btn-primary"
+
+style="width:100%;">
+
+<i class="fa-solid fa-shield-check"></i>
+
+Verify
+
+</button>
+
+</form>
+
+<div id="verifyMessage" style="display:none; margin-top:16px; text-align:center;"></div>
+
+<div class="login-links">
+
+<a href="#" id="resendOtpLink">
+
+Didn't get a code? Resend
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module" src="assets/js/verify-otp.js"></script>
+
+</body>
+
+</html>

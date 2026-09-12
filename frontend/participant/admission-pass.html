@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admission Pass | GY Summit 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<link rel="stylesheet" href="../assets/css/animations.css">
+
+<link rel="stylesheet" href="../assets/css/responsive.css">
+
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+
+<link rel="stylesheet" href="../assets/css/participants/admission-pass.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- ======================================
+SIDEBAR
+====================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img src="../assets/images/logo.png"
+alt="GY Summit">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Participant Portal
+
+</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+<a href="profile.html">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+<a href="admission-pass.html" class="active">
+
+<i class="fa-solid fa-id-card"></i>
+
+Admission Pass
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports Centre
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button
+id="logoutBtn"
+class="logout-btn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ======================================
+MAIN CONTENT
+====================================== -->
+
+<main class="dashboard-content">
+
+<header class="topbar">
+
+<div>
+
+<h1>
+
+Admission Pass
+
+</h1>
+
+<p>
+
+Your official entry pass to GY Summit 2026
+
+</p>
+
+</div>
+
+<div class="participant-profile">
+
+<img
+
+id="participantPhoto"
+
+src="../assets/images/avatar-placeholder.png"
+
+alt="Participant">
+
+<div>
+
+<h4 id="participantName">
+
+Loading...
+
+</h4>
+
+<p id="participantParish">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ======================================
+PAGE HEADER
+====================================== -->
+
+<section class="pass-header">
+
+<div>
+
+<h2>
+
+Digital Admission Pass
+
+</h2>
+
+<p>
+
+Present this QR Code at the registration desk during check-in.
+
+</p>
+
+</div>
+
+<div class="status-group">
+
+<span
+id="paymentBadge"
+class="badge badge-success">
+
+Payment Verified
+
+</span>
+
+<span
+id="admissionBadge"
+class="badge badge-info">
+
+Admission Approved
+
+</span>
+
+</div>
+
+</section>
+
+<!-- ======================================
+ADMISSION CARD
+Next Section
+====================================== --><section class="pass-container">
+
+<div class="admission-card">
+
+<!-- ==========================
+PASS HEADER
+========================== -->
+
+<div class="pass-top">
+
+<div class="summit-brand">
+
+<img
+src="../assets/images/logo.png"
+alt="GY Summit Logo">
+
+<div>
+
+<h2>
+
+PCEA GITHUNGURI PRESBYTERY
+
+</h2>
+
+<h3>
+
+GY SUMMIT 2026
+
+</h3>
+
+<p>
+
+Holiness and the Fear of God
+
+</p>
+
+</div>
+
+</div>
+
+<div class="pass-status">
+
+<span
+id="checkinStatus"
+class="badge badge-warning">
+
+Not Checked In
+
+</span>
+
+</div>
+
+</div>
+
+<!-- ==========================
+PASS BODY
+========================== -->
+
+<div class="pass-body">
+
+<!-- LEFT -->
+
+<div class="pass-left">
+
+<div class="participant-photo">
+
+<img
+
+id="passPhoto"
+
+src="../assets/images/avatar-placeholder.png"
+
+alt="Participant">
+
+</div>
+
+<div class="participant-basic">
+
+<h2 id="passName">
+
+Loading...
+
+</h2>
+
+<p id="passParish">
+
+Loading...
+
+</p>
+
+<p id="passChurch">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- CENTER -->
+
+<div class="pass-center">
+
+<div class="detail">
+
+<label>
+
+Admission Number
+
+</label>
+
+<h3 id="admissionNumber">
+
+GY26-000000
+
+</h3>
+
+</div>
+
+<div class="detail">
+
+<label>
+
+Registration Number
+
+</label>
+
+<h3 id="registrationNumber">
+
+REG000000
+
+</h3>
+
+</div>
+
+<div class="detail">
+
+<label>
+
+Participant Category
+
+</label>
+
+<p id="participantCategory">
+
+Youth Delegate
+
+</p>
+
+</div>
+
+<div class="detail">
+
+<label>
+
+Emergency Contact
+
+</label>
+
+<p id="emergencyContact">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="pass-right">
+
+<div class="qr-card">
+
+<img
+
+id="qrCode"
+
+src="../assets/images/qr-placeholder.png"
+
+alt="QR Code">
+
+<p>
+
+Scan During Check-in
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================
+PASS FOOTER
+========================== -->
+
+<div class="pass-footer">
+
+<div>
+
+<strong>
+
+Payment
+
+</strong>
+
+<p id="paymentStatus">
+
+Verified
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Admission
+
+</strong>
+
+<p id="admissionStatus">
+
+Approved
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Reporting Time
+
+</strong>
+
+<p id="reportingTime">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Venue
+
+</strong>
+
+<p id="summitVenue">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+EVENT DETAILS
+====================================== -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-calendar-days"></i>
+
+Event Details
+
+</h3>
+
+</div>
+
+<div class="event-grid">
+
+<div>
+
+<h4>
+
+Event
+
+</h4>
+
+<p>
+
+GY Summit 2026
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Theme
+
+</h4>
+
+<p>
+
+Holiness and the Fear of God
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Venue
+
+</h4>
+
+<p id="eventVenue">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Reporting Date
+
+</h4>
+
+<p id="reportingDate">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Reporting Time
+
+</h4>
+
+<p id="eventTime">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Admission Gate
+
+</h4>
+
+<p>
+
+Main Entrance
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+NEXT SECTION
+Instructions
+Downloads
+====================================== --><!-- ======================================
+ADMISSION INSTRUCTIONS
+====================================== -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-circle-info"></i>
+
+Admission Instructions
+
+</h3>
+
+</div>
+
+<div class="instructions-list">
+
+<div class="instruction">
+
+<i class="fa-solid fa-check-circle"></i>
+
+<div>
+
+<h4>
+
+Carry this Admission Pass
+
+</h4>
+
+<p>
+
+Present either the printed copy or the digital version together with your National ID or Student ID.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="instruction">
+
+<i class="fa-solid fa-check-circle"></i>
+
+<div>
+
+<h4>
+
+Arrive Early
+
+</h4>
+
+<p>
+
+Participants are expected to report before the official opening time to allow smooth registration.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="instruction">
+
+<i class="fa-solid fa-check-circle"></i>
+
+<div>
+
+<h4>
+
+QR Code Verification
+
+</h4>
+
+<p>
+
+Your QR Code will only be scanned once. After successful check-in it becomes inactive.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="instruction">
+
+<i class="fa-solid fa-check-circle"></i>
+
+<div>
+
+<h4>
+
+Official Communication
+
+</h4>
+
+<p>
+
+Only announcements published through the GY Summit Portal shall be considered official.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+WHAT TO CARRY
+====================================== -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-suitcase"></i>
+
+What to Carry
+
+</h3>
+
+</div>
+
+<div class="carry-grid">
+
+<div class="carry-item">
+
+<i class="fa-solid fa-id-card"></i>
+
+<p>National ID / Student ID</p>
+
+</div>
+
+<div class="carry-item">
+
+<i class="fa-solid fa-mobile-screen"></i>
+
+<p>Phone & Charger</p>
+
+</div>
+
+<div class="carry-item">
+
+<i class="fa-solid fa-book-bible"></i>
+
+<p>Bible & Notebook</p>
+
+</div>
+
+<div class="carry-item">
+
+<i class="fa-solid fa-shirt"></i>
+
+<p>Personal Effects</p>
+
+</div>
+
+<div class="carry-item">
+
+<i class="fa-solid fa-bottle-water"></i>
+
+<p>Water Bottle</p>
+
+</div>
+
+<div class="carry-item">
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+<p>Personal Medication</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+DOWNLOADS
+====================================== -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-download"></i>
+
+Downloads
+
+</h3>
+
+</div>
+
+<div class="download-buttons">
+
+<button
+
+class="btn btn-primary"
+
+id="downloadPassBtn">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+Download PDF Pass
+
+</button>
+
+<button
+
+class="btn btn-outline"
+
+id="printPassBtn">
+
+<i class="fa-solid fa-print"></i>
+
+Print Pass
+
+</button>
+
+<button
+
+class="btn btn-outline"
+
+id="downloadQrBtn">
+
+<i class="fa-solid fa-qrcode"></i>
+
+Download QR Code
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ======================================
+EMERGENCY CONTACT
+====================================== -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-phone"></i>
+
+Emergency Contact
+
+</h3>
+
+</div>
+
+<div class="event-grid">
+
+<div>
+
+<h4>
+
+Contact Person
+
+</h4>
+
+<p id="emergencyName">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Relationship
+
+</h4>
+
+<p id="emergencyRelationship">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Phone Number
+
+</h4>
+
+<p id="emergencyPhone">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<h4>
+
+Medical Notes
+
+</h4>
+
+<p id="medicalNotes">
+
+None
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+<p>
+
+This Admission Pass is valid only for the registered participant.
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<script type="module" src="js/admission-pass.js"></script>
+
+</body>
+
+</html>

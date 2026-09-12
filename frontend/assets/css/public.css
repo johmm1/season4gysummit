@@ -1,0 +1,290 @@
+/* ===========================================
+   GY SUMMIT 2026 — PUBLIC PAGES
+   Refined typography and component polish for
+   index.html, login.html, register.html.
+   Layers on top of variables.css/style.css —
+   does not touch shared tokens used site-wide.
+=========================================== */
+
+:root {
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', var(--font-main);
+  --ink: #1B1B1B;
+  --ink-soft: #4A4A44;
+  --parchment: #FBF9F4;
+  --hairline: rgba(200, 162, 74, 0.35);
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+/* ---- Headings carry the reverent register ---- */
+h1, h2, h3,
+.form-title,
+.login-logo h1,
+.logo-area h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.form-title,
+.form-step h2 {
+  position: relative;
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
+  font-size: var(--fs-2xl);
+}
+
+.form-title::after,
+.form-step h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  border-radius: var(--radius-xs);
+}
+
+/* ---- Navbar / logo area ---- */
+.navbar {
+  background: var(--parchment);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.logo-area h1 {
+  font-size: var(--fs-xl);
+  letter-spacing: 0;
+}
+
+/* ---- Login card ---- */
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2xl) var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary), var(--primary-light));
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.login-logo h1 {
+  font-size: var(--fs-2xl);
+  margin-top: var(--space-sm);
+}
+
+.login-links a {
+  color: var(--primary-dark);
+  font-weight: var(--fw-medium);
+  transition: var(--transition-fast);
+}
+
+.login-links a:hover {
+  color: var(--primary);
+}
+
+/* ---- Registration form container ---- */
+.form-container {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2xl);
+}
+
+.form-section {
+  background: var(--parchment);
+}
+
+/* ---- Stepper: a quiet progress rail, not default-looking circles ---- */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-lg);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  position: relative;
+  flex: 1;
+  justify-content: center;
+}
+
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 55%;
+  width: 90%;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+
+.step.active:not(:last-child)::after,
+.step.completed:not(:last-child)::after {
+  background: var(--primary);
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-circle);
+  background: var(--surface);
+  border: 2px solid var(--border-dark);
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--fw-semibold);
+  font-family: var(--font-display);
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+}
+
+.step.active .step-circle {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--text-white);
+  box-shadow: 0 0 0 4px rgba(200, 162, 74, 0.18);
+}
+
+.step.completed .step-circle {
+  border-color: var(--primary-dark);
+  background: var(--primary-dark);
+  color: var(--text-white);
+}
+
+/* ---- Form fields ---- */
+.form-group label {
+  font-weight: var(--fw-medium);
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.input-group input,
+.input-group select {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: var(--fs-md);
+  width: 100%;
+  transition: var(--transition-fast);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200, 162, 74, 0.15);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  border-radius: var(--radius-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.01em;
+  transition: var(--transition-fast);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: var(--text-white);
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border-dark);
+  color: var(--ink);
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+/* ---- Alerts ---- */
+.alert {
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--info);
+  background: #EAF4FB;
+  padding: var(--space-md);
+  font-size: var(--fs-sm);
+}
+
+.alert-success {
+  border-left-color: var(--success);
+  background: #EAF6EC;
+}
+
+.alert-info {
+  border-left-color: var(--secondary);
+}
+
+/* ---- Reduced motion respected ---- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 640px) {
+  .form-container,
+  .login-card {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .stepper {
+    gap: 0;
+  }
+
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    font-size: var(--fs-sm);
+  }
+}

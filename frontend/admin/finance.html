@@ -1,0 +1,2595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Finance | GY Summit 2026</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="../assets/css/finance.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ===========================
+SIDEBAR
+=========================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img src="../assets/images/logo.png">
+
+<h2>GY Summit</h2>
+
+<p>Finance Department</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>Dashboard</span>
+
+</a>
+
+<a class="active" href="finance.html">
+
+<i class="fa-solid fa-money-bill-transfer"></i>
+
+<span>Finance</span>
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+<span>Sports</span>
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+<span>Gallery</span>
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<span>Announcements</span>
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+<span>Participants</span>
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>Settings</span>
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ===========================
+MAIN CONTENT
+=========================== -->
+
+<main class="admin-main">
+
+<header class="admin-header">
+
+<div>
+
+<h1>
+
+Finance & Admission Centre
+
+</h1>
+
+<p>
+
+Manage parish payments, registrations and admissions.
+
+</p>
+
+</div>
+
+<div class="admin-user">
+
+<div class="avatar" id="adminAvatarInitial">
+
+F
+
+</div>
+
+<div>
+
+<strong id="adminName">
+
+Finance Admin
+
+</strong>
+
+<br>
+
+<small id="adminRole">
+
+Online
+
+</small>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out" style="margin-left:12px;">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</header>
+
+<!-- SEARCH -->
+
+<section class="search-card">
+
+<div class="search-box">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+type="text"
+id="globalSearch"
+placeholder="Search parish, participant, admission code...">
+
+</div>
+
+</section>
+
+<!-- OVERVIEW -->
+
+<section class="overview-grid">
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-money-check-dollar"></i>
+
+</div>
+
+<div>
+
+<h2 id="overallPaid">
+
+0
+
+</h2>
+
+<p>
+
+Paid Participants
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-user-plus"></i>
+
+</div>
+
+<div>
+
+<h2 id="overallRegistered">
+
+0
+
+</h2>
+
+<p>
+
+Registered
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-user-check"></i>
+
+</div>
+
+<div>
+
+<h2 id="overallAdmitted">
+
+0
+
+</h2>
+
+<p>
+
+Admitted
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-hourglass-half"></i>
+
+</div>
+
+<div>
+
+<h2 id="overallPending">
+
+0
+
+</h2>
+
+<p>
+
+Awaiting Admission
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+REGISTRATION CALCULATOR
+=========================== -->
+
+<section class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+<i class="fa-solid fa-calculator"></i>
+
+Registration Calculator
+
+</h2>
+
+<p>
+
+Every participant who registers is treated as fully paid — the amount in account is simply registered participants × ticket price. The M-Pesa figure is kept separately purely for transaction-level audit, not as a payment gate.
+
+</p>
+
+</div>
+
+<div class="overview-grid">
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div>
+
+<h2 id="calcRegisteredCount">
+
+0
+
+</h2>
+
+<p>
+
+Registered Participants
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-tag"></i>
+
+</div>
+
+<div>
+
+<h2 id="calcTicketPrice">
+
+KES 0
+
+</h2>
+
+<p>
+
+Ticket Price
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-equals"></i>
+
+</div>
+
+<div>
+
+<h2 id="calcExpectedTotal">
+
+KES 0
+
+</h2>
+
+<p>
+
+Actual Amount in Account (Registered × Price)
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-mobile-screen"></i>
+
+</div>
+
+<div>
+
+<h2 id="calcCollectedTotal">
+
+KES 0
+
+</h2>
+
+<p>
+
+M-Pesa Verified (audit only)
+
+</p>
+
+</div>
+
+</div>
+
+<div class="overview-card">
+
+<div class="overview-icon">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<div>
+
+<h2 id="calcOutstandingTotal">
+
+100%
+
+</h2>
+
+<p>
+
+Payment Rate
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="parish-section">
+
+<div class="section-title">
+
+<h2>
+
+Parish Finance Dashboard
+
+</h2>
+
+<p>
+
+Select a parish below to manage its finance and admissions.
+
+</p>
+
+</div>
+
+<div class="parish-grid"><!-- ======================================================
+KAGAA PARISH
+====================================================== -->
+
+<div class="parish-card active-card"
+
+onclick="loadParish('Kagaa')">
+
+<div class="card-header">
+
+<div class="church-icon">
+
+<i class="fa-solid fa-church"></i>
+
+</div>
+
+<span class="card-status">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<h3>Kagaa Parish</h3>
+
+<div class="card-stat">
+
+<span>Paid Slots</span>
+
+<strong id="kagaaPaid">50</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Registered</span>
+
+<strong id="kagaaRegistered">0</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Admitted</span>
+
+<strong id="kagaaAdmitted">0</strong>
+
+</div>
+
+<div class="card-progress">
+
+<div style="width:0%"></div>
+
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+GITHIGA PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Githiga')">
+
+<div class="card-header">
+
+<div class="church-icon">
+
+<i class="fa-solid fa-church"></i>
+
+</div>
+
+<span class="card-status">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<h3>Githiga Parish</h3>
+
+<div class="card-stat">
+
+<span>Paid Slots</span>
+
+<strong id="githigaPaid">50</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Registered</span>
+
+<strong id="githigaRegistered">0</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Admitted</span>
+
+<strong id="githigaAdmitted">0</strong>
+
+</div>
+
+<div class="card-progress">
+
+<div style="width:0%"></div>
+
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+GATHANJI PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Gathanji')">
+
+<div class="card-header">
+
+<div class="church-icon">
+
+<i class="fa-solid fa-church"></i>
+
+</div>
+
+<span class="card-status">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<h3>Gathanji Parish</h3>
+
+<div class="card-stat">
+
+<span>Paid Slots</span>
+
+<strong id="gathanjiPaid">50</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Registered</span>
+
+<strong id="gathanjiRegistered">0</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Admitted</span>
+
+<strong id="gathanjiAdmitted">0</strong>
+
+</div>
+
+<div class="card-progress">
+
+<div style="width:0%"></div>
+
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+GATHANGARI PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Gathangari')">
+
+<div class="card-header">
+
+<div class="church-icon">
+
+<i class="fa-solid fa-church"></i>
+
+</div>
+
+<span class="card-status">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<h3>Gathangari Parish</h3>
+
+<div class="card-stat">
+
+<span>Paid Slots</span>
+
+<strong id="gathangariPaid">50</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Registered</span>
+
+<strong id="gathangariRegistered">0</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Admitted</span>
+
+<strong id="gathangariAdmitted">0</strong>
+
+</div>
+
+<div class="card-progress">
+
+<div style="width:0%"></div>
+
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+RIARA RIDGE PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Riara Ridge')">
+
+<div class="card-header">
+
+<div class="church-icon">
+
+<i class="fa-solid fa-church"></i>
+
+</div>
+
+<span class="card-status">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<h3>Riara Ridge Parish</h3>
+
+<div class="card-stat">
+
+<span>Paid Slots</span>
+
+<strong id="riaraPaid">50</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Registered</span>
+
+<strong id="riaraRegistered">0</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Admitted</span>
+
+<strong id="riaraAdmitted">0</strong>
+
+</div>
+
+<div class="card-progress">
+
+<div style="width:0%"></div>
+
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+MATUGUTA PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Matuguta')">
+
+<div class="card-header">
+
+<div class="church-icon">
+
+<i class="fa-solid fa-church"></i>
+
+</div>
+
+<span class="card-status">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<h3>Matuguta Parish</h3>
+
+<div class="card-stat">
+
+<span>Paid Slots</span>
+
+<strong id="matugutaPaid">50</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Registered</span>
+
+<strong id="matugutaRegistered">0</strong>
+
+</div>
+
+<div class="card-stat">
+
+<span>Admitted</span>
+
+<strong id="matugutaAdmitted">0</strong>
+
+</div>
+
+<div class="card-progress">
+
+<div style="width:0%"></div>
+
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div><!-- ======================================================
+GITHUNGURI PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Githunguri')">
+
+<div class="card-header">
+
+<div class="church-icon">
+<i class="fa-solid fa-church"></i>
+</div>
+
+<span class="card-status">
+ACTIVE
+</span>
+
+</div>
+
+<h3>Githunguri Parish</h3>
+
+<div class="card-stat">
+<span>Paid Slots</span>
+<strong id="githunguriPaid">50</strong>
+</div>
+
+<div class="card-stat">
+<span>Registered</span>
+<strong id="githunguriRegistered">0</strong>
+</div>
+
+<div class="card-stat">
+<span>Admitted</span>
+<strong id="githunguriAdmitted">0</strong>
+</div>
+
+<div class="card-progress">
+<div style="width:0%"></div>
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+KAHUNIRA PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Kahunira')">
+
+<div class="card-header">
+
+<div class="church-icon">
+<i class="fa-solid fa-church"></i>
+</div>
+
+<span class="card-status">
+ACTIVE
+</span>
+
+</div>
+
+<h3>Kahunira Parish</h3>
+
+<div class="card-stat">
+<span>Paid Slots</span>
+<strong id="kahuniraPaid">50</strong>
+</div>
+
+<div class="card-stat">
+<span>Registered</span>
+<strong id="kahuniraRegistered">0</strong>
+</div>
+
+<div class="card-stat">
+<span>Admitted</span>
+<strong id="kahuniraAdmitted">0</strong>
+</div>
+
+<div class="card-progress">
+<div style="width:0%"></div>
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+GATHAITHI PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Gathaithi')">
+
+<div class="card-header">
+
+<div class="church-icon">
+<i class="fa-solid fa-church"></i>
+</div>
+
+<span class="card-status">
+ACTIVE
+</span>
+
+</div>
+
+<h3>Gathaithi Parish</h3>
+
+<div class="card-stat">
+<span>Paid Slots</span>
+<strong id="gathaithiPaid">50</strong>
+</div>
+
+<div class="card-stat">
+<span>Registered</span>
+<strong id="gathaithiRegistered">0</strong>
+</div>
+
+<div class="card-stat">
+<span>Admitted</span>
+<strong id="gathaithiAdmitted">0</strong>
+</div>
+
+<div class="card-progress">
+<div style="width:0%"></div>
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+
+<!-- ======================================================
+KAMBURU PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Kamburu')">
+
+<div class="card-header">
+
+<div class="church-icon">
+<i class="fa-solid fa-church"></i>
+</div>
+
+<span class="card-status">
+ACTIVE
+</span>
+
+</div>
+
+<h3>Kamburu Parish</h3>
+
+<div class="card-stat">
+<span>Paid Slots</span>
+<strong id="kamburuPaid">50</strong>
+</div>
+
+<div class="card-stat">
+<span>Registered</span>
+<strong id="kamburuRegistered">0</strong>
+</div>
+
+<div class="card-stat">
+<span>Admitted</span>
+<strong id="kamburuAdmitted">0</strong>
+</div>
+
+<div class="card-progress">
+<div style="width:0%"></div>
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+
+
+
+
+
+<!-- ======================================================
+KARUTHI PARISH
+====================================================== -->
+
+<div class="parish-card"
+
+onclick="loadParish('Karuthi')">
+
+<div class="card-header">
+
+<div class="church-icon">
+<i class="fa-solid fa-church"></i>
+</div>
+
+<span class="card-status">
+ACTIVE
+</span>
+
+</div>
+
+<h3>Karuthi Parish</h3>
+
+<div class="card-stat">
+<span>Paid Slots</span>
+<strong id="karuthiPaid">50</strong>
+</div>
+
+<div class="card-stat">
+<span>Registered</span>
+<strong id="karuthiRegistered">0</strong>
+</div>
+
+<div class="card-stat">
+<span>Admitted</span>
+<strong id="karuthiAdmitted">0</strong>
+</div>
+
+<div class="card-progress">
+<div style="width:0%"></div>
+</div>
+
+<small>50 Registration Slots Available</small>
+
+</div>
+
+</div>
+<!-- END PARISH GRID --><!-- =====================================================
+SELECTED PARISH DASHBOARD
+===================================================== -->
+
+<section id="selectedParishSection" class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+Selected Parish
+
+</h2>
+
+<p>
+
+Click any parish card above to load its finance details.
+
+</p>
+
+</div>
+
+<div class="selected-parish-header">
+
+<div>
+
+<h1 id="selectedParishName">
+
+Kagaa Parish
+
+</h1>
+
+<p>
+
+Finance & Admission Control Centre
+
+</p>
+
+</div>
+
+<div>
+
+<span class="status active">
+
+ACTIVE
+
+</span>
+
+</div>
+
+</div>
+
+<!-- ===========================
+LIVE STATISTICS
+=========================== -->
+
+<div class="finance-summary-grid">
+
+<div class="finance-summary-card">
+
+<div class="finance-icon">
+
+<i class="fa-solid fa-money-check-dollar"></i>
+
+</div>
+
+<div>
+
+<h2 id="paidSlots">
+
+50
+
+</h2>
+
+<p>
+
+Paid Slots
+
+</p>
+
+</div>
+
+</div>
+
+<div class="finance-summary-card">
+
+<div class="finance-icon">
+
+<i class="fa-solid fa-user-plus"></i>
+
+</div>
+
+<div>
+
+<h2 id="registeredSlots">
+
+0
+
+</h2>
+
+<p>
+
+Registered
+
+</p>
+
+</div>
+
+</div>
+
+<div class="finance-summary-card">
+
+<div class="finance-icon">
+
+<i class="fa-solid fa-chair"></i>
+
+</div>
+
+<div>
+
+<h2 id="availableSlots">
+
+50
+
+</h2>
+
+<p>
+
+Available Slots
+
+</p>
+
+</div>
+
+</div>
+
+<div class="finance-summary-card">
+
+<div class="finance-icon">
+
+<i class="fa-solid fa-user-check"></i>
+
+</div>
+
+<div>
+
+<h2 id="admittedCount">
+
+0
+
+</h2>
+
+<p>
+
+Admitted
+
+</p>
+
+</div>
+
+</div>
+
+<div class="finance-summary-card">
+
+<div class="finance-icon">
+
+<i class="fa-solid fa-hourglass-half"></i>
+
+</div>
+
+<div>
+
+<h2 id="pendingCount">
+
+0
+
+</h2>
+
+<p>
+
+Awaiting Admission
+
+</p>
+
+</div>
+
+</div>
+
+<div class="finance-summary-card">
+
+<div class="finance-icon">
+
+<i class="fa-solid fa-building-columns"></i>
+
+</div>
+
+<div>
+
+<h2 id="bankReference">
+
+GY-KAG-001
+
+</h2>
+
+<p>
+
+Bank Reference
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+REGISTRATION BAR
+=========================== -->
+
+<div class="registration-progress">
+
+<div class="progress-title">
+
+<span>
+
+Registration Capacity
+
+</span>
+
+<span id="capacityLabel">
+
+0 / 50
+
+</span>
+
+</div>
+
+<div class="progress-bar large">
+
+<div
+
+id="capacityProgress"
+
+style="width:0%;">
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+ADMISSION CENTRE
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+Admission Centre
+
+</h2>
+
+<p>
+
+Scan participant QR code or search using Admission Code.
+
+</p>
+
+</div>
+
+<div class="admission-grid">
+
+<!-- ==========================
+QR SCANNER CARD
+========================== -->
+
+<div class="admission-card">
+
+<div class="card-title">
+
+<i class="fa-solid fa-qrcode"></i>
+
+<h3>
+
+QR Scanner
+
+</h3>
+
+</div>
+
+<div class="scanner-area" id="scannerContainer">
+
+<div class="scanner-placeholder" id="scannerPlaceholder">
+
+<i class="fa-solid fa-camera"></i>
+
+<p>
+
+QR Scanner Preview
+
+</p>
+
+</div>
+
+</div>
+
+<button
+id="startScanner"
+class="primary-btn">
+
+<i class="fa-solid fa-camera"></i>
+
+Start Scanner
+
+</button>
+
+</div>
+
+<!-- ==========================
+ADMISSION CODE CARD
+========================== -->
+
+<div class="admission-card">
+
+<div class="card-title">
+
+<i class="fa-solid fa-keyboard"></i>
+
+<h3>
+
+Admission Code
+
+</h3>
+
+</div>
+
+<label>
+
+Enter Admission Code
+
+</label>
+
+<input
+
+type="text"
+
+id="admissionCode"
+
+placeholder="GY2026-00001">
+
+<button
+
+id="searchAdmission"
+
+class="primary-btn">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+Search Participant
+
+</button>
+
+<div class="search-note">
+
+<i class="fa-solid fa-circle-info"></i>
+
+Use this option if QR scanning fails.
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+PARTICIPANT VERIFICATION
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+Participant Verification
+
+</h2>
+
+<p>
+
+Participant information loaded after QR Scan or Admission Code Search.
+
+</p>
+
+</div>
+
+<div class="participant-card">
+
+<!-- ======================
+PHOTO
+====================== -->
+
+<div class="participant-photo">
+
+<img
+
+id="participantPhoto"
+
+src="../assets/images/default-user.png"
+
+alt="Participant">
+
+</div>
+
+<!-- ======================
+DETAILS
+====================== -->
+
+<div class="participant-details">
+
+<h2 id="participantName">
+
+No Participant Selected
+
+</h2>
+
+<div class="detail-grid">
+
+<div>
+
+<label>Admission Code</label>
+
+<p id="participantCode">
+
+---------
+
+</p>
+
+</div>
+
+<div>
+
+<label>Parish</label>
+
+<p id="participantParish">
+
+---------
+
+</p>
+
+</div>
+
+<div>
+
+<label>Phone Number</label>
+
+<p id="participantPhone">
+
+---------
+
+</p>
+
+</div>
+
+<div>
+
+<label>Gender</label>
+
+<p id="participantGender">
+
+---------
+
+</p>
+
+</div>
+
+<div>
+
+<label>Age</label>
+
+<p id="participantAge">
+
+---------
+
+</p>
+
+</div>
+
+<div>
+
+<label>Payment Status</label>
+
+<p>
+
+<span
+id="paymentStatus"
+class="badge success">
+
+NOT VERIFIED
+
+</span>
+
+</p>
+
+</div>
+
+<div>
+
+<label>Admission Status</label>
+
+<p>
+
+<span
+id="admissionStatus"
+class="badge warning">
+
+NOT ADMITTED
+
+</span>
+
+</p>
+
+</div>
+
+<div>
+
+<label>Registration Date</label>
+
+<p id="registrationDate">
+
+---------
+
+</p>
+
+</div>
+
+</div>
+
+<!-- ======================
+OPTIONAL MEDICAL INFO
+====================== -->
+
+<div class="medical-box">
+
+<h3>
+
+Medical Information
+
+</h3>
+
+<p id="medicalConditions">
+
+No medical information provided.
+
+</p>
+
+</div>
+
+<!-- ======================
+ACTION BUTTONS
+====================== -->
+
+<div class="participant-actions">
+
+<button
+
+id="admitParticipant"
+
+class="primary-btn">
+
+<i class="fa-solid fa-user-check"></i>
+
+Admit Participant
+
+</button>
+
+<button
+
+id="rejectParticipant"
+
+class="danger-btn">
+
+<i class="fa-solid fa-user-xmark"></i>
+
+Reject
+
+</button>
+
+<button
+
+id="printSlip"
+
+class="secondary-btn">
+
+<i class="fa-solid fa-print"></i>
+
+Print Admission Slip
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</section><!-- ======================================================
+CERTIFICATE TEMPLATES
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+Certificate Templates
+
+</h2>
+
+<p>
+
+Live preview of the templates configured in Settings → Certificates. Manage them there — this is a read-only reference for the admission desk.
+
+</p>
+
+</div>
+
+<div id="certificateTemplatePreviews" class="certificate-template-grid">
+
+<p>Loading templates…</p>
+
+</div>
+
+<div class="participant-actions" style="margin-top:16px;">
+
+<button id="generateParticipationCertsFinance" class="primary-btn">
+
+<i class="fa-solid fa-award"></i>
+
+Generate Participation Certificates
+
+</button>
+
+<a href="settings.html" class="secondary-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+
+<i class="fa-solid fa-gear"></i>
+
+Manage Templates in Settings
+
+</a>
+
+</div>
+
+</section><!-- ======================================================
+PARTICIPANTS LIST
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+Participants
+
+</h2>
+
+<p>
+
+All registered participants for the selected parish.
+
+</p>
+
+</div>
+
+<div class="table-search">
+
+<input
+
+type="text"
+
+id="participantSearch"
+
+placeholder="Search participant...">
+
+</div>
+
+<div class="table-responsive">
+
+<table class="participants-table">
+
+<thead>
+
+<tr>
+
+<th>Photo</th>
+
+<th>Admission Code</th>
+
+<th>Name</th>
+
+<th>Gender</th>
+
+<th>Phone</th>
+
+<th>Payment</th>
+
+<th>Admission</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="participantsTable">
+
+<!-- JavaScript will populate this -->
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+
+
+
+<!-- ======================================================
+RECENT ADMISSIONS
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="section-title">
+
+<h2>
+
+Recent Admissions
+
+</h2>
+
+<p>
+
+Latest successful admissions.
+
+</p>
+
+</div>
+
+<div
+id="recentAdmissions"
+class="recent-admissions">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-user-check"></i>
+
+<p>
+
+No admissions yet.
+
+</p>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+NOTIFICATION BAR
+====================================================== -->
+
+<div id="notificationBar" class="notification hidden">
+
+<i class="fa-solid fa-circle-check"></i>
+
+<span id="notificationText">
+
+Operation Successful
+
+</span>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+LOADING OVERLAY
+====================================================== -->
+
+<div id="loadingOverlay" class="loading-overlay hidden">
+
+<div class="loader-box">
+
+<div class="loader"></div>
+
+<h3>
+
+Processing...
+
+</h3>
+
+<p>
+
+Please wait...
+
+</p>
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+SUCCESS MODAL
+====================================================== -->
+
+<div id="successModal" class="modal hidden">
+
+<div class="modal-content">
+
+<div class="modal-icon">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<h2>
+
+Admission Successful
+
+</h2>
+
+<p id="successMessage">
+
+Participant admitted successfully.
+
+</p>
+
+<div class="modal-buttons">
+
+<button
+
+id="closeSuccessModal"
+
+class="primary-btn">
+
+Continue
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- ======================================================
+FOOTER
+====================================================== -->
+
+
+
+<!-- ======================================================
+FINANCE SETTINGS (moved from the old monolithic Settings page)
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-gear"></i>
+
+Finance Settings
+
+</h2>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Finance Configuration
+
+</h2>
+
+</div>
+
+<form id="financeSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Registration Fee (KES)
+
+</label>
+
+<input
+type="number"
+id="financeRegistrationFee"
+min="0">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Currency
+
+</label>
+
+<select id="currency">
+
+<option value="KES">
+
+Kenyan Shilling (KES)
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Payment Deadline
+
+</label>
+
+<input
+type="date"
+id="paymentDeadline">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Late Registration Fee (KES)
+
+</label>
+
+<input
+type="number"
+id="lateFee">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_financeSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+M-Pesa Configuration
+
+</h2>
+
+</div>
+
+<form id="mpesaSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Business Type
+
+</label>
+
+<select id="businessType">
+
+<option>
+
+Paybill
+
+</option>
+
+<option>
+
+Buy Goods
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Paybill / Till Number
+
+</label>
+
+<input
+type="text"
+id="paybillNumber">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Account Number
+
+</label>
+
+<input
+type="text"
+id="accountNumber">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Business Name
+
+</label>
+
+<input
+type="text"
+id="businessName">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Consumer Key
+
+</label>
+
+<input
+type="password"
+id="consumerKey">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Consumer Secret
+
+</label>
+
+<input
+type="password"
+id="consumerSecret">
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Callback URL
+
+</label>
+
+<input
+type="url"
+id="callbackUrl"
+readonly>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_mpesaSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Bank Payment
+
+</h2>
+
+</div>
+
+<form id="bankSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Bank Name
+
+</label>
+
+<input
+type="text"
+id="bankName">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Branch
+
+</label>
+
+<input
+type="text"
+id="bankBranch">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Account Name
+
+</label>
+
+<input
+type="text"
+id="bankAccountName">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Account Number
+
+</label>
+
+<input
+type="text"
+id="bankAccountNumber">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_bankSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Payment Controls
+
+</h2>
+
+</div>
+
+<form id="paymentControlsForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable M-Pesa
+
+</strong>
+
+<p>
+
+Allow M-Pesa payments.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enableMpesa"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Bank Payments
+
+</strong>
+
+<p>
+
+Allow bank deposit verification.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enableBank"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Automatic Verification
+
+</strong>
+
+<p>
+
+Verify Daraja transactions automatically.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="autoVerify">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Manual Approval
+
+</strong>
+
+<p>
+
+Finance officers can approve payments manually.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="manualApproval">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Refunds
+
+</strong>
+
+<p>
+
+Allow refund processing.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="refundsEnabled">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_paymentControlsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Receipt Settings
+
+</h2>
+
+</div>
+
+<form id="receiptSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Receipt Prefix
+
+</label>
+
+<input
+type="text"
+id="receiptPrefix"
+placeholder="GY26">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Starting Receipt Number
+
+</label>
+
+<input
+type="number"
+id="receiptStart">
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Receipt Footer
+
+</label>
+
+<textarea
+rows="4"
+id="receiptFooter"></textarea>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_receiptSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+<footer class="admin-footer">
+
+<p>
+
+© 2026 GY Summit Registration & Admission System
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<script type="module" src="../assets/js/finance.js"></script>
+
+</body>
+
+</html>

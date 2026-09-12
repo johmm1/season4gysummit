@@ -1,0 +1,632 @@
+/*=========================================
+GY SUMMIT 2026
+COMPONENTS.CSS
+Reusable UI Components
+==========================================*/
+
+
+/* ==========================
+BUTTONS
+========================== */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:14px 28px;
+    border:none;
+    border-radius:40px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-secondary{
+    background:var(--secondary);
+    color:#fff;
+}
+
+.btn-success{
+    background:var(--success);
+    color:#fff;
+}
+
+.btn-danger{
+    background:var(--danger);
+    color:#fff;
+}
+
+.btn-warning{
+    background:var(--warning);
+    color:#fff;
+}
+
+.btn-outline{
+
+    background:transparent;
+
+    border:2px solid var(--primary);
+
+    color:var(--primary);
+
+}
+
+.btn-outline:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+
+/* ==========================
+CARDS
+========================== */
+
+.card{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:var(--shadow-sm);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:var(--shadow-lg);
+
+}
+
+
+/* ==========================
+BADGES
+========================== */
+
+.badge{
+
+display:inline-block;
+
+padding:6px 15px;
+
+border-radius:30px;
+
+font-size:13px;
+
+font-weight:700;
+
+}
+
+.badge-success{
+
+background:#E8F5E9;
+
+color:#2E7D32;
+
+}
+
+.badge-danger{
+
+background:#FFEBEE;
+
+color:#D32F2F;
+
+}
+
+.badge-warning{
+
+background:#FFF8E1;
+
+color:#F9A825;
+
+}
+
+.badge-info{
+
+background:#E3F2FD;
+
+color:#1565C0;
+
+}
+
+
+/* ==========================
+ALERTS
+========================== */
+
+.alert{
+
+padding:18px 20px;
+
+border-radius:15px;
+
+margin:15px 0;
+
+font-weight:600;
+
+}
+
+.alert-success{
+
+background:#E8F5E9;
+
+color:#2E7D32;
+
+}
+
+.alert-danger{
+
+background:#FFEBEE;
+
+color:#D32F2F;
+
+}
+
+.alert-warning{
+
+background:#FFF8E1;
+
+color:#F9A825;
+
+}
+
+.alert-info{
+
+background:#E3F2FD;
+
+color:#1565C0;
+
+}
+
+
+/* ==========================
+INPUT GROUP
+========================== */
+
+.input-group{
+
+margin-bottom:20px;
+
+}
+
+.input-group label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-weight:600;
+
+}
+
+.input-group input,
+
+.input-group select,
+
+.input-group textarea{
+
+width:100%;
+
+padding:14px;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+transition:.3s;
+
+}
+
+.input-group input:focus,
+
+.input-group select:focus,
+
+.input-group textarea:focus{
+
+border-color:var(--primary);
+
+box-shadow:0 0 0 3px rgba(200,162,74,.2);
+
+}
+
+
+/* ==========================
+SEARCH BAR
+========================== */
+
+.search-bar{
+
+display:flex;
+
+gap:10px;
+
+margin-bottom:25px;
+
+}
+
+.search-bar input{
+
+flex:1;
+
+padding:14px;
+
+border-radius:40px;
+
+border:1px solid var(--border);
+
+}
+
+.search-bar button{
+
+padding:14px 25px;
+
+}
+
+
+/* ==========================
+MODAL
+========================== */
+
+.modal{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,.6);
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:9999;
+
+}
+
+.modal-content{
+
+background:white;
+
+padding:35px;
+
+border-radius:20px;
+
+width:90%;
+
+max-width:650px;
+
+position:relative;
+
+animation:fadeUp .3s;
+
+}
+
+.close-modal{
+
+position:absolute;
+
+top:15px;
+
+right:20px;
+
+font-size:26px;
+
+cursor:pointer;
+
+}
+
+
+/* ==========================
+LOADER
+========================== */
+
+.loader{
+
+width:55px;
+
+height:55px;
+
+border:6px solid #ddd;
+
+border-top:6px solid var(--primary);
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+margin:auto;
+
+}
+
+
+/* ==========================
+TOAST
+========================== */
+
+.toast{
+
+position:fixed;
+
+bottom:30px;
+
+right:30px;
+
+background:#222;
+
+color:white;
+
+padding:18px 25px;
+
+border-radius:12px;
+
+display:none;
+
+box-shadow:var(--shadow-lg);
+
+z-index:9999;
+
+}
+
+
+/* ==========================
+DROPDOWN
+========================== */
+
+.dropdown{
+
+position:relative;
+
+display:inline-block;
+
+}
+
+.dropdown-content{
+
+display:none;
+
+position:absolute;
+
+background:white;
+
+box-shadow:var(--shadow-md);
+
+border-radius:15px;
+
+min-width:220px;
+
+overflow:hidden;
+
+z-index:999;
+
+}
+
+.dropdown-content a{
+
+display:block;
+
+padding:15px;
+
+transition:.3s;
+
+}
+
+.dropdown-content a:hover{
+
+background:#f4f4f4;
+
+}
+
+.dropdown:hover .dropdown-content{
+
+display:block;
+
+}
+
+
+/* ==========================
+PAGINATION
+========================== */
+
+.pagination{
+
+display:flex;
+
+justify-content:center;
+
+gap:10px;
+
+margin:40px 0;
+
+}
+
+.pagination button{
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+border:none;
+
+background:white;
+
+box-shadow:var(--shadow-sm);
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.pagination button.active,
+
+.pagination button:hover{
+
+background:var(--primary);
+
+color:white;
+
+}
+
+
+/* ==========================
+ACCORDION
+========================== */
+
+.accordion{
+
+background:white;
+
+border-radius:15px;
+
+margin-bottom:15px;
+
+box-shadow:var(--shadow-sm);
+
+overflow:hidden;
+
+}
+
+.accordion-header{
+
+padding:18px;
+
+font-weight:700;
+
+cursor:pointer;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.accordion-body{
+
+display:none;
+
+padding:20px;
+
+border-top:1px solid var(--border);
+
+}
+
+
+/* ==========================
+BREADCRUMB
+========================== */
+
+.breadcrumb{
+
+display:flex;
+
+gap:10px;
+
+margin-bottom:25px;
+
+font-size:14px;
+
+}
+
+.breadcrumb a{
+
+color:var(--primary);
+
+}
+
+.breadcrumb span{
+
+color:#777;
+
+}
+
+
+/* ==========================
+PROGRESS BAR
+========================== */
+
+.progress{
+
+height:12px;
+
+background:#eee;
+
+border-radius:30px;
+
+overflow:hidden;
+
+}
+
+.progress-bar{
+
+height:100%;
+
+background:var(--primary);
+
+width:0%;
+
+}
+
+
+/* ==========================
+ANIMATIONS
+========================== */
+
+@keyframes spin{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(30px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}

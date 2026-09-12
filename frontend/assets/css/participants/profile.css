@@ -1,0 +1,393 @@
+/* ==========================================================
+GY SUMMIT 2026
+Participant Profile
+Page-specific styles only
+========================================================== */
+
+/* ==========================================================
+PROFILE HEADER
+========================================================== */
+
+.profile-header{
+
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+
+border-radius:24px;
+
+padding:45px;
+
+color:#fff;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.profile-header::before{
+
+content:"";
+
+position:absolute;
+
+right:-100px;
+
+top:-100px;
+
+width:320px;
+
+height:320px;
+
+background:rgba(255,255,255,.08);
+
+border-radius:50%;
+
+}
+
+.profile-cover{
+
+display:flex;
+
+align-items:center;
+
+gap:35px;
+
+position:relative;
+
+z-index:2;
+
+}
+
+/* ==========================================================
+PROFILE IMAGE
+========================================================== */
+
+.profile-avatar{
+
+position:relative;
+
+width:170px;
+
+height:170px;
+
+flex-shrink:0;
+
+}
+
+.profile-avatar img{
+
+width:100%;
+
+height:100%;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:6px solid rgba(255,255,255,.95);
+
+background:#fff;
+
+box-shadow:0 15px 35px rgba(0,0,0,.2);
+
+transition:.35s;
+
+}
+
+.profile-avatar:hover img{
+
+transform:scale(1.03);
+
+}
+
+.change-photo{
+
+position:absolute;
+
+bottom:8px;
+
+right:8px;
+
+width:48px;
+
+height:48px;
+
+border-radius:50%;
+
+background:var(--secondary);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+cursor:pointer;
+
+color:#fff;
+
+font-size:18px;
+
+transition:.3s;
+
+box-shadow:0 10px 20px rgba(0,0,0,.2);
+
+}
+
+.change-photo:hover{
+
+transform:scale(1.1);
+
+}
+
+/* ==========================================================
+PROFILE SUMMARY
+========================================================== */
+
+.profile-summary{
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+gap:10px;
+
+}
+
+.profile-summary h2{
+
+font-size:2.3rem;
+
+font-weight:700;
+
+}
+
+.profile-summary p{
+
+font-size:1rem;
+
+opacity:.9;
+
+}
+
+.profile-badges{
+
+display:flex;
+
+gap:12px;
+
+margin-top:8px;
+
+flex-wrap:wrap;
+
+}
+
+/* ==========================================================
+SECTION SPACING
+========================================================== */
+
+.profile-card{
+
+margin-bottom:30px;
+
+}
+
+.profile-card:last-of-type{
+
+margin-bottom:20px;
+
+}
+
+/* ==========================================================
+TEXTAREA HEIGHT
+========================================================== */
+
+#allergies,
+
+#medicalConditions{
+
+min-height:120px;
+
+}
+
+/* ==========================================================
+READ ONLY FIELD ICON
+========================================================== */
+
+.form-group.readonly{
+
+position:relative;
+
+}
+
+.form-group.readonly::after{
+
+content:"🔒";
+
+position:absolute;
+
+right:16px;
+
+top:45px;
+
+font-size:14px;
+
+opacity:.5;
+
+}
+
+/* ==========================================================
+PROFILE ACTIONS
+========================================================== */
+
+.profile-actions{
+
+display:flex;
+
+justify-content:flex-end;
+
+gap:18px;
+
+margin-top:40px;
+
+}
+
+/* ==========================================================
+PHOTO PREVIEW ANIMATION
+========================================================== */
+
+.photo-uploading{
+
+opacity:.5;
+
+pointer-events:none;
+
+}
+
+.photo-success{
+
+animation:photoFlash .5s ease;
+
+}
+
+@keyframes photoFlash{
+
+0%{
+
+transform:scale(.9);
+
+}
+
+50%{
+
+transform:scale(1.05);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+/* ==========================================================
+RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+.profile-cover{
+
+flex-direction:column;
+
+text-align:center;
+
+}
+
+.profile-summary{
+
+align-items:center;
+
+}
+
+.profile-badges{
+
+justify-content:center;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.profile-header{
+
+padding:30px 20px;
+
+}
+
+.profile-avatar{
+
+width:140px;
+
+height:140px;
+
+}
+
+.profile-summary h2{
+
+font-size:1.8rem;
+
+}
+
+.profile-actions{
+
+flex-direction:column;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.profile-avatar{
+
+width:120px;
+
+height:120px;
+
+}
+
+.change-photo{
+
+width:42px;
+
+height:42px;
+
+font-size:15px;
+
+}
+
+.profile-summary h2{
+
+font-size:1.5rem;
+
+}
+
+.profile-summary p{
+
+font-size:.9rem;
+
+}
+
+.profile-header{
+
+border-radius:18px;
+
+}
+
+}

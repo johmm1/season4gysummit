@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Profile | GY Summit 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Global CSS -->
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<link rel="stylesheet" href="../assets/css/animations.css">
+
+<link rel="stylesheet" href="../assets/css/responsive.css">
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+
+<!-- Participant CSS -->
+
+<link rel="stylesheet" href="../assets/css/participants/profile.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- ==========================================
+SIDEBAR
+========================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img
+src="../assets/images/logo.png"
+alt="GY Summit">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Participant Portal
+
+</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+<a href="profile.html" class="active">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+<a href="admission-pass.html">
+
+<i class="fa-solid fa-id-card"></i>
+
+Admission Pass
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports Centre
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button
+id="logoutBtn"
+class="logout-btn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ==========================================
+MAIN CONTENT
+========================================== -->
+
+<main class="dashboard-content">
+
+<!-- ==========================================
+TOPBAR
+========================================== -->
+
+<header class="topbar">
+
+<div>
+
+<h1>
+
+My Profile
+
+</h1>
+
+<p>
+
+Manage your personal information
+
+</p>
+
+</div>
+
+<div class="participant-profile">
+
+<img
+
+id="topProfilePhoto"
+
+src="../assets/images/avatar-placeholder.png"
+
+alt="Profile">
+
+<div>
+
+<h4 id="topParticipantName">
+
+Loading...
+
+</h4>
+
+<p id="topParticipantParish">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ==========================================
+PROFILE HEADER
+========================================== -->
+
+<section class="profile-header">
+
+<div class="profile-cover">
+
+<div class="profile-avatar">
+
+<img
+
+id="profilePhoto"
+
+src="../assets/images/avatar-placeholder.png"
+
+alt="Participant">
+
+<label
+for="photoUpload"
+class="change-photo">
+
+<i class="fa-solid fa-camera"></i>
+
+</label>
+
+<input
+
+type="file"
+
+id="photoUpload"
+
+accept="image/*"
+
+hidden>
+
+</div>
+
+<div class="profile-summary">
+
+<h2 id="participantName">
+
+Loading...
+
+</h2>
+
+<p id="participantParish">
+
+Loading...
+
+</p>
+
+<div class="profile-badges">
+
+<span class="badge">
+
+<i class="fa-solid fa-id-card"></i>
+
+Participant
+
+</span>
+
+<span
+class="badge badge-success"
+id="paymentBadge">
+
+Paid
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+PROFILE FORM
+Next Section
+========================================== -->
+
+<form id="profileForm"><!-- ==========================================
+PERSONAL INFORMATION
+========================================== -->
+
+<div class="profile-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-user"></i>
+
+Personal Information
+
+</h3>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Full Name</label>
+
+<input
+
+type="text"
+
+id="fullName"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>Gender</label>
+
+<input
+
+type="text"
+
+id="gender"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>Date of Birth</label>
+
+<input
+
+type="date"
+
+id="dob"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>National ID / Birth Certificate</label>
+
+<input
+
+type="text"
+
+id="nationalId"
+
+readonly>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+CONTACT INFORMATION
+========================================== -->
+
+<div class="profile-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-address-book"></i>
+
+Contact Information
+
+</h3>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Phone Number
+
+</label>
+
+<input
+
+type="tel"
+
+id="phone"
+
+placeholder="+2547XXXXXXXX"
+
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Email Address
+
+</label>
+
+<input
+
+type="email"
+
+id="email"
+
+placeholder="example@email.com"
+
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Occupation
+
+</label>
+
+<input
+
+type="text"
+
+id="occupation"
+
+placeholder="Student">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Institution / Workplace
+
+</label>
+
+<input
+
+type="text"
+
+id="institution"
+
+placeholder="University / Company">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+CHURCH INFORMATION
+========================================== -->
+
+<div class="profile-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-church"></i>
+
+Church Information
+
+</h3>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Presbytery
+
+</label>
+
+<input
+
+type="text"
+
+id="presbytery"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Parish
+
+</label>
+
+<input
+
+type="text"
+
+id="parish"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Congregation
+
+</label>
+
+<input
+
+type="text"
+
+id="church"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Chairperson
+
+</label>
+
+<input
+
+type="text"
+
+id="chairperson"
+
+readonly>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+NEXT SECTION
+Emergency Contact
+Medical Information
+========================================== --><!-- ==========================================
+EMERGENCY CONTACT
+========================================== -->
+
+<div class="profile-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-phone-volume"></i>
+
+Emergency Contact
+
+</h3>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Contact Name
+
+</label>
+
+<input
+
+type="text"
+
+id="emergencyName"
+
+placeholder="Emergency Contact Name">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Relationship
+
+</label>
+
+<select id="relationship">
+
+<option value="">Select Relationship</option>
+
+<option>Parent</option>
+
+<option>Guardian</option>
+
+<option>Sibling</option>
+
+<option>Spouse</option>
+
+<option>Relative</option>
+
+<option>Friend</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Phone Number
+
+</label>
+
+<input
+
+type="tel"
+
+id="emergencyPhone"
+
+placeholder="+2547XXXXXXXX">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Alternative Phone
+
+</label>
+
+<input
+
+type="tel"
+
+id="alternativePhone"
+
+placeholder="+2547XXXXXXXX">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+MEDICAL INFORMATION
+========================================== -->
+
+<div class="profile-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+Medical Information
+
+</h3>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group full-width">
+
+<label>
+
+Allergies
+
+</label>
+
+<textarea
+
+id="allergies"
+
+rows="3"
+
+placeholder="State any allergies or write None">
+
+</textarea>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Medical Conditions
+
+</label>
+
+<textarea
+
+id="medicalConditions"
+
+rows="3"
+
+placeholder="State any medical condition or write None">
+
+</textarea>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Dietary Requirements
+
+</label>
+
+<select id="dietaryRequirements">
+
+<option value="">None</option>
+
+<option>Vegetarian</option>
+
+<option>Vegan</option>
+
+<option>Halal</option>
+
+<option>Gluten Free</option>
+
+<option>Diabetic Diet</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Physical Challenge
+
+</label>
+
+<input
+
+type="text"
+
+id="physicalChallenge"
+
+placeholder="If applicable">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+SUMMIT INFORMATION
+========================================== -->
+
+<div class="profile-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-calendar-days"></i>
+
+Summit Information
+
+</h3>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Registration Number
+
+</label>
+
+<input
+
+type="text"
+
+id="registrationNumber"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Admission Number
+
+</label>
+
+<input
+
+type="text"
+
+id="admissionNumber"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Registration Date
+
+</label>
+
+<input
+
+type="text"
+
+id="registrationDate"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Payment Status
+
+</label>
+
+<input
+
+type="text"
+
+id="paymentStatus"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Football Team
+
+</label>
+
+<input
+
+type="text"
+
+id="footballTeam"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Volleyball Team
+
+</label>
+
+<input
+
+type="text"
+
+id="volleyballTeam"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Dance Team
+
+</label>
+
+<input
+
+type="text"
+
+id="danceTeam"
+
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Profile Last Updated
+
+</label>
+
+<input
+
+type="text"
+
+id="lastUpdated"
+
+readonly>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+FORM ACTIONS
+========================================== -->
+
+<div class="profile-actions">
+
+<button
+
+type="button"
+id="resetProfileBtn"
+
+class="btn btn-outline">
+
+<i class="fa-solid fa-arrow-rotate-left"></i>
+
+Reset
+
+</button>
+
+<button
+
+type="submit"
+
+class="btn btn-primary"
+
+id="saveProfileBtn">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Changes
+
+</button>
+
+</div>
+
+</form>
+
+</main>
+
+</div>
+
+<script type="module" src="js/profile.js"></script>
+
+</body>
+
+</html>

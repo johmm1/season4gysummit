@@ -1,0 +1,4042 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Sports Management | GY Summit 2026
+
+</title>
+
+<link rel="stylesheet"
+href="../assets/css/variables.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="../assets/css/admin.css">
+
+<link rel="stylesheet"
+href="../assets/css/sports.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img
+src="../assets/images/logo.png"
+alt="GY Summit Logo">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Sports Centre
+
+</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Finance
+
+</a>
+
+<a href="admissions.html">
+
+<i class="fa-solid fa-door-open"></i>
+
+Admissions
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a class="active"
+href="sports.html">
+
+<i class="fa-solid fa-trophy"></i>
+
+Sports
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Media
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<h4>
+
+PCEA Githunguri Presbytery
+
+</h4>
+
+<small>
+
+GY Summit 2026
+
+</small>
+
+</div>
+
+</aside>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<main class="admin-main">
+
+<header class="dashboard-header">
+
+<div>
+
+<h1>
+
+Sports Management Centre
+
+</h1>
+
+<p>
+
+Manage football, volleyball and dance competitions from one place.
+
+</p>
+
+</div>
+
+<div class="header-right">
+
+<div class="notification-btn">
+
+<i class="fa-solid fa-bell"></i>
+
+<span id="notificationBadge">
+
+0
+
+</span>
+
+</div>
+
+<div class="admin-profile">
+
+<img
+src="../assets/images/admin.png"
+alt="Administrator">
+
+<div>
+
+<strong id="adminName">
+
+Admin
+
+</strong>
+
+<small id="adminRole">
+
+Online
+
+</small>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
+
+</header>
+
+<!-- ======================================================
+GLOBAL SEARCH
+====================================================== -->
+
+<div class="dashboard-search">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+
+type="search"
+
+id="sportsSearch"
+
+placeholder="Search teams, players, fixtures or results...">
+
+</div>
+
+<!-- ======================================================
+DASHBOARD CARDS
+====================================================== -->
+
+<section class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-futbol"></i>
+
+</div>
+
+<div>
+
+<h2 id="footballTeams">
+
+0
+
+</h2>
+
+<p>
+
+Football Teams
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-volleyball"></i>
+
+</div>
+
+<div>
+
+<h2 id="volleyballTeams">
+
+0
+
+</h2>
+
+<p>
+
+Volleyball Teams
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-music"></i>
+
+</div>
+
+<div>
+
+<h2 id="danceTeams">
+
+0
+
+</h2>
+
+<p>
+
+Dance Teams
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div>
+
+<h2 id="registeredPlayers">
+
+0
+
+</h2>
+
+<p>
+
+Registered Players
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+</div>
+
+<div>
+
+<h2 id="todaysFixtures">
+
+0
+
+</h2>
+
+<p>
+
+Today's Fixtures
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-trophy"></i>
+
+</div>
+
+<div>
+
+<h2 id="completedMatches">
+
+0
+
+</h2>
+
+<p>
+
+Completed Matches
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+SPORTS NAVIGATION
+====================================================== -->
+
+<section class="sports-navigation">
+
+<button class="sports-tab active"
+data-tab="overview">
+
+<i class="fa-solid fa-chart-pie"></i>
+
+Overview
+
+</button>
+
+<button class="sports-tab"
+data-tab="teams">
+
+<i class="fa-solid fa-users"></i>
+
+Teams
+
+</button>
+
+<button class="sports-tab"
+data-tab="football">
+
+<i class="fa-solid fa-futbol"></i>
+
+Football
+
+</button>
+
+<button class="sports-tab"
+data-tab="volleyball">
+
+<i class="fa-solid fa-volleyball"></i>
+
+Volleyball
+
+</button>
+
+<button class="sports-tab"
+data-tab="dance">
+
+<i class="fa-solid fa-music"></i>
+
+Dance
+
+</button>
+
+<button class="sports-tab"
+data-tab="fixtures">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+Fixtures
+
+</button>
+
+<button class="sports-tab"
+data-tab="standings">
+
+<i class="fa-solid fa-ranking-star"></i>
+
+Standings
+
+</button>
+
+<button class="sports-tab"
+data-tab="reports">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+Reports
+
+</button>
+
+</section>
+
+<!-- ======================================================
+TAB CONTENT STARTS BELOW
+====================================================== -->
+
+<div id="sportsContent"><!-- ======================================================
+TEAM REGISTRATION CENTRE
+====================================================== -->
+
+<section id="teamsTab" class="sports-section active-section">
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-users"></i>
+
+Team Rosters
+
+</h2>
+
+</div>
+
+<p style="padding:0 4px 16px;color:#888;font-size:.9rem;max-width:760px;">
+
+Teams are pre-set one per parish per competition and can't be created from here. Pick a competition and parish to open that team's roster, then add or remove registered participants from their parish.
+
+</p>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Competition</label>
+
+<select id="competitionType" required>
+<option value="">Select Competition</option>
+<option value="Football">Football</option>
+<option value="Volleyball">Volleyball</option>
+<option value="Dance">Dance</option>
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Parish</label>
+
+<select id="parish" required>
+<option value="">Choose Parish</option>
+</select>
+
+</div>
+
+</div>
+
+<div id="teamRosterPanel" style="display:none;margin-top:10px;">
+
+<div class="panel-header" style="margin-top:10px;">
+
+<h2 id="rosterTeamName" style="font-size:1.1rem;">
+
+Team
+
+</h2>
+
+<span class="status info" id="rosterMemberCount">0 players</span>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Coach / Patron</label>
+
+<input type="text" id="coachName" placeholder="Coach or Patron">
+
+</div>
+
+<div class="form-group">
+
+<label>Chairperson</label>
+
+<input type="text" id="chairpersonName" placeholder="Chairperson">
+
+</div>
+
+<div class="form-group">
+
+<label>Chairperson Phone</label>
+
+<input type="tel" id="chairpersonPhone" placeholder="+254...">
+
+</div>
+
+</div>
+
+<div class="composer-actions" style="margin-top:-10px;">
+
+<button type="button" class="btn btn-outline" id="saveTeamMeta">
+<i class="fa-solid fa-floppy-disk"></i> Save team details
+</button>
+
+</div>
+
+<!-- ======================================================
+ADD PLAYER
+====================================================== -->
+
+<div class="panel-header" style="margin-top:25px;">
+
+<h2>
+
+<i class="fa-solid fa-user-group"></i>
+
+Players
+
+</h2>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group" style="grid-column:span 2;">
+
+<label>Add a registered participant from this parish</label>
+
+<select id="playerPicker">
+<option value="">Select a participant…</option>
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Position / Role</label>
+
+<input type="text" id="playerPosition" placeholder="e.g. Striker">
+
+</div>
+
+<div class="form-group">
+
+<label>Jersey No.</label>
+
+<input type="number" id="playerJersey" min="1" placeholder="e.g. 9">
+
+</div>
+
+</div>
+
+<div class="composer-actions" style="margin-top:-10px;">
+
+<button type="button" class="btn btn-primary" id="addPlayer">
+<i class="fa-solid fa-user-plus"></i> Add to roster
+</button>
+
+</div>
+
+<div class="players-table">
+
+<table>
+
+<thead>
+
+<tr>
+<th>#</th>
+<th>Player Name</th>
+<th>Gender</th>
+<th>Position / Role</th>
+<th>Jersey No.</th>
+<th>Captain</th>
+<th>Eligible</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="playersTableBody">
+
+<tr class="empty-row">
+<td colspan="8">No players added.</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+ALL TEAMS OVERVIEW
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-list"></i>
+
+All Teams
+
+</h2>
+
+<div class="form-group" style="margin:0;min-width:200px;">
+
+<select id="teamsOverviewFilter">
+<option value="">All competitions</option>
+<option value="Football">Football</option>
+<option value="Volleyball">Volleyball</option>
+<option value="Dance">Dance</option>
+</select>
+
+</div>
+
+<button class="btn btn-primary" id="awardCertificatesBtn" type="button">
+<i class="fa-solid fa-trophy"></i>
+Award Certificates to Champions
+</button>
+
+</div>
+
+<p style="padding:0 4px 14px;color:#888;font-size:.85rem;">
+
+Champions below are computed live from real fixture results — the bracket Final if one's been played, otherwise the group-stage points leader. This is exactly what "Award Certificates" uses, so what you see here is what gets issued.
+
+</p>
+
+<div id="championsSummary" style="display:flex;flex-wrap:wrap;gap:8px;padding:0 4px 16px;">
+
+<span style="color:#888;">Loading standings…</span>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+<th>Competition</th>
+<th>Parish</th>
+<th>Team</th>
+<th>Players</th>
+<th>Result</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="registeredTeamsTable">
+
+<tr>
+<td colspan="6">Loading teams…</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+PARISHES
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-place-of-worship"></i>
+
+Parishes
+
+</h2>
+
+<button class="btn btn-outline" id="refreshParishes" type="button">
+<i class="fa-solid fa-rotate"></i>
+Refresh
+</button>
+
+</div>
+
+<p style="padding:0 4px 16px;color:#888;font-size:.9rem;">
+
+Rename a parish here and it updates everywhere — registration dropdowns, participant profiles, and sports team names all read from this same record. Standings are computed live from completed fixtures.
+
+</p>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+<th>Presbytery</th>
+<th>Parish Name</th>
+<th>Churches</th>
+<th>Participants</th>
+<th>Teams</th>
+<th>P</th>
+<th>W</th>
+<th>D</th>
+<th>L</th>
+<th>Pts</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="parishesTable">
+
+<tr>
+<td colspan="11">Loading parishes…</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+FOOTBALL MANAGEMENT
+====================================================== -->
+
+<section id="footballTab" class="sports-section">
+
+<!-- ======================================================
+FOOTBALL OVERVIEW
+====================================================== -->
+
+<div class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div>
+
+<h2 id="footballRegisteredTeams">
+
+0
+
+</h2>
+
+<p>
+
+Registered Teams
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-futbol"></i>
+
+</div>
+
+<div>
+
+<h2 id="footballMatchesPlayed">
+
+0
+
+</h2>
+
+<p>
+
+Matches Played
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+</div>
+
+<div>
+
+<h2 id="footballRemainingMatches">
+
+0
+
+</h2>
+
+<p>
+
+Remaining Fixtures
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-trophy"></i>
+
+</div>
+
+<div>
+
+<h2 id="footballChampion">
+
+—
+
+</h2>
+
+<p>
+
+Current Leader
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+FIXTURE GENERATOR
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Fixture Generator
+
+</h2>
+
+<button
+
+class="btn btn-primary"
+
+id="generateFootballFixtures">
+
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+
+Generate Fixtures
+
+</button>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Tournament Stage
+
+</label>
+
+<select id="footballStage">
+
+<option>Group Stage</option>
+
+<option>Quarter Finals</option>
+
+<option>Semi Finals</option>
+
+<option>Third Place</option>
+
+<option>Final</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Venue
+
+</label>
+
+<select id="footballVenue">
+
+<option>Main Pitch</option>
+
+<option>Pitch B</option>
+
+<option>Pitch C</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Match Date
+
+</label>
+
+<input type="date" id="footballDate">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Kick Off Time
+
+</label>
+
+<input type="time" id="footballKickoff">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+MATCHES
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Football Fixtures
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Time</th>
+
+<th>Home</th>
+
+<th>Score</th>
+
+<th>Away</th>
+
+<th>Venue</th>
+
+<th>Referee</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="footballFixturesTable">
+
+<tr>
+
+<td colspan="9">
+
+No football fixtures generated.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+LIVE SCORE ENTRY
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Live Match Result
+
+</h2>
+
+</div>
+
+<form id="footballResultForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Fixture
+
+</label>
+
+<select id="footballFixtureSelect">
+
+<option>
+
+Select Fixture
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Home Goals
+
+</label>
+
+<input
+
+type="number"
+
+min="0"
+
+id="homeGoals">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Away Goals
+
+</label>
+
+<input
+
+type="number"
+
+min="0"
+
+id="awayGoals">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Match Status
+
+</label>
+
+<select id="matchStatus">
+
+<option>Scheduled</option>
+
+<option>Live</option>
+
+<option>Finished</option>
+
+<option>Postponed</option>
+
+<option>Cancelled</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="composer-actions">
+
+<button
+
+type="submit"
+
+class="btn btn-primary">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Result
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</section><!-- ======================================================
+VOLLEYBALL MANAGEMENT
+====================================================== -->
+
+<section id="volleyballTab" class="sports-section">
+
+<!-- ======================================================
+VOLLEYBALL OVERVIEW
+====================================================== -->
+
+<div class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-volleyball"></i>
+
+</div>
+
+<div>
+
+<h2 id="volleyballRegisteredTeams">
+
+0
+
+</h2>
+
+<p>
+
+Registered Teams
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-calendar-check"></i>
+
+</div>
+
+<div>
+
+<h2 id="volleyballMatchesPlayed">
+
+0
+
+</h2>
+
+<p>
+
+Matches Played
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-clock"></i>
+
+</div>
+
+<div>
+
+<h2 id="volleyballRemainingMatches">
+
+0
+
+</h2>
+
+<p>
+
+Remaining Fixtures
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-medal"></i>
+
+</div>
+
+<div>
+
+<h2 id="volleyballLeader">
+
+—
+
+</h2>
+
+<p>
+
+Current Leader
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+FIXTURE GENERATOR
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Volleyball Fixture Generator
+
+</h2>
+
+<button
+
+class="btn btn-primary"
+
+id="generateVolleyballFixtures">
+
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+
+Generate Fixtures
+
+</button>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Competition Stage
+
+</label>
+
+<select id="volleyballStage">
+
+<option>Group Stage</option>
+
+<option>Quarter Finals</option>
+
+<option>Semi Finals</option>
+
+<option>Third Place</option>
+
+<option>Final</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Court
+
+</label>
+
+<select id="volleyballVenue">
+
+<option>Main Court</option>
+
+<option>Court B</option>
+
+<option>Court C</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Match Date
+
+</label>
+
+<input
+
+type="date"
+
+id="volleyballDate">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Start Time
+
+</label>
+
+<input
+
+type="time"
+
+id="volleyballTime">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+FIXTURES TABLE
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Volleyball Fixtures
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Time</th>
+
+<th>Home Team</th>
+
+<th>Sets</th>
+
+<th>Away Team</th>
+
+<th>Court</th>
+
+<th>Official</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="volleyballFixturesTable">
+
+<tr>
+
+<td colspan="9">
+
+No fixtures available.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+RESULT ENTRY
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Enter Match Result
+
+</h2>
+
+</div>
+
+<form id="volleyballResultForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Fixture
+
+</label>
+
+<select id="volleyballFixture">
+
+<option>
+
+Select Match
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Home Sets Won
+
+</label>
+
+<input
+
+type="number"
+
+min="0"
+
+max="3"
+
+id="homeSets">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Away Sets Won
+
+</label>
+
+<input
+
+type="number"
+
+min="0"
+
+max="3"
+
+id="awaySets">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Match Status
+
+</label>
+
+<select id="volleyballStatus">
+
+<option>Scheduled</option>
+
+<option>Live</option>
+
+<option>Finished</option>
+
+<option>Postponed</option>
+
+<option>Cancelled</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="composer-actions">
+
+<button
+
+type="submit"
+
+class="btn btn-primary">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Result
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- ======================================================
+TOP PERFORMERS
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Top Players
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Player</th>
+
+<th>Parish</th>
+
+<th>Matches</th>
+
+<th>MVP Awards</th>
+
+<th>Total Points</th>
+
+</tr>
+
+</thead>
+
+<tbody id="volleyballTopPlayers">
+
+<tr>
+
+<td colspan="5">
+
+No statistics available.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+DANCE COMPETITION
+====================================================== -->
+
+<section id="danceTab" class="sports-section">
+
+<!-- ======================================================
+DASHBOARD
+====================================================== -->
+
+<div class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-music"></i>
+
+</div>
+
+<div>
+
+<h2 id="danceRegisteredTeams">
+
+0
+
+</h2>
+
+<p>
+
+Registered Dance Teams
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-calendar-day"></i>
+
+</div>
+
+<div>
+
+<h2 id="performancesToday">
+
+0
+
+</h2>
+
+<p>
+
+Today's Performances
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div>
+
+<h2 id="danceJudges">
+
+0
+
+</h2>
+
+<p>
+
+Judges
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-trophy"></i>
+
+</div>
+
+<div>
+
+<h2 id="danceLeader">
+
+—
+
+</h2>
+
+<p>
+
+Current Leader
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+PERFORMANCE SCHEDULE
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Performance Schedule
+
+</h2>
+
+<button
+class="btn btn-primary"
+id="addPerformance">
+
+<i class="fa-solid fa-plus"></i>
+
+Schedule Performance
+
+</button>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Order</th>
+
+<th>Parish</th>
+
+<th>Performance</th>
+
+<th>Stage</th>
+
+<th>Time</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="danceScheduleTable">
+
+<tr>
+
+<td colspan="7">
+
+No performances scheduled.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+JUDGES SCORING
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Judge Score Entry
+
+</h2>
+
+</div>
+
+<form id="danceScoreForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Performance
+
+</label>
+
+<select id="performanceSelect">
+
+<option>
+
+Select Performance
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Judge
+
+</label>
+
+<select id="judgeSelect">
+
+<option>
+
+Select Judge
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Theme (20)
+
+</label>
+
+<input
+type="number"
+min="0"
+max="20"
+id="themeScore">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Creativity (20)
+
+</label>
+
+<input
+type="number"
+min="0"
+max="20"
+id="creativityScore">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Synchronization (20)
+
+</label>
+
+<input
+type="number"
+min="0"
+max="20"
+id="syncScore">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Costume (20)
+
+</label>
+
+<input
+type="number"
+min="0"
+max="20"
+id="costumeScore">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Stage Presence (20)
+
+</label>
+
+<input
+type="number"
+min="0"
+max="20"
+id="stageScore">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Remarks
+
+</label>
+
+<textarea
+id="judgeRemarks"
+rows="4"></textarea>
+
+</div>
+
+</div>
+
+<div class="composer-actions">
+
+<button
+type="submit"
+class="btn btn-primary">
+
+<i class="fa-solid fa-check"></i>
+
+Submit Score
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- ======================================================
+LIVE LEADERBOARD
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Live Leaderboard
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Rank</th>
+
+<th>Parish</th>
+
+<th>Theme</th>
+
+<th>Creativity</th>
+
+<th>Synchronization</th>
+
+<th>Costume</th>
+
+<th>Stage</th>
+
+<th>Total</th>
+
+</tr>
+
+</thead>
+
+<tbody id="danceLeaderboard">
+
+<tr>
+
+<td colspan="8">
+
+No scores available.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+BEST PERFORMANCE
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Award Predictions
+
+</h2>
+
+</div>
+
+<div class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-crown"></i>
+
+</div>
+
+<div>
+
+<h2 id="bestDance">
+
+—
+
+</h2>
+
+<p>
+
+Best Overall Dance
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-star"></i>
+
+</div>
+
+<div>
+
+<h2 id="bestTheme">
+
+—
+
+</h2>
+
+<p>
+
+Best Theme
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-shirt"></i>
+
+</div>
+
+<div>
+
+<h2 id="bestCostume">
+
+—
+
+</h2>
+
+<p>
+
+Best Costume
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-fire"></i>
+
+</div>
+
+<div>
+
+<h2 id="crowdFavourite">
+
+—
+
+</h2>
+
+<p>
+
+Crowd Favourite
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+UNIFIED FIXTURES & EVENT CENTRE
+====================================================== -->
+
+<section id="fixturesTab" class="sports-section">
+
+<!-- ======================================================
+EVENT OVERVIEW
+====================================================== -->
+
+<div class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+</div>
+
+<div>
+
+<h2 id="todayEvents">
+
+0
+
+</h2>
+
+<p>
+
+Today's Events
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-play"></i>
+
+</div>
+
+<div>
+
+<h2 id="liveEvents">
+
+0
+
+</h2>
+
+<p>
+
+Live Events
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-check"></i>
+
+</div>
+
+<div>
+
+<h2 id="completedEvents">
+
+0
+
+</h2>
+
+<p>
+
+Completed
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-clock"></i>
+
+</div>
+
+<div>
+
+<h2 id="upcomingEvents">
+
+0
+
+</h2>
+
+<p>
+
+Upcoming
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+CREATE EVENT
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Schedule Event
+
+</h2>
+
+<button
+
+class="btn btn-primary"
+
+id="saveFixture">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Event
+
+</button>
+
+</div>
+
+<form id="fixtureForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Competition
+
+</label>
+
+<select id="fixtureCompetition">
+
+<option value="football">
+
+Football
+
+</option>
+
+<option value="volleyball">
+
+Volleyball
+
+</option>
+
+<option value="dance">
+
+Dance
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Venue
+
+</label>
+
+<select id="fixtureVenue">
+
+<option>Main Pitch</option>
+
+<option>Pitch B</option>
+
+<option>Volleyball Court</option>
+
+<option>Main Stage</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Gender Category
+
+</label>
+
+<select id="fixtureGender">
+
+<option value="MIXED">Mixed</option>
+
+<option value="MALE">Male</option>
+
+<option value="FEMALE">Female</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Date
+
+</label>
+
+<input type="date" id="fixtureDate">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Start Time
+
+</label>
+
+<input type="time" id="fixtureTime">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Home Team / Parish
+
+</label>
+
+<select id="fixtureHome"></select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Away Team
+
+</label>
+
+<select id="fixtureAway"></select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Round
+
+</label>
+
+<select id="fixtureRound">
+<option value="">Not part of a bracket</option>
+<option value="GROUP">Group Stage</option>
+<option value="QUARTER">Quarter Final</option>
+<option value="SEMI">Semi Final</option>
+<option value="FINAL">Final</option>
+</select>
+
+</div>
+
+<div class="form-group" id="fixtureGroupWrap">
+
+<label>
+
+Group (group stage only)
+
+</label>
+
+<select id="fixtureGroup">
+<option value="">—</option>
+<option value="A">Group A</option>
+<option value="B">Group B</option>
+<option value="C">Group C</option>
+</select>
+
+</div>
+
+<div class="form-group" id="fixtureBracketSlotWrap">
+
+<label>
+
+Bracket Slot (knockout only)
+
+</label>
+
+<select id="fixtureBracketSlot">
+<option value="">—</option>
+<option value="QF1">Quarter Final 1</option>
+<option value="QF2">Quarter Final 2</option>
+<option value="SF1">Semi Final 1</option>
+<option value="SF2">Semi Final 2</option>
+<option value="FINAL">Final</option>
+</select>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Notes
+
+</label>
+
+<textarea
+
+id="fixtureNotes"
+
+rows="3"
+
+placeholder="Additional instructions..."></textarea>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- ======================================================
+MASTER TIMELINE
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Master Event Timeline
+
+</h2>
+
+<button
+
+class="btn btn-outline"
+
+id="refreshTimeline">
+
+<i class="fa-solid fa-rotate"></i>
+
+Refresh
+
+</button>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Time</th>
+
+<th>Competition</th>
+
+<th>Fixture / Performance</th>
+
+<th>Venue</th>
+
+<th>Official</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="masterTimeline">
+
+<tr>
+
+<td colspan="7">
+
+No scheduled events.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+EDIT FIXTURE MODAL
+====================================================== -->
+
+<div id="editFixtureModal" class="modal hidden">
+
+<div class="modal-content" style="max-width:520px;text-align:left;">
+
+<h2 style="margin-bottom:16px;">Edit Fixture</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Home Team</label>
+<select id="editFixtureHome"></select>
+</div>
+
+<div class="form-group">
+<label>Away Team</label>
+<select id="editFixtureAway"></select>
+</div>
+
+<div class="form-group">
+<label>Date</label>
+<input type="date" id="editFixtureDate">
+</div>
+
+<div class="form-group">
+<label>Time</label>
+<input type="time" id="editFixtureTime">
+</div>
+
+<div class="form-group" style="grid-column:span 2;">
+<label>Venue</label>
+<input type="text" id="editFixtureVenue">
+</div>
+
+<div class="form-group">
+<label>Gender Category</label>
+<select id="editFixtureGender">
+<option value="MIXED">Mixed</option>
+<option value="MALE">Male</option>
+<option value="FEMALE">Female</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Round</label>
+<select id="editFixtureRound">
+<option value="">Not part of a bracket</option>
+<option value="GROUP">Group Stage</option>
+<option value="QUARTER">Quarter Final</option>
+<option value="SEMI">Semi Final</option>
+<option value="FINAL">Final</option>
+</select>
+</div>
+
+<div class="form-group" id="editFixtureGroupWrap">
+<label>Group</label>
+<select id="editFixtureGroup">
+<option value="">—</option>
+<option value="A">Group A</option>
+<option value="B">Group B</option>
+<option value="C">Group C</option>
+</select>
+</div>
+
+<div class="form-group" id="editFixtureBracketWrap">
+<label>Bracket Slot</label>
+<select id="editFixtureBracketSlot">
+<option value="">—</option>
+<option value="QF1">Quarter Final 1</option>
+<option value="QF2">Quarter Final 2</option>
+<option value="SF1">Semi Final 1</option>
+<option value="SF2">Semi Final 2</option>
+<option value="FINAL">Final</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Status</label>
+<select id="editFixtureStatus">
+<option value="SCHEDULED">Scheduled</option>
+<option value="ONGOING">Ongoing</option>
+<option value="COMPLETED">Completed</option>
+<option value="CANCELLED">Cancelled</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Home Score</label>
+<input type="number" id="editFixtureScoreHome" min="0">
+</div>
+
+<div class="form-group">
+<label>Away Score</label>
+<input type="number" id="editFixtureScoreAway" min="0">
+</div>
+
+</div>
+
+<div class="modal-buttons" style="justify-content:space-between;margin-top:20px;">
+
+<button class="btn btn-danger" id="deleteFixtureBtn" type="button">
+<i class="fa-solid fa-trash"></i> Delete
+</button>
+
+<div style="display:flex;gap:10px;">
+<button class="btn btn-outline" id="cancelEditFixture" type="button">Cancel</button>
+<button class="btn btn-primary" id="saveEditFixture" type="button">Save Changes</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+LIVE MATCH CENTRE
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Live Event
+
+</h2>
+
+<span class="status success">
+
+LIVE
+
+</span>
+
+</div>
+
+<div class="live-event-card">
+
+<div class="live-event-header">
+
+<h2 id="liveCompetition">
+
+Football
+
+</h2>
+
+<h3 id="liveVenue">
+
+Main Pitch
+
+</h3>
+
+</div>
+
+<div class="live-scoreboard">
+
+<div class="team-side">
+
+<h2 id="liveHomeTeam">
+
+—
+
+</h2>
+
+</div>
+
+<div class="live-score">
+
+<span id="liveHomeScore">
+
+0
+
+</span>
+
+:
+
+<span id="liveAwayScore">
+
+0
+
+</span>
+
+</div>
+
+<div class="team-side">
+
+<h2 id="liveAwayTeam">
+
+—
+
+</h2>
+
+</div>
+
+</div>
+
+<div class="live-controls">
+
+<button class="btn btn-primary" id="startEvent">
+
+Start
+
+</button>
+
+<button class="btn btn-warning" id="pauseEvent">
+
+Pause
+
+</button>
+
+<button class="btn btn-danger" id="finishEvent">
+
+Finish
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+NEXT EVENTS
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Upcoming Events
+
+</h2>
+
+</div>
+
+<div id="upcomingEventsList">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-calendar-plus"></i>
+
+<h3>
+
+No Upcoming Events
+
+</h3>
+
+<p>
+
+Scheduled events will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+STANDINGS & REPORTS
+====================================================== -->
+
+<section id="standingsTab" class="sports-section">
+
+<!-- ======================================================
+FOOTBALL STANDINGS
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-futbol"></i>
+
+Football Standings
+
+</h2>
+
+<button class="btn btn-outline" id="refreshFootballStandings">
+
+<i class="fa-solid fa-rotate"></i>
+
+Refresh
+
+</button>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Team</th>
+
+<th>P</th>
+
+<th>W</th>
+
+<th>D</th>
+
+<th>L</th>
+
+<th>GF</th>
+
+<th>GA</th>
+
+<th>GD</th>
+
+<th>Pts</th>
+
+</tr>
+
+</thead>
+
+<tbody id="footballStandingsTable">
+
+<tr>
+
+<td colspan="10">
+
+Standings will appear here.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+VOLLEYBALL STANDINGS
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-volleyball"></i>
+
+Volleyball Standings
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Team</th>
+
+<th>P</th>
+
+<th>W</th>
+
+<th>L</th>
+
+<th>Sets Won</th>
+
+<th>Sets Lost</th>
+
+<th>Difference</th>
+
+<th>Pts</th>
+
+</tr>
+
+</thead>
+
+<tbody id="volleyballStandingsTable">
+
+<tr>
+
+<td colspan="9">
+
+Standings will appear here.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+DANCE LEADERBOARD
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-music"></i>
+
+Dance Leaderboard
+
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table class="sports-table">
+
+<thead>
+
+<tr>
+
+<th>Rank</th>
+
+<th>Parish</th>
+
+<th>Theme</th>
+
+<th>Creativity</th>
+
+<th>Synchronization</th>
+
+<th>Costume</th>
+
+<th>Stage</th>
+
+<th>Total</th>
+
+</tr>
+
+</thead>
+
+<tbody id="danceStandingsTable">
+
+<tr>
+
+<td colspan="8">
+
+Leaderboard will appear here.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+INDIVIDUAL AWARDS
+====================================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Competition Awards
+
+</h2>
+
+</div>
+
+<div class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-futbol"></i>
+
+</div>
+
+<div>
+
+<h3 id="goldenBoot">
+
+—
+
+</h3>
+
+<p>
+
+Golden Boot
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-handshake"></i>
+
+</div>
+
+<div>
+
+<h3 id="fairPlay">
+
+—
+
+</h3>
+
+<p>
+
+Fair Play
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-star"></i>
+
+</div>
+
+<div>
+
+<h3 id="mvpPlayer">
+
+—
+
+</h3>
+
+<p>
+
+Overall MVP
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-crown"></i>
+
+</div>
+
+<div>
+
+<h3 id="overallChampion">
+
+—
+
+</h3>
+
+<p>
+
+Champion
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+REPORTS TAB
+====================================================== -->
+
+<section id="reportsTab" class="sports-section">
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Sports Reports
+
+</h2>
+
+</div>
+
+<div class="quick-actions-grid">
+
+<button class="quick-action-card" id="exportFootball">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<h3>
+
+Football Report
+
+</h3>
+
+<p>
+
+Fixtures, standings and statistics.
+
+</p>
+
+</button>
+
+<button class="quick-action-card" id="exportVolleyball">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<h3>
+
+Volleyball Report
+
+</h3>
+
+<p>
+
+Fixtures, standings and statistics.
+
+</p>
+
+</button>
+
+<button class="quick-action-card" id="exportDance">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<h3>
+
+Dance Results
+
+</h3>
+
+<p>
+
+Performance scores and rankings.
+
+</p>
+
+</button>
+
+<button class="quick-action-card" id="exportAll">
+
+<i class="fa-solid fa-file-export"></i>
+
+<h3>
+
+Full Tournament Report
+
+</h3>
+
+<p>
+
+Export every competition.
+
+</p>
+
+</button>
+
+<button class="quick-action-card" id="presentationMode">
+
+<i class="fa-solid fa-tv"></i>
+
+<h3>
+
+Presentation Mode
+
+</h3>
+
+<p>
+
+Display live fixtures and standings.
+
+</p>
+
+</button>
+
+<button class="quick-action-card" id="generateKnockouts">
+
+<i class="fa-solid fa-diagram-project"></i>
+
+<h3>
+
+Generate Knockouts
+
+</h3>
+
+<p>
+
+Automatically create knockout fixtures.
+
+</p>
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- ======================================================
+END OF MAIN CONTENT
+====================================================== -->
+
+
+
+<!-- ======================================================
+SPORTS SETTINGS (moved from the old monolithic Settings page)
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-gear"></i>
+
+Sports Settings
+
+</h2>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+General Sports Configuration
+
+</h2>
+
+</div>
+
+<form id="generalSportsForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>Enable Football Competition</strong>
+
+<p>Show football module throughout the system.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="enableFootball" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>Enable Volleyball Competition</strong>
+
+<p>Enable volleyball registration and fixtures.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="enableVolleyball" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>Enable Dance Competition</strong>
+
+<p>Allow dance registration and judging.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" id="enableDance" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_generalSportsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Football Rules
+
+</h2>
+
+</div>
+
+<form id="footballRulesForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Teams Per Group
+
+</label>
+
+<input
+type="number"
+id="footballGroupSize"
+min="2">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Players Per Squad
+
+</label>
+
+<input
+type="number"
+id="footballSquadSize"
+value="18">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Players On Pitch
+
+</label>
+
+<input
+type="number"
+id="footballStartingPlayers"
+value="11">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Maximum Substitutes
+
+</label>
+
+<input
+type="number"
+id="footballSubs"
+value="7">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Match Duration (Minutes)
+
+</label>
+
+<input
+type="number"
+id="footballDuration"
+value="60">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Points For Win
+
+</label>
+
+<input
+type="number"
+id="footballWinPoints"
+value="3">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Points For Draw
+
+</label>
+
+<input
+type="number"
+id="footballDrawPoints"
+value="1">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Knockout Qualification
+
+</label>
+
+<select id="footballQualification">
+
+<option>
+
+Top 2 Teams
+
+</option>
+
+<option>
+
+Top 3 Teams
+
+</option>
+
+<option>
+
+Quarter Finals
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_footballRulesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Volleyball Rules
+
+</h2>
+
+</div>
+
+<form id="volleyballRulesForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Squad Size
+
+</label>
+
+<input
+type="number"
+id="volleyballSquadSize"
+value="12">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Players On Court
+
+</label>
+
+<input
+type="number"
+id="volleyballPlayers"
+value="6">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Sets Per Match
+
+</label>
+
+<select id="volleyballSets">
+
+<option>
+
+Best of 3
+
+</option>
+
+<option>
+
+Best of 5
+
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Points Per Set
+
+</label>
+
+<input
+type="number"
+id="setPoints"
+value="25">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_volleyballRulesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Dance Competition
+
+</h2>
+
+</div>
+
+<form id="danceCompetitionForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Maximum Dancers
+
+</label>
+
+<input
+type="number"
+id="maximumDancers">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Number of Judges
+
+</label>
+
+<input
+type="number"
+id="numberOfJudges">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Maximum Performance Time (Minutes)
+
+</label>
+
+<input
+type="number"
+id="performanceTime">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Winning Criteria
+
+</label>
+
+<select id="winnerCriteria">
+
+<option>
+
+Highest Total Score
+
+</option>
+
+<option>
+
+Average Judge Score
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_danceCompetitionForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Dance Scoring Weights
+
+</h2>
+
+</div>
+
+<form id="danceScoringForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Theme (%)
+
+</label>
+
+<input type="number" id="danceWeightTheme" value="20">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Creativity (%)
+
+</label>
+
+<input type="number" id="danceWeightCreativity" value="20">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Synchronization (%)
+
+</label>
+
+<input type="number" id="danceWeightSync" value="20">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Stage Presence (%)
+
+</label>
+
+<input type="number" id="danceWeightPresence" value="20">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Costume (%)
+
+</label>
+
+<input type="number" id="danceWeightCostume" value="20">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_danceScoringForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<footer class="admin-footer">
+
+<p>
+
+© 2026 GY Summit Management System
+
+</p>
+
+<p>
+
+PCEA Githunguri Presbytery
+
+</p>
+
+</footer>
+
+<script type="module" src="../assets/js/sports.js"></script>
+
+</body>
+
+</html>

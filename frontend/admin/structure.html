@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Structure | GY Summit 2026
+
+</title>
+
+<link rel="stylesheet"
+href="../assets/css/variables.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="../assets/css/admin.css">
+
+<link rel="stylesheet"
+href="../assets/css/participants.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ==========================
+SIDEBAR
+========================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img src="../assets/images/logo.png">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Administration
+
+</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-transfer"></i>
+
+Finance
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a class="active" href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ==========================
+MAIN CONTENT
+========================== -->
+
+<main class="admin-main">
+
+<header class="admin-header">
+
+<div>
+
+<h1>
+
+Presbytery Structure
+
+</h1>
+
+<p>
+
+Parishes, churches, and how each parish is standing across Football, Volleyball and Dance.
+
+</p>
+
+</div>
+
+<div class="admin-user">
+
+<div class="avatar" id="adminAvatarInitial">
+
+A
+
+</div>
+
+<div>
+
+<strong id="adminName">
+
+Administrator
+
+</strong>
+
+<br>
+
+<small id="adminRole">
+
+Online
+
+</small>
+
+</div>
+
+</div>
+
+</header>
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+<h2>Parish Overview</h2>
+<button class="btn btn-primary btn-sm" id="openAddParishBtn"><i class="fa-solid fa-plus"></i> Add Parish</button>
+</div>
+
+<div id="addParishPanel" class="dashboard-panel" style="display:none; margin:0 0 16px;">
+<form id="addParishForm" style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
+<div class="form-group">
+<label for="newParishPresbytery">Presbytery</label>
+<select id="newParishPresbytery" name="presbyteryId" required></select>
+</div>
+<div class="form-group">
+<label for="newParishName">Parish name</label>
+<input type="text" id="newParishName" name="name" required placeholder="e.g. Githunguri Parish">
+</div>
+<button type="submit" class="btn btn-primary btn-sm">Save</button>
+</form>
+</div>
+
+<div class="table-responsive">
+<table class="participants-table" id="parishTable">
+<thead>
+<tr>
+<th>Parish</th>
+<th>Presbytery</th>
+<th>Churches</th>
+<th>Participants</th>
+<th>Teams</th>
+<th>P</th>
+<th>W</th>
+<th>D</th>
+<th>L</th>
+<th>Pts</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="parishTableBody">
+<tr><td colspan="11">Loading…</td></tr>
+</tbody>
+</table>
+</div>
+
+</section>
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+<h2>Churches</h2>
+<button class="btn btn-primary btn-sm" id="openAddChurchBtn"><i class="fa-solid fa-plus"></i> Add Church</button>
+</div>
+
+<div id="addChurchPanel" class="dashboard-panel" style="display:none; margin:0 0 16px;">
+<form id="addChurchForm" style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
+<div class="form-group">
+<label for="newChurchParish">Parish</label>
+<select id="newChurchParish" name="parishId" required></select>
+</div>
+<div class="form-group">
+<label for="newChurchName">Church name</label>
+<input type="text" id="newChurchName" name="name" required placeholder="e.g. PCEA Githunguri">
+</div>
+<button type="submit" class="btn btn-primary btn-sm">Save</button>
+</form>
+</div>
+
+<div class="form-group" style="max-width:320px; margin-bottom:12px;">
+<input type="text" id="churchSearch" placeholder="Search churches…">
+</div>
+
+<div class="table-responsive">
+<table class="participants-table" id="churchTable">
+<thead>
+<tr>
+<th>Church</th>
+<th>Parish</th>
+<th>Presbytery</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="churchTableBody">
+<tr><td colspan="4">Loading…</td></tr>
+</tbody>
+</table>
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script type="module" src="../assets/js/structure.js"></script>
+
+</body>
+
+</html>

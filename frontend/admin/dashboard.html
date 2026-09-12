@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GY Summit 2026 | Admin Dashboard</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="../assets/css/dashboard.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ==========================================
+SIDEBAR
+========================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img src="../assets/images/logo.png" alt="GY Summit">
+
+<h2>GY Summit</h2>
+
+<p>Administration</p>
+
+</div>
+
+<nav>
+
+<a class="active" href="dashboard.html">
+<i class="fa-solid fa-chart-line"></i>
+Dashboard
+</a>
+
+<a href="finance.html">
+<i class="fa-solid fa-money-bill-wave"></i>
+Finance
+</a>
+
+<a href="admissions.html">
+<i class="fa-solid fa-door-open"></i>
+Admissions
+</a>
+
+<a href="participants.html">
+<i class="fa-solid fa-users"></i>
+Participants
+</a>
+
+<a href="sports.html">
+<i class="fa-solid fa-futbol"></i>
+Sports
+</a>
+
+<a href="gallery.html">
+<i class="fa-solid fa-images"></i>
+Gallery
+</a>
+
+<a href="announcements.html">
+<i class="fa-solid fa-bullhorn"></i>
+Announcements
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<h4>PCEA Githunguri Presbytery</h4>
+
+<small>GY Summit 2026</small>
+
+</div>
+
+</aside>
+
+<!-- ==========================================
+MAIN CONTENT
+========================================== -->
+
+<main class="admin-main">
+
+<header class="dashboard-header">
+
+<div>
+
+<h1>
+
+Admin Command Centre
+
+</h1>
+
+<p>
+
+Monitor every department from one dashboard.
+
+</p>
+
+</div>
+
+<div class="header-right">
+
+<div class="notification-btn">
+
+<i class="fa-solid fa-bell"></i>
+
+<span id="notificationCount">
+
+0
+
+</span>
+
+</div>
+
+<div class="live-clock">
+
+<h3 id="liveTime">
+
+00:00:00
+
+</h3>
+
+<p id="liveDate">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="admin-profile">
+
+<img src="../assets/images/admin.png">
+
+<div>
+
+<strong id="adminName">
+
+Admin
+
+</strong>
+
+<small id="adminRole">
+
+Online
+
+</small>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
+
+</header>
+
+<!-- ==========================================
+SEARCH
+========================================== -->
+
+<div class="dashboard-search">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+
+id="dashboardSearch"
+
+type="text"
+
+placeholder="Search participant, parish, admission code or phone number...">
+
+</div><!-- ======================================================
+EXECUTIVE KPI CARDS
+====================================================== -->
+
+<section class="dashboard-kpis">
+
+<!-- PARTICIPANTS -->
+
+<a href="participants.html" class="kpi-card participants">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="totalParticipants">
+
+0
+
+</h2>
+
+<p>
+
+Total Participants
+
+</p>
+
+<small>
+
+Registered across all parishes
+
+</small>
+
+</div>
+
+<i class="fa-solid fa-arrow-right card-arrow"></i>
+
+</a>
+
+<!-- FINANCE -->
+
+<a href="finance.html" class="kpi-card finance">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="totalRevenue">
+
+KES 0
+
+</h2>
+
+<p>
+
+Finance
+
+</p>
+
+<small>
+
+Total revenue collected
+
+</small>
+
+</div>
+
+<i class="fa-solid fa-arrow-right card-arrow"></i>
+
+</a>
+
+<!-- ADMISSIONS -->
+
+<a href="admissions.html" class="kpi-card admissions">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-door-open"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="checkedInParticipants">
+
+0
+
+</h2>
+
+<p>
+
+Admissions
+
+</p>
+
+<small>
+
+Participants checked in
+
+</small>
+
+</div>
+
+<i class="fa-solid fa-arrow-right card-arrow"></i>
+
+</a>
+
+<!-- SPORTS -->
+
+<a href="sports.html" class="kpi-card sports">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-futbol"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="registeredTeams">
+
+0
+
+</h2>
+
+<p>
+
+Sports
+
+</p>
+
+<small>
+
+Teams registered
+
+</small>
+
+</div>
+
+<i class="fa-solid fa-arrow-right card-arrow"></i>
+
+</a>
+
+<!-- GALLERY -->
+
+<a href="gallery.html" class="kpi-card gallery">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-images"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="galleryPhotos">
+
+0
+
+</h2>
+
+<p>
+
+Gallery
+
+</p>
+
+<small>
+
+Photos uploaded
+
+</small>
+
+</div>
+
+<i class="fa-solid fa-arrow-right card-arrow"></i>
+
+</a>
+
+<!-- ANNOUNCEMENTS -->
+
+<a href="announcements.html" class="kpi-card announcements">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="activeAnnouncements">
+
+0
+
+</h2>
+
+<p>
+
+Announcements
+
+</p>
+
+<small>
+
+Active notices
+
+</small>
+
+</div>
+
+<i class="fa-solid fa-arrow-right card-arrow"></i>
+
+</a>
+
+</section><!-- ======================================================
+OPERATIONS CENTRE
+====================================================== -->
+
+<section class="operations-grid">
+
+<!-- ==========================================
+LIVE ADMISSIONS
+========================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-door-open"></i>
+
+Live Admissions
+
+</h2>
+
+<a href="admissions.html">
+
+Open
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+<div id="liveAdmissionsFeed" class="feed-list">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-door-open"></i>
+
+<h3>
+
+No admissions yet
+
+</h3>
+
+<p>
+
+Admissions will appear here in real time.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+FINANCE SUMMARY
+========================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Finance Summary
+
+</h2>
+
+<a href="finance.html">
+
+Open
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+<div class="mini-stats">
+
+<div class="mini-stat">
+
+<label>Paid Participants</label>
+
+<h3 id="financePaid">
+
+0
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>Pending Payments</label>
+
+<h3 id="financePending">
+
+0
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>Revenue</label>
+
+<h3 id="financeRevenue">
+
+KES 0
+
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+ANNOUNCEMENTS
+========================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Latest Announcements
+
+</h2>
+
+<a href="announcements.html">
+
+Manage
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+<div id="announcementList">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<h3>
+
+No announcements
+
+</h3>
+
+<p>
+
+Announcements will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+MEDICAL ALERTS
+========================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+Medical Alerts
+
+</h2>
+
+<a href="participants.html">
+
+View
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+<div id="medicalAlerts">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+<h3>
+
+No medical alerts
+
+</h3>
+
+<p>
+
+Participants with declared medical conditions will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+PENDING APPROVALS
+========================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-user-clock"></i>
+
+Pending Actions
+
+</h2>
+
+</div>
+
+<div class="mini-stats">
+
+<div class="mini-stat">
+
+<label>Pending Admissions</label>
+
+<h3 id="pendingAdmissions">
+
+0
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>Payment Reviews</label>
+
+<h3 id="pendingPayments">
+
+0
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>Sports Approvals</label>
+
+<h3 id="pendingSports">
+
+0
+
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+SYSTEM STATUS
+========================================== -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-server"></i>
+
+System Status
+
+</h2>
+
+</div>
+
+<div class="status-list">
+
+<div class="status-item">
+
+<span>Database</span>
+
+<span class="status success" id="dbStatus">
+
+ONLINE
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>Admissions</span>
+
+<span class="status success" id="admissionStatus">
+
+READY
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>Finance</span>
+
+<span class="status success" id="financeStatus">
+
+SYNCED
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>Last Backup</span>
+
+<span id="lastBackup">
+
+Today 08:30
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================================
+PARISH PERFORMANCE DASHBOARD
+====================================================== -->
+
+<section class="section-header">
+
+<div>
+
+<h2>
+
+<i class="fa-solid fa-church"></i>
+
+Parish Performance
+
+</h2>
+
+<p>
+
+Monitor registrations, payments and admissions across all parishes.
+
+</p>
+
+</div>
+
+<a href="finance.html" class="view-btn">
+
+Finance Centre
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</section>
+
+<!-- ======================================================
+PARISH GRID
+Generated by dashboard.js
+====================================================== -->
+
+<div id="parishGrid" class="parish-grid">
+
+<!-- Example Loading Card -->
+
+<div class="parish-loading">
+
+<div class="loading-circle"></div>
+
+<div class="loading-line short"></div>
+
+<div class="loading-line"></div>
+
+<div class="loading-line"></div>
+
+</div>
+
+<div class="parish-loading">
+
+<div class="loading-circle"></div>
+
+<div class="loading-line short"></div>
+
+<div class="loading-line"></div>
+
+<div class="loading-line"></div>
+
+</div>
+
+<div class="parish-loading">
+
+<div class="loading-circle"></div>
+
+<div class="loading-line short"></div>
+
+<div class="loading-line"></div>
+
+<div class="loading-line"></div>
+
+</div>
+
+</div>
+
+<!-- ======================================================
+PARISH SUMMARY
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-chart-pie"></i>
+
+Overall Parish Summary
+
+</h2>
+
+</div>
+
+<div class="mini-stats">
+
+<div class="mini-stat">
+
+<label>
+
+Total Parishes
+
+</label>
+
+<h3 id="parishCount">
+
+0
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>
+
+Highest Registration
+
+</label>
+
+<h3 id="highestParish">
+
+—
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>
+
+Lowest Registration
+
+</label>
+
+<h3 id="lowestParish">
+
+—
+
+</h3>
+
+</div>
+
+<div class="mini-stat">
+
+<label>
+
+Average Attendance
+
+</label>
+
+<h3 id="averageAttendance">
+
+0%
+
+</h3>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+DEPARTMENT SHORTCUTS
+====================================================== -->
+
+<section class="section-header">
+
+<div>
+
+<h2>
+
+<i class="fa-solid fa-layer-group"></i>
+
+Departments
+
+</h2>
+
+<p>
+
+Quick access to every management module.
+
+</p>
+
+</div>
+
+</section>
+
+<div class="department-grid">
+
+<a href="finance.html" class="department-card">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+<h3>
+
+Finance
+
+</h3>
+
+<p>
+
+Payments, revenue, parish balances.
+
+</p>
+
+</a>
+
+<a href="admissions.html" class="department-card">
+
+<i class="fa-solid fa-door-open"></i>
+
+<h3>
+
+Admissions
+
+</h3>
+
+<p>
+
+QR verification and participant check-in.
+
+</p>
+
+</a>
+
+<a href="participants.html" class="department-card">
+
+<i class="fa-solid fa-users"></i>
+
+<h3>
+
+Participants
+
+</h3>
+
+<p>
+
+View every registered participant.
+
+</p>
+
+</a>
+
+<a href="sports.html" class="department-card">
+
+<i class="fa-solid fa-futbol"></i>
+
+<h3>
+
+Sports
+
+</h3>
+
+<p>
+
+Teams, fixtures and results.
+
+</p>
+
+</a>
+
+<a href="gallery.html" class="department-card">
+
+<i class="fa-solid fa-images"></i>
+
+<h3>
+
+Gallery
+
+</h3>
+
+<p>
+
+Photos and media management.
+
+</p>
+
+</a>
+
+<a href="announcements.html" class="department-card">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<h3>
+
+Announcements
+
+</h3>
+
+<p>
+
+Broadcast notices to participants.
+
+</p>
+
+</a>
+
+</div><!-- ======================================================
+SYSTEM ACTIVITY TIMELINE
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+Live System Activity
+
+</h2>
+
+<a href="#">
+
+View Full Log
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+<div id="systemTimeline" class="timeline">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+<h3>
+
+No Recent Activity
+
+</h3>
+
+<p>
+
+System events will appear here automatically.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+EVENT STATUS
+====================================================== -->
+
+<section class="event-status">
+
+<div class="event-info">
+
+<h2>
+
+GY Summit 2026
+
+</h2>
+
+<p>
+
+PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</div>
+
+<div class="event-grid">
+
+<div class="event-item">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<div>
+
+<label>Event Date</label>
+
+<strong id="eventDate">
+
+--
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="event-item">
+
+<i class="fa-solid fa-location-dot"></i>
+
+<div>
+
+<label>Venue</label>
+
+<strong id="eventVenue">
+
+--
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="event-item">
+
+<i class="fa-solid fa-users"></i>
+
+<div>
+
+<label>Expected Attendance</label>
+
+<strong id="eventAttendance">
+
+0
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="event-item">
+
+<i class="fa-solid fa-hourglass-half"></i>
+
+<div>
+
+<label>Countdown</label>
+
+<strong id="eventCountdown">
+
+Loading...
+
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+ADMIN NOTICE BOARD
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-thumbtack"></i>
+
+Admin Notice Board
+
+</h2>
+
+</div>
+
+<div id="noticeBoard">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-note-sticky"></i>
+
+<h3>
+
+No Notices
+
+</h3>
+
+<p>
+
+Administrative notices will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+QUICK ACTION BAR
+====================================================== -->
+
+<section class="quick-action-bar">
+
+<a href="participants.html" class="quick-btn">
+
+<i class="fa-solid fa-user-plus"></i>
+
+New Registration
+
+</a>
+
+<a href="finance.html" class="quick-btn">
+
+<i class="fa-solid fa-money-check-dollar"></i>
+
+Record Payment
+
+</a>
+
+<a href="admissions.html" class="quick-btn">
+
+<i class="fa-solid fa-qrcode"></i>
+
+Start Admissions
+
+</a>
+
+<a href="sports.html" class="quick-btn">
+
+<i class="fa-solid fa-trophy"></i>
+
+Sports Centre
+
+</a>
+
+<a href="announcements.html" class="quick-btn">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Send Notice
+
+</a>
+
+</section>
+
+
+
+<!-- ======================================================
+SUMMIT PROFILE (moved from the old monolithic Settings page —
+these are the identity/branding fields, so they live where the
+admin already is: the Dashboard)
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-id-badge"></i>
+
+Summit Profile
+
+</h2>
+
+<p style="width:100%;color:#888;font-size:.85rem;margin-top:6px;">These feed everything else — registration pages, certificates, admission passes — so changes here show up across the whole platform.</p>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+General Summit Information
+
+</h2>
+
+</div><!-- =====================================================
+GENERAL SETTINGS FORM
+===================================================== -->
+
+<form id="generalSettingsForm">
+
+<div class="form-grid">
+
+<!-- Summit Name -->
+<div class="form-group">
+
+<label for="summitName">
+
+Summit Name
+
+</label>
+
+<input
+type="text"
+id="summitName"
+name="summitName"
+placeholder="GY Summit 2026">
+
+</div>
+
+<!-- Theme -->
+<div class="form-group">
+
+<label for="theme">
+
+Theme
+
+</label>
+
+<input
+type="text"
+id="theme"
+name="theme"
+placeholder="Holiness and the Fear of God">
+
+</div>
+
+<!-- Theme Verse -->
+<div class="form-group full-width">
+
+<label for="themeVerse">
+
+Theme Verse
+
+</label>
+
+<textarea
+id="themeVerse"
+name="themeVerse"
+rows="3"
+placeholder="2 Corinthians 7:1"></textarea>
+
+</div>
+
+<!-- Venue -->
+<div class="form-group">
+
+<label for="venue">
+
+Venue
+
+</label>
+
+<input
+type="text"
+id="venue"
+name="venue"
+placeholder="Host Church">
+
+</div>
+
+<!-- Host Parish -->
+<div class="form-group">
+
+<label for="hostParish">
+
+Host Parish
+
+</label>
+
+<input
+type="text"
+id="hostParish"
+name="hostParish">
+
+</div>
+
+<!-- Registration Opens -->
+<div class="form-group">
+
+<label for="registrationOpen">
+
+Registration Opens
+
+</label>
+
+<input
+type="date"
+id="registrationOpen">
+
+</div>
+
+<!-- Registration Closes -->
+<div class="form-group">
+
+<label for="registrationClose">
+
+Registration Closes
+
+</label>
+
+<input
+type="date"
+id="registrationClose">
+
+</div>
+
+<!-- Event Starts -->
+<div class="form-group">
+
+<label for="eventStart">
+
+Event Start Date
+
+</label>
+
+<input
+type="date"
+id="eventStart">
+
+</div>
+
+<!-- Event Ends -->
+<div class="form-group">
+
+<label for="eventEnd">
+
+Event End Date
+
+</label>
+
+<input
+type="date"
+id="eventEnd">
+
+</div>
+
+<!-- Maximum Participants -->
+<div class="form-group">
+
+<label for="maximumParticipants">
+
+Maximum Participants
+
+</label>
+
+<input
+type="number"
+id="maximumParticipants"
+min="1">
+
+</div>
+
+<!-- Registration Fee -->
+<div class="form-group">
+
+<label for="registrationFee">
+
+Registration Fee (KES)
+
+</label>
+
+<input
+type="number"
+id="registrationFee"
+min="0">
+
+</div>
+
+<!-- Logo Upload -->
+<div class="form-group">
+
+<label>
+
+Summit Logo
+
+</label>
+
+<input
+type="file"
+id="summitLogo"
+accept=".png,.jpg,.jpeg,.svg">
+
+<small>
+
+Recommended size: 500×500px
+
+</small>
+
+</div>
+
+<!-- Banner Upload -->
+<div class="form-group">
+
+<label>
+
+Summit Banner
+
+</label>
+
+<input
+type="file"
+id="summitBanner"
+accept=".png,.jpg,.jpeg">
+
+<small>
+
+Recommended: 1920×700px
+
+</small>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+SYSTEM OPTIONS
+===================================================== -->
+
+<div class="settings-card">
+
+<h3>
+
+System Options
+
+</h3>
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Registration
+
+</strong>
+
+<p>
+
+Allow participants to register.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="registrationEnabled">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Public Website
+
+</strong>
+
+<p>
+
+Display public registration portal.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="publicWebsite">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Walk-ins
+
+</strong>
+
+<p>
+
+Permit registration during the event.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="walkIns">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Maintenance Mode
+
+</strong>
+
+<p>
+
+Temporarily disable participant access.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="maintenanceMode">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_generalSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Organisation Information
+
+</h2>
+
+</div>
+
+<form id="organisationSettingsForm">
+
+<div class="form-grid">
+
+<!-- Presbytery -->
+
+<div class="form-group">
+
+<label>
+
+Presbytery
+
+</label>
+
+<input
+type="text"
+id="presbytery"
+value="PCEA Githunguri Presbytery">
+
+</div>
+
+<!-- Host Church -->
+
+<div class="form-group">
+
+<label>
+
+Host Church
+
+</label>
+
+<input
+type="text"
+id="hostChurch">
+
+</div>
+
+<!-- Host Parish -->
+
+<div class="form-group">
+
+<label>
+
+Host Parish
+
+</label>
+
+<input
+type="text"
+id="organisationHostParish">
+
+</div>
+
+<!-- County -->
+
+<div class="form-group">
+
+<label>
+
+County
+
+</label>
+
+<input
+type="text"
+id="county"
+value="Kiambu">
+
+</div>
+
+<!-- Official Email -->
+
+<div class="form-group">
+
+<label>
+
+Official Email
+
+</label>
+
+<input
+type="email"
+id="officialEmail">
+
+</div>
+
+<!-- Official Phone -->
+
+<div class="form-group">
+
+<label>
+
+Official Phone
+
+</label>
+
+<input
+type="tel"
+id="officialPhone">
+
+</div>
+
+<!-- Postal Address -->
+
+<div class="form-group">
+
+<label>
+
+Postal Address
+
+</label>
+
+<input
+type="text"
+id="postalAddress">
+
+</div>
+
+<!-- Website -->
+
+<div class="form-group">
+
+<label>
+
+Website
+
+</label>
+
+<input
+type="url"
+id="website">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_organisationSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Leadership
+
+</h2>
+
+</div>
+
+<form id="leadershipForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Presbytery Chairman
+
+</label>
+
+<input
+type="text"
+id="chairman">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Youth Patron
+
+</label>
+
+<input
+type="text"
+id="patron">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Youth Moderator
+
+</label>
+
+<input
+type="text"
+id="moderator">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Secretary
+
+</label>
+
+<input
+type="text"
+id="secretary">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Treasurer
+
+</label>
+
+<input
+type="text"
+id="treasurer">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+ICT Administrator
+
+</label>
+
+<input
+type="text"
+id="ictAdmin">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_leadershipForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Social Media
+
+</h2>
+
+</div>
+
+<form id="socialMediaForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Facebook
+
+</label>
+
+<input
+type="url"
+id="facebook">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Instagram
+
+</label>
+
+<input
+type="url"
+id="instagram">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+YouTube
+
+</label>
+
+<input
+type="url"
+id="youtube">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+TikTok
+
+</label>
+
+<input
+type="url"
+id="tiktok">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+X (Twitter)
+
+</label>
+
+<input
+type="url"
+id="twitter">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+WhatsApp Channel
+
+</label>
+
+<input
+type="url"
+id="whatsappChannel">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_socialMediaForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<!-- ======================================================
+FOOTER
+====================================================== -->
+
+<footer class="admin-footer">
+
+<p>
+
+© 2026 GY Summit Management System
+
+</p>
+
+<p>
+
+PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+<!-- ======================================================
+JAVASCRIPT
+====================================================== -->
+
+<script type="module" src="../assets/js/dashboard.js"></script>
+
+</body>
+
+</html>

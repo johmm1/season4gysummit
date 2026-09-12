@@ -1,0 +1,738 @@
+/* ==========================================================
+GY SUMMIT 2026
+Admission Pass
+==========================================================*/
+
+/* ==========================================================
+PAGE HEADER
+==========================================================*/
+
+.pass-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+flex-wrap:wrap;
+
+gap:20px;
+
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+
+color:#fff;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+.pass-header h2{
+
+font-size:2rem;
+
+font-weight:700;
+
+margin-bottom:8px;
+
+}
+
+.pass-header p{
+
+opacity:.9;
+
+line-height:1.6;
+
+}
+
+.status-group{
+
+display:flex;
+
+gap:12px;
+
+flex-wrap:wrap;
+
+}
+
+/* ==========================================================
+PASS CONTAINER
+==========================================================*/
+
+.pass-container{
+
+display:flex;
+
+justify-content:center;
+
+margin-top:30px;
+
+}
+
+/* ==========================================================
+ADMISSION CARD
+==========================================================*/
+
+.admission-card{
+
+background:#fff;
+
+width:100%;
+
+max-width:1100px;
+
+border-radius:24px;
+
+overflow:hidden;
+
+box-shadow:0 20px 50px rgba(0,0,0,.08);
+
+}
+
+/* ==========================================================
+PASS TOP
+==========================================================*/
+
+.pass-top{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:25px 35px;
+
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+
+color:#fff;
+
+}
+
+.summit-brand{
+
+display:flex;
+
+align-items:center;
+
+gap:20px;
+
+}
+
+.summit-brand img{
+
+width:70px;
+
+height:70px;
+
+object-fit:contain;
+
+}
+
+.summit-brand h2{
+
+font-size:1.2rem;
+
+font-weight:700;
+
+margin-bottom:5px;
+
+}
+
+.summit-brand h3{
+
+font-size:1.5rem;
+
+font-weight:700;
+
+margin-bottom:5px;
+
+}
+
+.summit-brand p{
+
+opacity:.9;
+
+}
+
+.pass-status{
+
+display:flex;
+
+align-items:center;
+
+}
+
+/* ==========================================================
+PASS BODY
+==========================================================*/
+
+.pass-body{
+
+display:grid;
+
+grid-template-columns:250px 1fr 250px;
+
+gap:35px;
+
+padding:35px;
+
+align-items:center;
+
+}
+
+/* ==========================================================
+LEFT SIDE
+==========================================================*/
+
+.pass-left{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+text-align:center;
+
+}
+
+.participant-photo{
+
+width:170px;
+
+height:170px;
+
+margin-bottom:20px;
+
+}
+
+.participant-photo img{
+
+width:100%;
+
+height:100%;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:5px solid var(--secondary);
+
+box-shadow:0 12px 30px rgba(0,0,0,.12);
+
+}
+
+.participant-basic h2{
+
+font-size:1.6rem;
+
+font-weight:700;
+
+margin-bottom:8px;
+
+}
+
+.participant-basic p{
+
+color:var(--text-light);
+
+margin-bottom:5px;
+
+}/* ==========================================================
+CENTER DETAILS
+==========================================================*/
+
+.pass-center{
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.detail{
+
+padding:18px 20px;
+
+background:#fafafa;
+
+border-radius:14px;
+
+border-left:5px solid var(--secondary);
+
+transition:.3s;
+
+}
+
+.detail:hover{
+
+background:#fff;
+
+box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+}
+
+.detail label{
+
+display:block;
+
+font-size:.82rem;
+
+font-weight:600;
+
+text-transform:uppercase;
+
+letter-spacing:.6px;
+
+color:var(--text-light);
+
+margin-bottom:8px;
+
+}
+
+.detail h3{
+
+font-size:1.2rem;
+
+font-weight:700;
+
+color:var(--primary);
+
+}
+
+.detail p{
+
+font-size:.95rem;
+
+color:var(--text-dark);
+
+line-height:1.6;
+
+}
+
+/* ==========================================================
+QR SECTION
+==========================================================*/
+
+.pass-right{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.qr-card{
+
+background:#fafafa;
+
+padding:25px;
+
+border-radius:18px;
+
+text-align:center;
+
+box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+}
+
+.qr-card img{
+
+width:190px;
+
+height:190px;
+
+object-fit:contain;
+
+background:#fff;
+
+padding:12px;
+
+border-radius:12px;
+
+margin-bottom:15px;
+
+}
+
+.qr-card p{
+
+font-weight:600;
+
+color:var(--primary);
+
+}
+
+/* ==========================================================
+PASS FOOTER
+==========================================================*/
+
+.pass-footer{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:20px;
+
+padding:25px 35px;
+
+background:#f7f8fb;
+
+border-top:1px solid rgba(0,0,0,.08);
+
+}
+
+.pass-footer div{
+
+text-align:center;
+
+}
+
+.pass-footer strong{
+
+display:block;
+
+margin-bottom:8px;
+
+font-size:.9rem;
+
+color:var(--primary);
+
+}
+
+.pass-footer p{
+
+font-size:.95rem;
+
+font-weight:500;
+
+}
+
+/* ==========================================================
+EVENT DETAILS
+==========================================================*/
+
+.event-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+}
+
+.event-grid div{
+
+background:#fafafa;
+
+padding:18px;
+
+border-radius:14px;
+
+}
+
+.event-grid h4{
+
+margin-bottom:8px;
+
+font-size:.95rem;
+
+color:var(--primary);
+
+}
+
+.event-grid p{
+
+line-height:1.6;
+
+color:var(--text-dark);
+
+}
+
+/* ==========================================================
+INSTRUCTIONS
+==========================================================*/
+
+.instructions-list{
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.instruction{
+
+display:flex;
+
+gap:18px;
+
+align-items:flex-start;
+
+padding:18px;
+
+border-radius:14px;
+
+background:#fafafa;
+
+}
+
+.instruction i{
+
+font-size:22px;
+
+color:#2E7D32;
+
+margin-top:3px;
+
+}
+
+.instruction h4{
+
+margin-bottom:6px;
+
+font-size:1rem;
+
+}
+
+.instruction p{
+
+line-height:1.7;
+
+color:var(--text-light);
+
+}
+
+/* ==========================================================
+WHAT TO CARRY
+==========================================================*/
+
+.carry-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+gap:20px;
+
+}
+
+.carry-item{
+
+background:#fafafa;
+
+padding:25px;
+
+border-radius:16px;
+
+text-align:center;
+
+transition:.3s;
+
+}
+
+.carry-item:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.carry-item i{
+
+font-size:2rem;
+
+color:var(--primary);
+
+margin-bottom:15px;
+
+}
+
+.carry-item p{
+
+font-weight:600;
+
+line-height:1.5;
+
+}
+
+/* ==========================================================
+DOWNLOAD BUTTONS
+==========================================================*/
+
+.download-buttons{
+
+display:flex;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+}
+
+.download-buttons .btn{
+
+flex:1;
+
+min-width:220px;
+
+}
+
+/* ==========================================================
+RESPONSIVE
+==========================================================*/
+
+@media(max-width:1100px){
+
+.pass-body{
+
+grid-template-columns:1fr;
+
+text-align:center;
+
+}
+
+.pass-center{
+
+order:2;
+
+}
+
+.pass-right{
+
+order:3;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.pass-header{
+
+padding:25px;
+
+}
+
+.pass-top{
+
+flex-direction:column;
+
+gap:20px;
+
+text-align:center;
+
+}
+
+.summit-brand{
+
+flex-direction:column;
+
+}
+
+.pass-footer{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+.download-buttons{
+
+flex-direction:column;
+
+}
+
+.download-buttons .btn{
+
+width:100%;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.pass-footer{
+
+grid-template-columns:1fr;
+
+}
+
+.participant-photo{
+
+width:140px;
+
+height:140px;
+
+}
+
+.qr-card img{
+
+width:160px;
+
+height:160px;
+
+}
+
+.pass-header h2{
+
+font-size:1.5rem;
+
+}
+
+}
+
+/* ==========================================================
+PRINT
+==========================================================*/
+
+@media print{
+
+.sidebar,
+
+.topbar,
+
+.download-buttons,
+
+.dashboard-footer{
+
+display:none !important;
+
+}
+
+.dashboard-content{
+
+padding:0;
+
+}
+
+.admission-card{
+
+box-shadow:none;
+
+border:2px solid #000;
+
+break-inside:avoid;
+
+}
+
+body{
+
+background:#fff;
+
+}
+
+}

@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Settings | GY Summit 2026</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/responsive.css">
+
+<link rel="stylesheet"
+href="../assets/css/participants/layout.css">
+
+<link rel="stylesheet"
+href="../assets/css/participants/components.css">
+
+<link rel="stylesheet"
+href="../assets/css/participants/settings.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+<!-- ======================================
+SIDEBAR
+====================================== -->
+
+<aside class="sidebar">
+
+<div class="logo">
+
+<img src="../assets/images/logo.png">
+
+<h2>GY Summit</h2>
+
+</div>
+
+<nav>
+
+<ul>
+
+<li>
+
+<a href="dashboard.html">
+
+<i class="fas fa-home"></i>
+
+Dashboard
+
+</a>
+
+</li>
+
+<li>
+
+<a href="profile.html">
+
+<i class="fas fa-user"></i>
+
+Profile
+
+</a>
+
+</li>
+
+<li>
+
+<a href="announcements.html">
+
+<i class="fas fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+</li>
+
+<li>
+
+<a href="sports.html">
+
+<i class="fas fa-futbol"></i>
+
+Sports
+
+</a>
+
+</li>
+
+<li>
+
+<a href="gallery.html">
+
+<i class="fas fa-photo-film"></i>
+
+Media Centre
+
+</a>
+
+</li>
+
+<li>
+
+<a href="admission-pass.html">
+
+<i class="fas fa-id-card"></i>
+
+Admission Pass
+
+</a>
+
+</li>
+
+<li class="active">
+
+<a href="settings.html">
+
+<i class="fas fa-cog"></i>
+
+Settings
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button id="logoutBtn" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<!-- ======================================
+MAIN CONTENT
+====================================== -->
+
+<main class="main-content">
+
+<header class="topbar">
+
+<div>
+
+<h1>Account Settings</h1>
+
+<p class="page-subtitle">
+
+Manage your GY Summit account and preferences.
+
+</p>
+
+</div>
+
+<div class="topbar-right">
+
+<button class="notification-btn">
+
+<i class="fas fa-bell"></i>
+
+<span class="badge">2</span>
+
+</button>
+
+<img src="../assets/images/default-avatar.png"
+class="avatar">
+
+</div>
+
+</header>
+
+<!-- ======================================
+HERO
+====================================== -->
+
+<section class="settings-hero">
+
+<div>
+
+<span class="hero-tag">
+
+ACCOUNT SETTINGS
+
+</span>
+
+<h2>
+
+Manage Your Account
+
+</h2>
+
+<p>
+
+Update your personal information,
+privacy preferences,
+notifications and security settings.
+
+</p>
+
+</div>
+
+<div class="hero-icon">
+
+<i class="fas fa-user-cog"></i>
+
+</div>
+
+</section>
+
+<!-- ======================================
+QUICK MENU
+====================================== -->
+
+<section class="settings-menu">
+
+<button class="active">
+
+<i class="fas fa-user"></i>
+
+Profile
+
+</button>
+
+<button>
+
+<i class="fas fa-lock"></i>
+
+Security
+
+</button>
+
+<button>
+
+<i class="fas fa-bell"></i>
+
+Notifications
+
+</button>
+
+<button>
+
+<i class="fas fa-palette"></i>
+
+Appearance
+
+</button>
+
+<button>
+
+<i class="fas fa-shield-alt"></i>
+
+Privacy
+
+</button>
+
+<button>
+
+<i class="fas fa-sign-out-alt"></i>
+
+Logout
+
+</button>
+
+</section><!-- ======================================
+PROFILE SETTINGS
+====================================== -->
+
+<section class="settings-section active">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-user-circle"></i>
+
+Profile Information
+
+</h3>
+
+<p>
+
+Keep your account information up to date.
+
+</p>
+
+</div>
+
+<form id="profileSettingsForm">
+
+<div class="settings-grid">
+
+<div class="form-group">
+
+<label>
+
+Full Name
+
+</label>
+
+<input
+type="text"
+id="fullName"
+placeholder="John Kamau">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Email Address
+
+</label>
+
+<input
+type="email"
+id="email"
+placeholder="john@example.com">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Phone Number
+
+</label>
+
+<input
+type="tel"
+id="phone"
+placeholder="+254 712 345678">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Admission Number
+
+</label>
+
+<input
+type="text"
+id="admissionCode"
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Parish
+
+</label>
+
+<select id="parish">
+
+<option>Select Parish</option>
+
+<option>Githunguri</option>
+
+<option>Ruiru</option>
+
+<option>Kiambu</option>
+
+<option>Limuru</option>
+
+<option>Kikuyu</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Local Church
+
+</label>
+
+<input
+type="text"
+id="church"
+placeholder="Church Name">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Emergency Contact
+
+</label>
+
+<input
+type="text"
+id="emergencyName"
+placeholder="Contact Person">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Emergency Phone
+
+</label>
+
+<input
+type="tel"
+id="emergencyPhone"
+placeholder="+254 7xx xxx xxx">
+
+</div>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+About Me
+
+</label>
+
+<textarea
+id="bio"
+rows="5"
+placeholder="Tell us a little about yourself...">
+
+</textarea>
+
+</div>
+
+<div class="settings-actions">
+
+<button
+type="reset"
+class="btn-secondary">
+
+<i class="fas fa-rotate-left"></i>
+
+Reset
+
+</button>
+
+<button
+type="submit"
+class="btn-primary">
+
+<i class="fas fa-floppy-disk"></i>
+
+Save Changes
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</section><!-- ======================================
+SECURITY SETTINGS
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-lock"></i>
+
+Security
+
+</h3>
+
+<p>
+
+Protect your GY Summit account.
+
+</p>
+
+</div>
+
+<form id="securityForm">
+
+<div class="settings-grid">
+
+<div class="form-group">
+
+<label>
+
+Current Password
+
+</label>
+
+<div class="password-wrapper">
+
+<input
+type="password"
+id="currentPassword"
+placeholder="••••••••">
+
+<button
+type="button"
+class="toggle-password">
+
+<i class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+New Password
+
+</label>
+
+<div class="password-wrapper">
+
+<input
+type="password"
+id="newPassword"
+placeholder="Enter new password">
+
+<button
+type="button"
+class="toggle-password">
+
+<i class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+<div class="password-strength">
+
+<div class="strength-bar">
+
+<span></span>
+
+</div>
+
+<small>
+
+Password Strength:
+<strong>
+
+Strong
+
+</strong>
+
+</small>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Confirm Password
+
+</label>
+
+<div class="password-wrapper">
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm password">
+
+<button
+type="button"
+class="toggle-password">
+
+<i class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="settings-actions">
+
+<button
+type="submit"
+class="btn-primary">
+
+<i class="fas fa-key"></i>
+
+Update Password
+
+</button>
+
+</div>
+
+</form>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Two-Factor Authentication
+
+</h4>
+
+<p>
+
+Add an extra layer of protection to your account.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Login Notifications
+
+</h4>
+
+<p>
+
+Receive an email whenever a new device logs into your account.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<h4 class="section-subtitle">
+
+Active Devices
+
+</h4>
+
+<div class="device-list">
+
+<div class="device-item">
+
+<div>
+
+<h5>
+
+<i class="fas fa-laptop"></i>
+
+Windows PC
+
+</h5>
+
+<p>
+
+Chrome • Nairobi • Active Now
+
+</p>
+
+</div>
+
+<span class="device-status active">
+
+Current Device
+
+</span>
+
+</div>
+
+<div class="device-item">
+
+<div>
+
+<h5>
+
+<i class="fas fa-mobile-alt"></i>
+
+Android Phone
+
+</h5>
+
+<p>
+
+Last active yesterday
+
+</p>
+
+</div>
+
+<button class="btn-danger">
+
+Remove
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section><!-- ======================================
+NOTIFICATION SETTINGS
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-bell"></i>
+
+Notifications
+
+</h3>
+
+<p>
+
+Choose how you would like to receive updates.
+
+</p>
+
+</div>
+
+<div class="setting-item">
+
+<div>
+
+<h4>Announcements</h4>
+
+<p>Receive summit announcements instantly.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>Sports Fixtures</h4>
+
+<p>Be notified when new fixtures are published.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>Gallery Uploads</h4>
+
+<p>Receive notifications when new photos or videos are uploaded.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>Certificate Ready</h4>
+
+<p>Notify me immediately my certificate becomes available.</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+APPEARANCE
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-palette"></i>
+
+Appearance
+
+</h3>
+
+<p>
+
+Customize how the portal looks.
+
+</p>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Theme
+
+</label>
+
+<select id="theme">
+
+<option value="light">Light</option>
+
+<option value="dark">Dark</option>
+
+<option value="system" selected>System Default</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Language
+
+</label>
+
+<select id="language">
+
+<option selected>English</option>
+
+<option>Kiswahili</option>
+
+<option>French</option>
+
+</select>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Compact Mode
+
+</h4>
+
+<p>
+
+Display more content in less space.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Reduce Animations
+
+</h4>
+
+<p>
+
+Reduce motion effects throughout the portal.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+PRIVACY
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-user-shield"></i>
+
+Privacy
+
+</h3>
+
+<p>
+
+Manage your personal information and privacy.
+
+</p>
+
+</div>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Show My Profile
+
+</h4>
+
+<p>
+
+Allow other participants to see your profile.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Show Sports Statistics
+
+</h4>
+
+<p>
+
+Display your sports participation publicly.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Media Consent
+
+</h4>
+
+<p>
+
+Allow your photos to appear in the summit gallery.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input type="checkbox" checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+</div>
+
+</section><!-- ======================================
+DATA & PRIVACY
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-database"></i>
+
+Data & Privacy
+
+</h3>
+
+<p>
+
+Manage your personal data and account information.
+
+</p>
+
+</div>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Download My Data
+
+</h4>
+
+<p>
+
+Download your registration details, profile information,
+sports participation and certificates.
+
+</p>
+
+</div>
+
+<button class="btn-secondary">
+
+<i class="fas fa-download"></i>
+
+Request Data
+
+</button>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Privacy Policy
+
+</h4>
+
+<p>
+
+Read how GY Summit collects and protects your information.
+
+</p>
+
+</div>
+
+<button class="btn-secondary">
+
+View Policy
+
+</button>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Terms & Conditions
+
+</h4>
+
+<p>
+
+Read participant guidelines and portal terms.
+
+</p>
+
+</div>
+
+<button class="btn-secondary">
+
+View Terms
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+CONNECTED SERVICES
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-link"></i>
+
+Connected Services
+
+</h3>
+
+<p>
+
+Accounts linked to your summit profile.
+
+</p>
+
+</div>
+
+<div class="device-list">
+
+<div class="device-item">
+
+<div>
+
+<h5>
+
+<i class="fas fa-envelope"></i>
+
+Email Verification
+
+</h5>
+
+<p>
+
+Verified
+
+</p>
+
+</div>
+
+<span class="device-status active">
+
+Connected
+
+</span>
+
+</div>
+
+<div class="device-item">
+
+<div>
+
+<h5>
+
+<i class="fas fa-mobile-screen-button"></i>
+
+Phone Number
+
+</h5>
+
+<p>
+
+Verified
+
+</p>
+
+</div>
+
+<span class="device-status active">
+
+Connected
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+DANGER ZONE
+====================================== -->
+
+<section class="settings-section">
+
+<div class="settings-card danger-zone">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fas fa-triangle-exclamation"></i>
+
+Danger Zone
+
+</h3>
+
+<p>
+
+These actions are irreversible.
+
+</p>
+
+</div>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Logout
+
+</h4>
+
+<p>
+
+Sign out from this device.
+
+</p>
+
+</div>
+
+<button class="btn-secondary logout-btn">
+
+<i class="fas fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+<hr>
+
+<div class="setting-item">
+
+<div>
+
+<h4>
+
+Request Account Deletion
+
+</h4>
+
+<p>
+
+Send a request to permanently delete your participant account.
+
+</p>
+
+</div>
+
+<button class="btn-danger">
+
+<i class="fas fa-trash"></i>
+
+Request Deletion
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================
+FOOTER
+====================================== -->
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+<small>
+
+GY Summit Season 4 Participant Portal
+
+</small>
+
+</footer>
+
+</main>
+
+</div>
+
+<script type="module"
+src="js/settings.js">
+
+</script>
+
+</body>
+
+</html>

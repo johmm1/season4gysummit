@@ -1,226 +1,740 @@
-// GY Summit 2026 — notifications (email + SMS + WhatsApp)
+// GY Summit 2026 — Notifications
 //
-// Wired to real providers now:
-//   - Email: Nodemailer, if SMTP_HOST/USER/PASS are set.
-//   - SMS: Brevo Transactional SMS API, if BREVO_API_KEY is set.
-//   - WhatsApp: Brevo's Transactional WhatsApp API (same account/API key
-//     as SMS — one Brevo account covers all three channels now), if
-//     BREVO_API_KEY and BREVO_WHATSAPP_SENDER are set. Brevo sits on top
-//     of WhatsApp Business, so the same 24-hour session / approved-
-//     template rule still applies — see the note on sendWhatsapp() below.
+// EMAIL: Brevo Transactional Email API (HTTPS / port 443)
+// SMS: Brevo Transactional SMS API
+// WHATSAPP: Brevo Transactional WhatsApp API
 //
-// Any channel left unconfigured logs a clear one-line notice instead of
-// silently doing nothing or crashing the request it's attached to — every
-// call here is fire-and-forget from the caller's point of view.
+// IMPORTANT:
+// Email no longer uses SMTP/Nodemailer.
+// This avoids Render's outbound SMTP port restrictions.
 
 const axios = require("axios");
 const { getForm } = require("./settingsService");
 const { normalizePhone } = require("./mpesaService");
 
-// ---------------- Email ----------------
+// ============================================================
+// EMAIL — BREVO TRANSACTIONAL EMAIL API
+// ============================================================
 
-let transporter = null;
-function getTransporter() {
-  if (transporter) return transporter;
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) return null;
-  const nodemailer = require("nodemailer");
-  transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: Number(SMTP_PORT) || 587,
-    secure: Number(SMTP_PORT) === 465,
-    auth: { user: SMTP_USER, pass: SMTP_PASS },
-  });
-  return transporter;
-}
-
-async function sendEmail({ to, subject, body, emailConfig }) {
-  const senderName = emailConfig.emailSenderName || "GY Summit 2026";
-  const senderEmail = emailConfig.senderEmail;
-  const t = getTransporter();
-  if (!t || !senderEmail || !to) {
-    console.log(`[notify:email:not-configured] would send to ${to}: "${subject}" — ${body}`);
-    return;
-  }
-  await t.sendMail({
-    from: `"${senderName}" <${senderEmail}>`,
-    replyTo: emailConfig.replyEmail || senderEmail,
-    to,
-    subject,
-    text: body,
-  });
-}
+const BREVO_EMAIL_URL = "https://api.brevo.com/v3/smtp/email";
 
 /**
- * For account-security emails (password reset, etc.) that must always go
- * out regardless of the admin's Announcements > Notification Channels
- * toggles — those toggles are meant to govern optional/marketing-style
- * notifications, not core account recovery. Uses whatever SMTP sender
- * name/address is configured, but never checks channels.enableEmail or
- * autoMessages first.
+ * Send an email through Brevo's HTTPS API.
+ *
+ * Required Render environment variable:
+ *
+ * BREVO_API_KEY
+ *
+ * Sender information comes from:
+ *
+ * SystemSettings -> emailConfigForm
+ *
+ * Example:
+ * {
+ *   "emailSenderName": "GY Summit 2026",
+ *   "senderEmail": "yourverifiedemail@gmail.com",
+ *   "replyEmail": "yourverifiedemail@gmail.com"
+ * }
  */
-async function sendTransactionalEmail(to, subject, body) {
-  if (!to) return;
+async function sendEmail({ to, subject, body, emailConfig = {} }) {
+  const { BREVO_API_KEY } = process.env;
+
+  const senderName =
+    emailConfig.emailSenderName || "GY Summit 2026";
+
+  const senderEmail =
+    emailConfig.senderEmail;
+
+  const replyEmail =
+    emailConfig.replyEmail || senderEmail;
+
+  // Validate recipient
+  if (!to) {
+    console.log(
+      `[notify:email:not-configured] No recipient email provided`
+    );
+    return;
+  }
+
+  // Validate Brevo API key
+  if (!BREVO_API_KEY) {
+    console.log(
+      `[notify:email:not-configured] BREVO_API_KEY is missing. Would send to ${to}: "${subject}"`
+    );
+    return;
+  }
+
+  // Validate sender
+  if (!senderEmail) {
+    console.log(
+      `[notify:email:not-configured] senderEmail is missing in emailConfigForm. Would send to ${to}: "${subject}"`
+    );
+    return;
+  }
+
   try {
-    const emailConfig = await getForm("emailConfigForm");
-    await sendEmail({ to, subject, body, emailConfig });
+    const payload = {
+      sender: {
+        name: senderName,
+        email: senderEmail,
+      },
+
+      to: [
+        {
+          email: to,
+        },
+      ],
+
+      subject: subject || "GY Summit 2026",
+
+      textContent:
+        body || "",
+    };
+
+    // Add reply-to only when available
+    if (replyEmail) {
+      payload.replyTo = {
+        email: replyEmail,
+      };
+    }
+
+    const response = await axios.post(
+      BREVO_EMAIL_URL,
+      payload,
+      {
+        timeout: 15000,
+
+        headers: {
+          "api-key": BREVO_API_KEY,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+
+    console.log(
+      `[notify:email:sent] ${to} — "${subject}" — messageId=${response.data?.messageId || "unknown"}`
+    );
+
+    return response.data;
   } catch (err) {
-    console.error("[notify:transactional:error]", err.message);
-    throw err; // callers of transactional email (e.g. password reset) need to know if it failed
+    const brevoError =
+      err.response?.data
+        ? JSON.stringify(err.response.data)
+        : err.message;
+
+    console.error(
+      `[notify:email:error] ${to} — "${subject}" — ${brevoError}`
+    );
+
+    throw err;
   }
 }
 
-// ---------------- SMS (Brevo Transactional SMS) ----------------
 
-const BREVO_SMS_URL = "https://api.brevo.com/v3/transactionalSMS/sms";
+// ============================================================
+// TRANSACTIONAL EMAIL
+// ============================================================
 
-// Brevo's sender field is capped at 11 alphanumeric characters (or a full
-// number in some regions) — fall back to a safe generic default rather
-// than sending an invalid sender and having the whole message rejected.
+/**
+ * Used for account-security emails such as:
+ *
+ * - OTP
+ * - Password reset
+ * - Account recovery
+ *
+ * This does NOT depend on notification channel toggles.
+ */
+async function sendTransactionalEmail(
+  to,
+  subject,
+  body
+) {
+  if (!to) {
+    console.log(
+      "[notify:transactional] No recipient email"
+    );
+    return;
+  }
+
+  try {
+    const emailConfig =
+      await getForm("emailConfigForm");
+
+    return await sendEmail({
+      to,
+      subject,
+      body,
+      emailConfig,
+    });
+  } catch (err) {
+    console.error(
+      "[notify:transactional:error]",
+      err.response?.data
+        ? JSON.stringify(err.response.data)
+        : err.message
+    );
+
+    // Keep the original behavior:
+    // transactional email callers know that sending failed.
+    throw err;
+  }
+}
+
+
+// ============================================================
+// SMS — BREVO TRANSACTIONAL SMS
+// ============================================================
+
+const BREVO_SMS_URL =
+  "https://api.brevo.com/v3/transactionalSMS/sms";
+
+
+/**
+ * Brevo SMS sender name.
+ *
+ * Maximum is normally 11 alphanumeric characters.
+ */
 function brevoSender() {
-  const raw = (process.env.BREVO_SMS_SENDER || "GYSummit").replace(/[^A-Za-z0-9]/g, "");
+  const raw = (
+    process.env.BREVO_SMS_SENDER ||
+    "GYSummit"
+  ).replace(
+    /[^A-Za-z0-9]/g,
+    ""
+  );
+
   return raw.slice(0, 11) || "GYSummit";
 }
 
+
+/**
+ * Send one SMS.
+ */
 async function sendSms(phone, message) {
-  const { BREVO_API_KEY } = process.env;
-  if (!phone) return;
-  if (!BREVO_API_KEY) {
-    console.log(`[notify:sms:not-configured] would SMS +${normalizePhone(phone)}: "${message}"`);
+  const {
+    BREVO_API_KEY,
+  } = process.env;
+
+  if (!phone) {
     return;
   }
-  await axios.post(
-    BREVO_SMS_URL,
-    {
-      sender: brevoSender(),
-      recipient: normalizePhone(phone),
-      content: message,
-      type: "transactional",
-    },
-    {
-      headers: {
-        "api-key": BREVO_API_KEY,
-        "Content-Type": "application/json",
-        Accept: "application/json",
+
+  if (!BREVO_API_KEY) {
+    console.log(
+      `[notify:sms:not-configured] Would SMS +${normalizePhone(phone)}: "${message}"`
+    );
+
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      BREVO_SMS_URL,
+      {
+        sender: brevoSender(),
+
+        recipient:
+          normalizePhone(phone),
+
+        content: message,
+
+        type: "transactional",
       },
+      {
+        timeout: 15000,
+
+        headers: {
+          "api-key": BREVO_API_KEY,
+          "Content-Type":
+            "application/json",
+          Accept:
+            "application/json",
+        },
+      }
+    );
+
+    console.log(
+      `[notify:sms:sent] +${normalizePhone(phone)}`
+    );
+
+    return response.data;
+  } catch (err) {
+    console.error(
+      "[notify:sms:error]",
+      err.response?.data
+        ? JSON.stringify(err.response.data)
+        : err.message
+    );
+
+    throw err;
+  }
+}
+
+
+/**
+ * Send SMS to multiple recipients.
+ */
+async function sendBulkSms(
+  phones,
+  message
+) {
+  const {
+    BREVO_API_KEY,
+  } = process.env;
+
+  const numbers = [
+    ...new Set(
+      phones
+        .filter(Boolean)
+        .map((p) =>
+          normalizePhone(p)
+        )
+    ),
+  ];
+
+  if (!numbers.length) {
+    return {
+      sent: 0,
+    };
+  }
+
+  if (!BREVO_API_KEY) {
+    console.log(
+      `[notify:sms:not-configured] Would bulk-SMS ${numbers.length} recipient(s): "${message}"`
+    );
+
+    return {
+      sent: 0,
+      skipped: numbers.length,
+    };
+  }
+
+  const sender =
+    brevoSender();
+
+  const CONCURRENCY = 10;
+
+  let sent = 0;
+  let failed = 0;
+
+  for (
+    let i = 0;
+    i < numbers.length;
+    i += CONCURRENCY
+  ) {
+    const chunk =
+      numbers.slice(
+        i,
+        i + CONCURRENCY
+      );
+
+    const results =
+      await Promise.allSettled(
+        chunk.map(
+          (recipient) =>
+            axios.post(
+              BREVO_SMS_URL,
+              {
+                sender,
+
+                recipient,
+
+                content:
+                  message,
+
+                type:
+                  "transactional",
+              },
+              {
+                timeout: 15000,
+
+                headers: {
+                  "api-key":
+                    BREVO_API_KEY,
+
+                  "Content-Type":
+                    "application/json",
+
+                  Accept:
+                    "application/json",
+                },
+              }
+            )
+        )
+      );
+
+    results.forEach(
+      (result) => {
+        if (
+          result.status ===
+          "fulfilled"
+        ) {
+          sent++;
+        } else {
+          failed++;
+
+          console.error(
+            "[notify:sms:bulk:error]",
+            result.reason
+              ?.response?.data ||
+              result.reason?.message
+          );
+        }
+      }
+    );
+  }
+
+  return failed
+    ? {
+        sent,
+        failed,
+      }
+    : {
+        sent,
+      };
+}
+
+
+// ============================================================
+// WHATSAPP — BREVO TRANSACTIONAL WHATSAPP
+// ============================================================
+
+const BREVO_WHATSAPP_URL =
+  "https://api.brevo.com/v3/whatsapp/sendMessage";
+
+
+/**
+ * Send WhatsApp message through Brevo.
+ *
+ * Environment variables:
+ *
+ * BREVO_API_KEY
+ * BREVO_WHATSAPP_SENDER
+ * BREVO_WHATSAPP_TEMPLATE_ID (optional)
+ */
+async function sendWhatsapp(
+  phone,
+  message
+) {
+  const {
+    BREVO_API_KEY,
+    BREVO_WHATSAPP_SENDER,
+    BREVO_WHATSAPP_TEMPLATE_ID,
+  } = process.env;
+
+  if (!phone) {
+    return;
+  }
+
+  if (
+    !BREVO_API_KEY ||
+    !BREVO_WHATSAPP_SENDER
+  ) {
+    console.log(
+      `[notify:whatsapp:not-configured] Would WhatsApp +${normalizePhone(phone)}: "${message}"`
+    );
+
+    return;
+  }
+
+  try {
+    let payload;
+
+    if (
+      BREVO_WHATSAPP_TEMPLATE_ID
+    ) {
+      payload = {
+        contactNumbers: [
+          normalizePhone(phone),
+        ],
+
+        senderNumber:
+          BREVO_WHATSAPP_SENDER,
+
+        templateId:
+          Number(
+            BREVO_WHATSAPP_TEMPLATE_ID
+          ),
+      };
+    } else {
+      payload = {
+        contactNumbers: [
+          normalizePhone(phone),
+        ],
+
+        senderNumber:
+          BREVO_WHATSAPP_SENDER,
+
+        text: message,
+      };
     }
+
+    const response =
+      await axios.post(
+        BREVO_WHATSAPP_URL,
+        payload,
+        {
+          timeout: 15000,
+
+          headers: {
+            "api-key":
+              BREVO_API_KEY,
+
+            "Content-Type":
+              "application/json",
+
+            Accept:
+              "application/json",
+          },
+        }
+      );
+
+    console.log(
+      `[notify:whatsapp:sent] +${normalizePhone(phone)}`
+    );
+
+    return response.data;
+  } catch (err) {
+    console.error(
+      "[notify:whatsapp:error]",
+      err.response?.data
+        ? JSON.stringify(err.response.data)
+        : err.message
+    );
+
+    throw err;
+  }
+}
+
+
+// ============================================================
+// TEMPLATE FILLING
+// ============================================================
+
+function fillTemplate(
+  template,
+  vars
+) {
+  if (!template) {
+    return null;
+  }
+
+  return String(template).replace(
+    /\{\{(\w+)\}\}/g,
+    (_, key) =>
+      vars[key] !== undefined
+        ? vars[key]
+        : ""
   );
 }
 
-/**
- * Brevo's transactional SMS endpoint is single-recipient only (unlike some
- * gateways that accept a comma-separated `to` list), so "bulk" here means
- * firing requests for the whole audience with bounded concurrency instead
- * of either a single API call or a slow fully-sequential loop. One bad
- * number/failure is isolated via Promise.allSettled and never aborts the
- * rest of the batch.
- */
-async function sendBulkSms(phones, message) {
-  const { BREVO_API_KEY } = process.env;
-  const numbers = [...new Set(phones.filter(Boolean).map((p) => normalizePhone(p)))];
-  if (!numbers.length) return { sent: 0 };
-  if (!BREVO_API_KEY) {
-    console.log(`[notify:sms:not-configured] would bulk-SMS ${numbers.length} recipient(s): "${message}"`);
-    return { sent: 0, skipped: numbers.length };
-  }
 
-  const sender = brevoSender();
-  const CONCURRENCY = 10; // stay well under Brevo's per-second rate limit
-  let sent = 0;
-  let failed = 0;
-  for (let i = 0; i < numbers.length; i += CONCURRENCY) {
-    const chunk = numbers.slice(i, i + CONCURRENCY);
-    const results = await Promise.allSettled(
-      chunk.map((recipient) =>
-        axios.post(
-          BREVO_SMS_URL,
-          { sender, recipient, content: message, type: "transactional" },
-          { headers: { "api-key": BREVO_API_KEY, "Content-Type": "application/json", Accept: "application/json" } }
-        )
-      )
-    );
-    results.forEach((r) => (r.status === "fulfilled" ? sent++ : failed++));
-  }
-  return failed ? { sent, failed } : { sent };
-}
-
-// ---------------- WhatsApp (Brevo Transactional WhatsApp) ----------------
-
-const BREVO_WHATSAPP_URL = "https://api.brevo.com/v3/whatsapp/sendMessage";
-
-// Brevo's WhatsApp API is a thin layer over WhatsApp Business itself, so
-// the underlying Meta rule still applies: a free-form "text" message only
-// delivers within a 24-hour window after the contact last messaged your
-// WhatsApp number, or the very first message to a new contact. Outside
-// that window, WhatsApp requires an approved message *template* instead.
-// Since summit participants haven't necessarily messaged the WhatsApp
-// number first, production use for cold outreach (e.g. "your registration
-// is confirmed") will need a template created and approved in Brevo's
-// WhatsApp Campaigns dashboard — set BREVO_WHATSAPP_TEMPLATE_ID once you
-// have one and this switches to sending it (templated messages don't
-// carry a custom body, so the plain-text `message` argument is ignored in
-// that mode). Leave BREVO_WHATSAPP_TEMPLATE_ID unset to keep sending
-// plain text, which works immediately for testing and for any participant
-// who has messaged in first.
-async function sendWhatsapp(phone, message) {
-  const { BREVO_API_KEY, BREVO_WHATSAPP_SENDER, BREVO_WHATSAPP_TEMPLATE_ID } = process.env;
-  if (!phone) return;
-  if (!BREVO_API_KEY || !BREVO_WHATSAPP_SENDER) {
-    console.log(`[notify:whatsapp:not-configured] would WhatsApp +${normalizePhone(phone)}: "${message}"`);
-    return;
-  }
-  const body = BREVO_WHATSAPP_TEMPLATE_ID
-    ? { contactNumbers: [normalizePhone(phone)], senderNumber: BREVO_WHATSAPP_SENDER, templateId: Number(BREVO_WHATSAPP_TEMPLATE_ID) }
-    : { contactNumbers: [normalizePhone(phone)], senderNumber: BREVO_WHATSAPP_SENDER, text: message };
-
-  await axios.post(BREVO_WHATSAPP_URL, body, {
-    headers: { "api-key": BREVO_API_KEY, "Content-Type": "application/json", Accept: "application/json" },
-  });
-}
-
-// ---------------- Template filling ----------------
-
-function fillTemplate(template, vars) {
-  if (!template) return null;
-  return String(template).replace(/\{\{(\w+)\}\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : ""));
-}
+// ============================================================
+// GENERAL NOTIFICATION SYSTEM
+// ============================================================
 
 /**
- * @param eventKey one of "notifyRegistration" | "notifyPayment" | "notifyAdmission" | "notifyAnnouncements" | "notifyCertificates"
- * @param templateKey one of "registrationTemplate" | "paymentTemplate" | "admissionTemplate" | "certificateTemplate" | null
- * @param to { email, phone } — either can be omitted
- * @param subjectFallback used as the email subject, and as the SMS/WhatsApp body if no template/vars.body is set
- * @param vars values available to the template as {{placeholders}}
+ * eventKey:
+ *
+ * notifyRegistration
+ * notifyPayment
+ * notifyAdmission
+ * notifyAnnouncements
+ * notifyCertificates
+ *
+ * templateKey:
+ *
+ * registrationTemplate
+ * paymentTemplate
+ * admissionTemplate
+ * certificateTemplate
+ *
+ * to:
+ *
+ * { email, phone }
+ *
+ * or simply:
+ *
+ * "email@example.com"
  */
-async function notify(eventKey, templateKey, to, subjectFallback, vars = {}) {
-  const recipient = typeof to === "string" ? { email: to } : (to || {});
+async function notify(
+  eventKey,
+  templateKey,
+  to,
+  subjectFallback,
+  vars = {}
+) {
+  const recipient =
+    typeof to === "string"
+      ? {
+          email: to,
+        }
+      : (
+          to || {}
+        );
+
   try {
-    const [channels, autoMessages, emailConfig, templates, whatsappConfig] = await Promise.all([
-      getForm("notificationChannelsForm"),
-      getForm("autoMessagesForm"),
-      getForm("emailConfigForm"),
-      getForm("notificationTemplatesForm"),
-      getForm("whatsappConfigForm"),
+    const [
+      channels,
+      autoMessages,
+      emailConfig,
+      templates,
+      whatsappConfig,
+    ] = await Promise.all([
+      getForm(
+        "notificationChannelsForm"
+      ),
+
+      getForm(
+        "autoMessagesForm"
+      ),
+
+      getForm(
+        "emailConfigForm"
+      ),
+
+      getForm(
+        "notificationTemplatesForm"
+      ),
+
+      getForm(
+        "whatsappConfigForm"
+      ),
     ]);
 
-    if (autoMessages[eventKey] === false) return;
+    // Automatic notification disabled
+    if (
+      autoMessages[eventKey] ===
+      false
+    ) {
+      console.log(
+        `[notify:disabled] ${eventKey}`
+      );
 
-    const body = fillTemplate(templates[templateKey], vars) || vars.body || subjectFallback;
+      return;
+    }
 
-    if (channels.enableEmail !== false && recipient.email) {
-      await sendEmail({ to: recipient.email, subject: subjectFallback, body, emailConfig });
+    const body =
+      fillTemplate(
+        templates[templateKey],
+        vars
+      ) ||
+      vars.body ||
+      subjectFallback;
+
+    // --------------------------------------------------------
+    // EMAIL
+    // --------------------------------------------------------
+
+    if (
+      channels.enableEmail !==
+        false &&
+      recipient.email
+    ) {
+      try {
+        await sendEmail({
+          to:
+            recipient.email,
+
+          subject:
+            subjectFallback,
+
+          body,
+
+          emailConfig,
+        });
+      } catch (err) {
+        console.error(
+          `[notify:error] ${eventKey}: Email failed —`,
+          err.response?.data
+            ? JSON.stringify(
+                err.response.data
+              )
+            : err.message
+        );
+      }
     }
-    if (channels.enableSms === true && recipient.phone) {
-      await sendSms(recipient.phone, body);
+
+    // --------------------------------------------------------
+    // SMS
+    // --------------------------------------------------------
+
+    if (
+      channels.enableSms ===
+        true &&
+      recipient.phone
+    ) {
+      try {
+        await sendSms(
+          recipient.phone,
+          body
+        );
+      } catch (err) {
+        console.error(
+          `[notify:error] ${eventKey}: SMS failed —`,
+          err.response?.data
+            ? JSON.stringify(
+                err.response.data
+              )
+            : err.message
+        );
+      }
     }
-    if (channels.enableWhatsapp === true && recipient.phone) {
-      const footer = whatsappConfig.whatsappFooter ? `\n\n${whatsappConfig.whatsappFooter}` : "";
-      await sendWhatsapp(recipient.phone, body + footer);
+
+    // --------------------------------------------------------
+    // WHATSAPP
+    // --------------------------------------------------------
+
+    if (
+      channels.enableWhatsapp ===
+        true &&
+      recipient.phone
+    ) {
+      try {
+        const footer =
+          whatsappConfig.whatsappFooter
+            ? `\n\n${whatsappConfig.whatsappFooter}`
+            : "";
+
+        await sendWhatsapp(
+          recipient.phone,
+          body + footer
+        );
+      } catch (err) {
+        console.error(
+          `[notify:error] ${eventKey}: WhatsApp failed —`,
+          err.response?.data
+            ? JSON.stringify(
+                err.response.data
+              )
+            : err.message
+        );
+      }
     }
   } catch (err) {
-    // Never let a notification failure break the caller's request.
-    console.error(`[notify:error] ${eventKey}:`, err.response?.data ? JSON.stringify(err.response.data) : err.message);
+    // Never let notification failure
+    // break the main request.
+    console.error(
+      `[notify:error] ${eventKey}:`,
+      err.response?.data
+        ? JSON.stringify(
+            err.response.data
+          )
+        : err.message
+    );
   }
 }
 
-module.exports = { notify, sendBulkSms, sendSms, sendWhatsapp, sendTransactionalEmail };
+
+// ============================================================
+// EXPORTS
+// ============================================================
+
+module.exports = {
+  notify,
+  sendBulkSms,
+  sendSms,
+  sendWhatsapp,
+  sendTransactionalEmail,
+};

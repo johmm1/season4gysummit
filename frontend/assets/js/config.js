@@ -10,7 +10,7 @@ export const CONFIG = {
     if (isLocal) return "http://localhost:4000/api";
 
     // ---> Set this to your deployed Railway backend's URL once you have it <---
-    const PRODUCTION_API_URL = "https://your-backend.up.railway.app/api";
+       const PRODUCTION_API_URL = "https://gy-summit-2026-api.onrender.com/api";
     return PRODUCTION_API_URL;
   })(),
   APP_NAME: "GY Summit 2026",

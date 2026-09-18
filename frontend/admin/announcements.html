@@ -1,0 +1,2473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Announcement Centre | GY Summit 2026
+</title>
+
+<!-- Core CSS -->
+
+<link rel="stylesheet"
+href="../assets/css/variables.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="../assets/css/admin.css">
+
+<link rel="stylesheet"
+href="../assets/css/announcements.css">
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<!-- Quill Rich Text Editor -->
+
+<link
+href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
+rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- =====================================
+SIDEBAR
+===================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img
+src="../assets/images/logo.png"
+alt="GY Summit">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Communication Centre
+
+</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Finance
+
+</a>
+
+<a href="admissions.html">
+
+<i class="fa-solid fa-door-open"></i>
+
+Admissions
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a class="active"
+href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<h4>
+
+PCEA Githunguri Presbytery
+
+</h4>
+
+<small>
+
+GY Summit 2026
+
+</small>
+
+</div>
+
+</aside>
+
+<!-- =====================================
+MAIN CONTENT
+===================================== -->
+
+<main class="admin-main">
+
+<!-- HEADER -->
+
+<header class="dashboard-header">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+
+<h1>
+
+Announcement Centre
+
+</h1>
+
+<p>
+
+Create, publish and monitor communication across the entire summit.
+
+</p>
+
+</div>
+
+<div class="header-right">
+
+<!-- Notifications -->
+
+<div class="notification-btn">
+
+<i class="fa-solid fa-bell"></i>
+
+<span id="notificationBadge">
+
+0
+
+</span>
+
+</div>
+
+<!-- Live Clock -->
+
+<div class="live-clock">
+
+<h3 id="liveClock">
+
+00:00
+
+</h3>
+
+<p id="liveDate">
+
+Loading...
+
+</p>
+
+</div>
+
+<!-- Admin -->
+
+<div class="admin-profile">
+
+<img
+src="../assets/images/admin.png"
+alt="Admin">
+
+<div>
+
+<strong id="adminName">
+
+Admin
+
+</strong>
+
+<small id="adminRole">
+
+Online
+
+</small>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
+
+</header>
+
+<!-- SEARCH -->
+
+<div class="dashboard-search">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+
+type="search"
+
+id="globalAnnouncementSearch"
+
+placeholder="Search announcements, titles, recipients or categories...">
+
+</div>
+
+<!-- =====================================
+SYSTEM STATUS
+===================================== -->
+
+<section class="system-status">
+
+<div class="status-item">
+
+<i class="fa-solid fa-circle"></i>
+
+API Connected
+
+</div>
+
+<div class="status-item">
+
+<i class="fa-solid fa-circle"></i>
+
+Realtime Active
+
+</div>
+
+<div class="status-item">
+
+<i class="fa-solid fa-circle"></i>
+
+Storage Online
+
+</div>
+
+<div class="status-item">
+
+<i class="fa-solid fa-circle"></i>
+
+Notifications Ready
+
+</div>
+
+</section>
+
+<!-- =====================================
+STATISTICS
+===================================== -->
+
+<section class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="totalAnnouncements">
+
+0
+
+</h2>
+
+<p>
+
+Announcements
+
+</p>
+
+<small>
+
+Total created
+
+</small>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="publishedToday">
+
+0
+
+</h2>
+
+<p>
+
+Published Today
+
+</p>
+
+<small>
+
+Successfully delivered
+
+</small>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="scheduledCount">
+
+0
+
+</h2>
+
+<p>
+
+Scheduled
+
+</p>
+
+<small>
+
+Awaiting publication
+
+</small>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-eye"></i>
+
+</div>
+
+<div class="kpi-content">
+
+<h2 id="readPercentage">
+
+0%
+
+</h2>
+
+<p>
+
+Read Rate
+
+</p>
+
+<small>
+
+Participant engagement
+
+</small>
+
+</div>
+
+</div>
+
+</section><!-- ==========================================================
+ANNOUNCEMENT COMPOSER
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-pen-to-square"></i>
+
+Compose Announcement
+
+</h2>
+
+<div class="draft-status">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+<span id="draftStatus">
+
+Draft Saved
+
+</span>
+
+</div>
+
+</div>
+
+<form id="announcementForm">
+
+<div class="form-grid">
+
+<!-- ==========================================
+TITLE
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Announcement Title
+
+</label>
+
+<input
+
+type="text"
+
+id="announcementTitle"
+
+maxlength="120"
+
+placeholder="Enter announcement title..."
+
+required>
+
+</div>
+
+<!-- ==========================================
+CATEGORY
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Category
+
+</label>
+
+<select id="announcementCategory">
+
+<option value="General">General</option>
+
+<option value="Finance">Finance</option>
+
+<option value="Sports">Sports</option>
+
+<option value="Transport">Transport</option>
+
+<option value="Accommodation">Accommodation</option>
+
+<option value="Medical">Medical</option>
+
+<option value="Worship">Worship</option>
+
+<option value="Emergency">Emergency</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+PRIORITY
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Priority
+
+</label>
+
+<select id="announcementPriority">
+
+<option value="Low">
+
+🟢 Low
+
+</option>
+
+<option value="Normal" selected>
+
+🔵 Normal
+
+</option>
+
+<option value="High">
+
+🟠 High
+
+</option>
+
+<option value="Critical">
+
+🔴 Critical
+
+</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+DELIVERY
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Delivery Channels
+
+</label>
+
+<div class="delivery-grid">
+
+<label>
+
+<input
+
+type="checkbox"
+
+value="dashboard"
+
+checked>
+
+Dashboard
+
+</label>
+
+<label>
+
+<input
+
+type="checkbox"
+
+value="email"
+
+checked>
+
+Email
+
+</label>
+
+<label>
+
+<input
+
+type="checkbox"
+
+value="whatsapp"
+
+checked>
+
+WhatsApp
+
+</label>
+
+<label>
+
+<input
+
+type="checkbox"
+
+value="sms">
+
+SMS
+
+</label>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+AUDIENCE
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Audience
+
+</label>
+
+<select id="audienceType">
+
+<option value="all">
+
+All Participants
+
+</option>
+
+<option value="parish">
+
+Specific Parish
+
+</option>
+
+<option value="sports">
+
+Sports Teams
+
+</option>
+
+<option value="committee">
+
+Committee Members
+
+</option>
+
+<option value="volunteers">
+
+Volunteers
+
+</option>
+
+<option value="individual">
+
+Individual Participant
+
+</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+PARISH SELECTOR
+========================================== -->
+
+<div
+class="form-group"
+id="parishContainer"
+style="display:none;">
+
+<label>
+
+Select Parish
+
+</label>
+
+<select id="parishSelect">
+
+<option value="">
+
+Choose Parish
+
+</option>
+
+<option>Githunguri</option>
+
+<option>Kagaa</option>
+
+<option>Githiga</option>
+
+<option>Gathanji</option>
+
+<option>Gathangari</option>
+
+<option>Riara Ridge</option>
+
+<option>Matuguta</option>
+
+<option>Ikinu</option>
+
+<option>Komothai</option>
+
+<option>Nyathuna</option>
+
+<option>Kiairia</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+RECIPIENT PREVIEW
+========================================== -->
+
+<div class="form-group full-width">
+
+<div class="recipient-preview">
+
+<i class="fa-solid fa-users"></i>
+
+Recipients
+
+<strong id="recipientCount">
+
+0
+
+</strong>
+
+participants
+
+</div>
+
+</div>
+
+<!-- ==========================================
+MESSAGE EDITOR
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Announcement
+
+</label>
+
+<div id="toolbar">
+
+<span class="ql-formats">
+
+<select class="ql-header"></select>
+
+</span>
+
+<span class="ql-formats">
+
+<button class="ql-bold"></button>
+
+<button class="ql-italic"></button>
+
+<button class="ql-underline"></button>
+
+</span>
+
+<span class="ql-formats">
+
+<button class="ql-list"
+value="ordered"></button>
+
+<button class="ql-list"
+value="bullet"></button>
+
+</span>
+
+<span class="ql-formats">
+
+<button class="ql-link"></button>
+
+<button class="ql-image"></button>
+
+</span>
+
+</div>
+
+<div id="announcementEditor"></div>
+
+<input
+type="hidden"
+id="announcementMessage">
+
+<div class="editor-footer">
+
+<span id="characterCount">
+
+0 Characters
+
+</span>
+
+<span id="readingTime">
+
+0 min read
+
+</span>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+UPLOAD AREA
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Attachments
+
+</label>
+
+<div id="dropZone">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+<h3>
+
+Drop files here
+
+</h3>
+
+<p>
+
+or click to browse
+
+</p>
+
+<input
+
+type="file"
+
+id="announcementFiles"
+
+multiple
+
+accept=".pdf,.png,.jpg,.jpeg,.doc,.docx">
+
+</div>
+
+<div id="attachmentPreview"></div>
+
+</div>
+
+<!-- ==========================================
+SCHEDULING
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Publish Date
+
+</label>
+
+<input
+
+type="date"
+
+id="publishDate">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Publish Time
+
+</label>
+
+<input
+
+type="time"
+
+id="publishTime">
+
+</div>
+
+</div>
+
+<!-- ==========================================
+BUTTONS
+========================================== -->
+
+<div class="composer-actions">
+
+<button
+
+type="button"
+
+id="previewAnnouncement"
+
+class="btn btn-outline">
+
+<i class="fa-solid fa-eye"></i>
+
+Preview
+
+</button>
+
+<button
+
+type="button"
+
+id="saveDraft"
+
+class="btn btn-secondary">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Draft
+
+</button>
+
+<button
+
+type="button"
+
+id="scheduleAnnouncement"
+
+class="btn btn-warning">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+Schedule
+
+</button>
+
+<button
+
+type="submit"
+
+id="publishAnnouncement"
+
+class="btn btn-primary">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Publish Now
+
+</button>
+
+<button
+
+type="button"
+
+id="emergencyBroadcast"
+
+class="btn btn-danger">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+Emergency Broadcast
+
+</button>
+
+</div>
+
+</form>
+
+</section><!-- ==========================================================
+ANNOUNCEMENT HISTORY
+========================================================== -->
+
+<section class="dashboard-panel" id="announcementHistory">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+Announcement History
+
+</h2>
+
+<div class="panel-actions">
+
+<button class="btn btn-outline" id="refreshAnnouncements">
+
+<i class="fa-solid fa-rotate"></i>
+
+Refresh
+
+</button>
+
+<button class="btn btn-outline" id="exportAnnouncements">
+
+<i class="fa-solid fa-file-export"></i>
+
+Export
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+FILTERS
+========================================== -->
+
+<div class="history-filters">
+
+<input
+
+type="search"
+
+id="historySearch"
+
+placeholder="Search announcements...">
+
+<select id="historyCategory">
+
+<option value="">All Categories</option>
+
+<option>General</option>
+
+<option>Finance</option>
+
+<option>Sports</option>
+
+<option>Accommodation</option>
+
+<option>Transport</option>
+
+<option>Medical</option>
+
+<option>Worship</option>
+
+<option>Emergency</option>
+
+</select>
+
+<select id="historyStatus">
+
+<option value="">All Status</option>
+
+<option>Draft</option>
+
+<option>Scheduled</option>
+
+<option>Published</option>
+
+<option>Archived</option>
+
+</select>
+
+<select id="historyPriority">
+
+<option value="">All Priorities</option>
+
+<option>Low</option>
+
+<option>Normal</option>
+
+<option>High</option>
+
+<option>Critical</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+TABLE
+========================================== -->
+
+<div class="table-wrapper">
+
+<table class="announcement-table">
+
+<thead>
+
+<tr>
+
+<th>Title</th>
+
+<th>Category</th>
+
+<th>Priority</th>
+
+<th>Audience</th>
+
+<th>Published</th>
+
+<th>Recipients</th>
+
+<th>Delivered</th>
+
+<th>Read</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="announcementTable">
+
+<!-- Loaded from the API -->
+
+<tr class="empty-state-row">
+
+<td colspan="10">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<h3>
+
+No Announcements Found
+
+</h3>
+
+<p>
+
+Announcements will appear here once published.
+
+</p>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- ==========================================
+PAGINATION
+========================================== -->
+
+<div class="table-pagination">
+
+<button
+id="previousPage"
+
+class="btn btn-outline">
+
+<i class="fa-solid fa-chevron-left"></i>
+
+Previous
+
+</button>
+
+<span id="pageIndicator">
+
+Page 1 of 1
+
+</span>
+
+<button
+id="nextPage"
+
+class="btn btn-outline">
+
+Next
+
+<i class="fa-solid fa-chevron-right"></i>
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+DELIVERY REPORT
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-chart-column"></i>
+
+Delivery Report
+
+</h2>
+
+</div>
+
+<div class="analytics-grid">
+
+<div class="analytics-card">
+
+<h4>Total Recipients</h4>
+
+<h2 id="reportRecipients">
+
+0
+
+</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h4>Delivered</h4>
+
+<h2 id="reportDelivered">
+
+0
+
+</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h4>Read</h4>
+
+<h2 id="reportRead">
+
+0
+
+</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h4>Failed</h4>
+
+<h2 id="reportFailed">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+VIEW ANNOUNCEMENT MODAL
+========================================================== -->
+
+<div
+class="modal"
+id="announcementModal">
+
+<div class="modal-content large">
+
+<div class="modal-header">
+
+<h2>
+
+Announcement Details
+
+</h2>
+
+<button
+id="closeAnnouncementModal">
+
+<i class="fa-solid fa-xmark"></i>
+
+</button>
+
+</div>
+
+<div id="announcementContent">
+
+<!-- Loaded from the API -->
+
+</div>
+
+<div class="modal-footer">
+
+<button
+class="btn btn-primary"
+
+id="editAnnouncement">
+
+<i class="fa-solid fa-pen"></i>
+
+Edit
+
+</button>
+
+<button
+class="btn btn-warning"
+
+id="duplicateAnnouncement">
+
+<i class="fa-solid fa-copy"></i>
+
+Duplicate
+
+</button>
+
+<button
+class="btn btn-secondary"
+
+id="archiveAnnouncement">
+
+<i class="fa-solid fa-box-archive"></i>
+
+Archive
+
+</button>
+
+<button
+class="btn btn-danger"
+
+id="deleteAnnouncement">
+
+<i class="fa-solid fa-trash"></i>
+
+Delete
+
+</button>
+
+</div>
+
+</div>
+
+</div><!-- ==========================================================
+COMMUNICATION OPERATIONS
+========================================================== -->
+
+<div class="operations-grid">
+
+<!-- ==========================================================
+SCHEDULED ANNOUNCEMENTS
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-calendar-days"></i>
+
+Scheduled Queue
+
+</h2>
+
+<button
+
+class="btn btn-outline"
+
+id="refreshSchedule">
+
+<i class="fa-solid fa-rotate"></i>
+
+Refresh
+
+</button>
+
+</div>
+
+<div id="scheduledAnnouncements">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-calendar-check"></i>
+
+<h3>
+
+No Scheduled Announcements
+
+</h3>
+
+<p>
+
+Scheduled announcements will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+RECENT COMMUNICATION ACTIVITY
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+Communication Activity
+
+</h2>
+
+</div>
+
+<div id="activityTimeline"
+
+class="timeline">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-comments"></i>
+
+<h3>
+
+No Activity
+
+</h3>
+
+<p>
+
+Publishing logs and delivery updates will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- ==========================================================
+QUICK TEMPLATES
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-layer-group"></i>
+
+Quick Templates
+
+</h2>
+
+<button
+
+class="btn btn-primary"
+
+id="manageTemplates">
+
+<i class="fa-solid fa-gear"></i>
+
+Manage
+
+</button>
+
+</div>
+
+<div class="template-grid">
+
+<div class="template-card"
+
+data-template="welcome">
+
+<i class="fa-solid fa-handshake"></i>
+
+<h3>
+
+Welcome
+
+</h3>
+
+<p>
+
+Participant welcome message.
+
+</p>
+
+<button
+
+class="btn btn-outline use-template">
+
+Use
+
+</button>
+
+</div>
+
+<div class="template-card"
+
+data-template="meal">
+
+<i class="fa-solid fa-utensils"></i>
+
+<h3>
+
+Meal Time
+
+</h3>
+
+<p>
+
+Meal notification.
+
+</p>
+
+<button
+
+class="btn btn-outline use-template">
+
+Use
+
+</button>
+
+</div>
+
+<div class="template-card"
+
+data-template="sports">
+
+<i class="fa-solid fa-futbol"></i>
+
+<h3>
+
+Sports Fixtures
+
+</h3>
+
+<p>
+
+Fixture updates.
+
+</p>
+
+<button
+
+class="btn btn-outline use-template">
+
+Use
+
+</button>
+
+</div>
+
+<div class="template-card"
+
+data-template="worship">
+
+<i class="fa-solid fa-cross"></i>
+
+<h3>
+
+Worship
+
+</h3>
+
+<p>
+
+Service reminders.
+
+</p>
+
+<button
+
+class="btn btn-outline use-template">
+
+Use
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+EMERGENCY BROADCAST
+========================================================== -->
+
+<section class="dashboard-panel emergency-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+Emergency Broadcast
+
+</h2>
+
+</div>
+
+<p>
+
+Immediately send a critical announcement to all selected participants.
+
+</p>
+
+<button
+
+id="launchEmergency"
+
+class="btn btn-danger emergency-button">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Launch Emergency Broadcast
+
+</button>
+
+</section>
+
+<!-- ==========================================================
+SYSTEM HEALTH
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-server"></i>
+
+System Health
+
+</h2>
+
+</div>
+
+<div class="status-list">
+
+<div class="status-item">
+
+<span>
+
+PostgreSQL Database
+
+</span>
+
+<span
+
+id="databaseStatus"
+
+class="status success">
+
+ONLINE
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>
+
+Realtime Engine
+
+</span>
+
+<span
+
+id="realtimeStatus"
+
+class="status success">
+
+CONNECTED
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>
+
+Storage
+
+</span>
+
+<span
+
+id="storageStatus"
+
+class="status success">
+
+READY
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>
+
+Authentication
+
+</span>
+
+<span
+
+id="authStatus"
+
+class="status success">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<div class="status-item">
+
+<span>
+
+Notification Service
+
+</span>
+
+<span
+
+id="notificationStatus"
+
+class="status success">
+
+RUNNING
+
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+FOOTER
+========================================================== -->
+
+
+
+<!-- ======================================================
+NOTIFICATION SETTINGS (moved from the old monolithic Settings page)
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-gear"></i>
+
+Notification Settings
+
+</h2>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Notification Channels
+
+</h2>
+
+</div>
+
+<form id="notificationChannelsForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Email Notifications
+
+</strong>
+
+<p>
+
+Send emails to participants.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enableEmail"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable WhatsApp
+
+</strong>
+
+<p>
+
+Send WhatsApp messages.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enableWhatsapp">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable SMS
+
+</strong>
+
+<p>
+
+Send SMS notifications.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enableSms">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Enable Push Notifications
+
+</strong>
+
+<p>
+
+Browser and mobile push alerts.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="enablePush">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_notificationChannelsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Email Configuration
+
+</h2>
+
+</div>
+
+<form id="emailConfigForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Sender Name
+
+</label>
+
+<input
+type="text"
+id="emailSenderName">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Sender Email
+
+</label>
+
+<input
+type="email"
+id="senderEmail">
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Reply-To Email
+
+</label>
+
+<input
+type="email"
+id="replyEmail">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_emailConfigForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+WhatsApp Configuration
+
+</h2>
+
+</div>
+
+<form id="whatsappConfigForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Business Number
+
+</label>
+
+<input
+type="text"
+id="whatsappNumber">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+WhatsApp Channel
+
+</label>
+
+<input
+type="url"
+id="whatsappConfigChannel">
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Default Footer
+
+</label>
+
+<textarea
+rows="3"
+id="whatsappFooter"></textarea>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_whatsappConfigForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Automatic Messages
+
+</h2>
+
+</div>
+
+<form id="autoMessagesForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Registration Successful
+
+</strong>
+
+<p>
+
+Notify immediately after registration.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="notifyRegistration"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Payment Received
+
+</strong>
+
+<p>
+
+Notify after payment verification.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="notifyPayment"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Admission Ready
+
+</strong>
+
+<p>
+
+Notify when admission card is generated.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="notifyAdmission"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Announcements
+
+</strong>
+
+<p>
+
+Send all announcements automatically.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="notifyAnnouncements"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Certificates Ready
+
+</strong>
+
+<p>
+
+Notify when certificates are generated.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="notifyCertificates"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_autoMessagesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Notification Templates
+
+</h2>
+
+</div>
+
+<form id="notificationTemplatesForm">
+
+<div class="form-grid">
+
+<div class="form-group full-width">
+
+<label>
+
+Registration Template
+
+</label>
+
+<textarea
+rows="5"
+id="registrationTemplate">
+
+Hello {{name}},
+
+Welcome to GY Summit 2026.
+
+Your registration has been received successfully.
+
+</textarea>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Payment Template
+
+</label>
+
+<textarea
+rows="5"
+id="paymentTemplate">
+
+Dear {{name}},
+
+Your payment of KES {{amount}} has been verified successfully.
+
+</textarea>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Admission Template
+
+</label>
+
+<textarea
+rows="5"
+id="admissionTemplate">
+
+Hello {{name}},
+
+Your admission pass is now ready.
+
+Download it from your participant dashboard.
+
+</textarea>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Certificate Template
+
+</label>
+
+<textarea
+rows="5"
+id="certificateTemplate">
+
+Congratulations {{name}}.
+
+Your certificate has been generated successfully.
+
+</textarea>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_notificationTemplatesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+<footer class="admin-footer">
+
+<p>
+
+© 2026 GY Summit Management System
+
+</p>
+
+<p>
+
+PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<!-- ==========================================================
+LIBRARIES
+========================================================== -->
+
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+
+<!-- CONFIG -->
+
+
+
+<!-- PAGE SCRIPT -->
+
+<script type="module" src="../assets/js/announcements.js"></script>
+
+<script src="../assets/js/app-shell.js"></script>
+
+</body>
+
+</html>

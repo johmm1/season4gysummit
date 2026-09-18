@@ -1,0 +1,128 @@
+/* ===========================================
+   GY SUMMIT 2026 — SITEWIDE MOBILE SAFETY NET
+   ===========================================
+   Loaded LAST on every page, after every other stylesheet, on purpose:
+   this file exists to catch mobile-breaking gaps in the 20+ page-specific
+   CSS files (missing small-phone breakpoints, a couple of undefined
+   wrapper classes, iOS-only quirks) without having to hunt down every
+   instance individually. Most rules here are deliberately generic —
+   they target *patterns* used consistently across the codebase (e.g.
+   every grid layout class ends in "-grid") rather than one page at a
+   time, so a new page that follows the same naming conventions is
+   covered automatically.
+
+   A few rules use !important. That's intentional here, not a shortcut:
+   this file's whole job is to be the final, guaranteed word on a small,
+   specific list of mobile failure modes, regardless of which page-level
+   stylesheet(s) happen to be loaded above it or how specific their
+   selectors are. It is not used for anything else in this file.
+*/
+
+
+/* ---------------------------------------------
+   1. Media never wider than its container
+   (variables.css already does this for <img>; this extends the same
+   safety to everything else that can overflow a narrow screen)
+--------------------------------------------- */
+
+video, iframe, canvas, svg, embed, object {
+  max-width: 100%;
+}
+
+
+/* ---------------------------------------------
+   2. Tables: guarantee the two wrapper classes actually used
+   sitewide (.table-responsive, .table-wrapper) scroll horizontally
+   instead of blowing out the page width. Belt-and-suspenders: this
+   backstops the .table-responsive fix already made in admissions.css,
+   in case any future page reuses these class names without also
+   pulling in a stylesheet that defines them.
+--------------------------------------------- */
+
+.table-responsive,
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* ---------------------------------------------
+   3. iOS Safari zooms the whole page in when a focused form field has
+   a font-size under 16px. Two page stylesheets (gallery, announcements)
+   were fixed at the source; this is the sitewide backstop so the same
+   mistake anywhere else doesn't reintroduce the zoom-on-focus jump.
+--------------------------------------------- */
+
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+
+/* ---------------------------------------------
+   4. Small-phone grid collapse (≤480px), applied to every layout class
+   that follows this codebase's own "*-grid" naming convention
+   (.stats-grid, .summary-grid, .form-grid, .health-grid, .admission-grid,
+   etc. — 30+ of them). Most already collapse to 1 column at 768px/992px
+   in their own file; this only changes anything on the handful that
+   didn't, and is a no-op (same 1fr) everywhere else.
+--------------------------------------------- */
+
+@media (max-width: 480px) {
+  [class*="-grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ---------------------------------------------
+   5. Modal dialogs already cap themselves at 90-95% width, but their
+   padding was tuned for desktop — on a 320-360px phone that leaves
+   very little room for actual content. Tighten it only at phone widths.
+--------------------------------------------- */
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 20px !important;
+    width: 94% !important;
+  }
+}
+
+
+/* ---------------------------------------------
+   6. Comfortable tap targets on touchscreens. Only widens things that
+   are currently smaller than the ~44px minimum touch-target guideline;
+   never shrinks anything.
+--------------------------------------------- */
+
+@media (max-width: 600px) {
+  .btn,
+  button:not(.icon-btn):not(.notification-btn),
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+  }
+
+  .sidebar nav a,
+  .navbar nav a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+
+/* ---------------------------------------------
+   7. Long unbroken strings (emails, long names, church/parish names,
+   URLs pasted into announcements) can force a table cell or card wider
+   than the screen even inside a scrollable wrapper's non-table children.
+--------------------------------------------- */
+
+@media (max-width: 480px) {
+  .card, .panel, .dashboard-panel, .summary-card, .stat-card,
+  .modal-content, td, th {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}

@@ -1,0 +1,100 @@
+/* ==========================================================
+GY SUMMIT 2026 — PARTICIPANT PORTAL THEMES
+Overrides the design-system variables (variables.css) and the
+portal-specific ones (participants/layout.css) per data-theme
+value on <html>. Applied on top of the base stylesheets, so any
+CSS that already uses var(--primary), var(--bg-color) etc. just
+repaints automatically — no per-page CSS changes needed.
+
+Themes: vanilla (default), dark, pink, blue.
+Set by frontend/assets/js/theme.js, persisted in localStorage
+under "gySummitTheme".
+========================================================== */
+
+/* VANILLA — the portal's original warm ivory + gold identity.
+   Written out explicitly (not just left to fall through to the
+   base files) so it's a real, selectable theme rather than an
+   accident of what happens when no theme is set. */
+html[data-theme="vanilla"],
+html:not([data-theme]) {
+--bg-color:#FBF8F1;
+--surface:#FFFFFF;
+--surface-alt:#F4EFE2;
+--text-dark:#2A2420;
+--text-light:#6B6058;
+--ink:#1D2A44;
+--ink-light:#33456B;
+--primary:#C8A24A;
+--primary-dark:#A8842F;
+--primary-light:#E5C979;
+--secondary:#1565C0;
+--border:#E9E2D4;
+}
+
+/* DARK — warm charcoal instead of flat black, gold pushed a
+   touch brighter so it still reads clearly on a dark surface. */
+html[data-theme="dark"]{
+--bg-color:#15130F;
+--surface:#211E19;
+--surface-alt:#2B2721;
+--text-dark:#F2EDE3;
+--text-light:#B4A996;
+--ink:#3A5488;
+--ink-light:#5678AE;
+--primary:#E5C979;
+--primary-dark:#C8A24A;
+--primary-light:#F2DFA6;
+--secondary:#5B9BFF;
+--border:#3A362E;
+}
+
+html[data-theme="dark"] body{
+color-scheme:dark;
+}
+
+/* PINK — soft rose surface with a berry-pink primary; violet
+   stands in for the old blue accent so it doesn't clash. */
+html[data-theme="pink"]{
+--bg-color:#FFF4F8;
+--surface:#FFFFFF;
+--surface-alt:#FCE9F0;
+--text-dark:#3B222C;
+--text-light:#8A6B78;
+--ink:#5C2A45;
+--ink-light:#7A3D5C;
+--primary:#E0578A;
+--primary-dark:#B93B6B;
+--primary-light:#F2A8C4;
+--secondary:#8B3FE0;
+--border:#F5D9E4;
+}
+
+/* BLUE — the existing secondary blue promoted to primary, gold
+   flipped in as the accent so the palette still feels branded. */
+html[data-theme="blue"]{
+--bg-color:#F0F6FC;
+--surface:#FFFFFF;
+--surface-alt:#E3EDF7;
+--text-dark:#1B2733;
+--text-light:#5E7387;
+--ink:#12406B;
+--ink-light:#1F5C94;
+--primary:#1565C0;
+--primary-dark:#0D47A1;
+--primary-light:#5A9BE0;
+--secondary:#F9A825;
+--border:#D6E4F2;
+}
+
+/* Every participant stylesheet that used to hardcode "#fff" for
+   card/panel backgrounds now points at this instead, so cards
+   repaint with the theme rather than staying white on a dark or
+   tinted page. Smooth the swap between themes while we're at it. */
+body{
+transition:background-color .25s ease, color .25s ease;
+}
+
+.topbar,
+.sidebar-header img{
+transition:background-color .25s ease;
+}

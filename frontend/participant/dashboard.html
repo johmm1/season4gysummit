@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../assets/js/theme-init.js"></script>
+
+
+<title>Participant Dashboard | GY Summit 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<!-- Fonts -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Global CSS -->
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<link rel="stylesheet" href="../assets/css/animations.css">
+
+<link rel="stylesheet" href="../assets/css/responsive.css">
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+<link rel="stylesheet" href="../assets/css/themes.css">
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+<!-- Shared Dashboard CSS -->
+
+<link rel="stylesheet" href="../assets/css/participants/dashboard.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- =======================================
+SIDEBAR
+======================================= -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img src="../assets/images/logo.png"
+alt="GY Summit">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Participant Portal
+
+</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html"
+class="active">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+<a href="profile.html">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+<a href="admission-pass.html">
+
+<i class="fa-solid fa-id-card"></i>
+
+Admission Pass
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports Centre
+
+</a>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Gallery
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button id="logoutBtn"
+class="logout-btn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- =======================================
+MAIN CONTENT
+======================================= -->
+
+<main class="dashboard-content">
+
+<!-- =======================================
+TOP NAVBAR
+======================================= -->
+
+<header class="topbar">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+
+<h1>
+
+Participant Dashboard
+
+</h1>
+
+<p>
+
+Welcome back to GY Summit 2026
+
+</p>
+
+</div>
+
+<div class="topbar-right">
+
+<div class="current-time">
+
+<i class="fa-regular fa-clock"></i>
+
+<span id="currentTime">
+
+Loading...
+
+</span>
+
+</div>
+
+<div class="participant-profile">
+
+<img
+
+id="participantAvatar"
+
+src="../assets/images/avatar-placeholder.png"
+
+alt="Participant">
+
+<div>
+
+<h4 id="participantName">
+
+Loading...
+
+</h4>
+
+<p id="participantParish">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- =======================================
+WELCOME CARD
+======================================= -->
+
+<section class="welcome-card">
+
+<div>
+
+<h2>
+
+Welcome,
+
+<span id="welcomeName">
+
+Participant
+
+</span>
+
+👋
+
+</h2>
+
+<p>
+
+We're excited to have you at the GY Summit 2026.
+
+Stay updated with announcements, sports fixtures, gallery uploads and your admission status.
+
+</p>
+
+</div>
+
+<div>
+
+<button
+class="btn btn-primary"
+onclick="location.href='admission-pass.html'">
+
+<i class="fa-solid fa-qrcode"></i>
+
+View Admission Pass
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =======================================
+STATUS CARDS
+Next Section
+======================================= -->
+
+<section class="stats-grid"><!-- =======================================
+REGISTRATION STATUS
+======================================= -->
+
+<div class="stat-card">
+
+<div class="stat-icon registration">
+
+<i class="fa-solid fa-user-check"></i>
+
+</div>
+
+<div class="stat-content">
+
+<h5>
+
+Registration
+
+</h5>
+
+<h2 id="registrationStatus">
+
+Verified
+
+</h2>
+
+<p id="registrationDate">
+
+Completed Successfully
+
+</p>
+
+</div>
+
+<div class="status-badge success">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+</div>
+
+<!-- =======================================
+PAYMENT STATUS
+======================================= -->
+
+<div class="stat-card">
+
+<div class="stat-icon payment">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+</div>
+
+<div class="stat-content">
+
+<h5>
+
+Payment
+
+</h5>
+
+<h2 id="paymentStatus">
+
+Pending
+
+</h2>
+
+<p>
+
+KES
+
+<span id="amountPaid">
+
+0
+
+</span>
+
+Paid
+
+</p>
+
+</div>
+
+<div class="status-badge warning">
+
+<i class="fa-solid fa-hourglass-half"></i>
+
+</div>
+
+</div>
+
+<!-- =======================================
+ADMISSION STATUS
+======================================= -->
+
+<div class="stat-card">
+
+<div class="stat-icon admission">
+
+<i class="fa-solid fa-qrcode"></i>
+
+</div>
+
+<div class="stat-content">
+
+<h5>
+
+Admission Pass
+
+</h5>
+
+<h2 id="admissionStatus">
+
+Ready
+
+</h2>
+
+<p id="admissionCode">
+
+GY26-000000
+
+</p>
+
+</div>
+
+<button
+class="mini-btn"
+onclick="location.href='admission-pass.html'">
+
+View
+
+</button>
+
+</div>
+
+<!-- =======================================
+CERTIFICATES
+======================================= -->
+
+<div class="stat-card">
+
+<div class="stat-icon certificate">
+
+<i class="fa-solid fa-award"></i>
+
+</div>
+
+<div class="stat-content">
+
+<h5>
+
+Certificates
+
+</h5>
+
+<h2 id="certificateCount">
+
+0
+
+</h2>
+
+<p>
+
+Available Downloads
+
+</p>
+
+</div>
+
+<button
+class="mini-btn"
+onclick="location.href='gallery.html#certificates'">
+
+Open
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =======================================
+DASHBOARD MIDDLE
+======================================= -->
+
+<div class="dashboard-columns">
+
+<!-- =======================================
+COUNTDOWN
+======================================= -->
+
+<div class="dashboard-panel countdown-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Countdown to Summit
+
+</h2>
+
+</div>
+
+<div class="countdown-grid">
+
+<div class="countdown-box">
+
+<h1 id="days">
+
+00
+
+</h1>
+
+<span>
+
+Days
+
+</span>
+
+</div>
+
+<div class="countdown-box">
+
+<h1 id="hours">
+
+00
+
+</h1>
+
+<span>
+
+Hours
+
+</span>
+
+</div>
+
+<div class="countdown-box">
+
+<h1 id="minutes">
+
+00
+
+</h1>
+
+<span>
+
+Minutes
+
+</span>
+
+</div>
+
+<div class="countdown-box">
+
+<h1 id="seconds">
+
+00
+
+</h1>
+
+<span>
+
+Seconds
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =======================================
+LATEST ANNOUNCEMENT
+======================================= -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Latest Announcement
+
+</h2>
+
+<a href="announcements.html">
+
+View All
+
+</a>
+
+</div>
+
+<div class="announcement-preview">
+
+<h3 id="announcementTitle">
+
+Loading...
+
+</h3>
+
+<p id="announcementMessage">
+
+Loading latest announcement...
+
+</p>
+
+<small id="announcementDate">
+
+--
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =======================================
+QUICK ACTIONS
+======================================= -->
+
+<section class="quick-actions-grid">
+
+<a
+href="profile.html"
+class="quick-action-card">
+
+<i class="fa-solid fa-user"></i>
+
+<h4>
+
+My Profile
+
+</h4>
+
+<p>
+
+View and edit your profile.
+
+</p>
+
+</a>
+
+<a
+href="sports.html"
+class="quick-action-card">
+
+<i class="fa-solid fa-futbol"></i>
+
+<h4>
+
+Sports
+
+</h4>
+
+<p>
+
+Fixtures, standings and schedules.
+
+</p>
+
+</a>
+
+<a
+href="gallery.html"
+class="quick-action-card">
+
+<i class="fa-solid fa-images"></i>
+
+<h4>
+
+Gallery
+
+</h4>
+
+<p>
+
+Photos and certificates.
+
+</p>
+
+</a>
+
+<a
+href="announcements.html"
+class="quick-action-card">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<h4>
+
+Announcements
+
+</h4>
+
+<p>
+
+Latest summit updates.
+
+</p>
+
+</a>
+
+</section>
+
+<!-- =======================================
+NEXT SECTION:
+My Schedule + Gallery Preview
+======================================= --><!-- =======================================
+MAIN CONTENT GRID
+======================================= -->
+
+<div class="dashboard-columns">
+
+<!-- =======================================
+MY SCHEDULE
+======================================= -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+My Schedule
+
+</h2>
+
+<a href="sports.html">
+
+View Full Schedule
+
+</a>
+
+</div>
+
+<div class="schedule-list" id="mySchedule">
+
+<div class="schedule-item">
+
+<div class="schedule-time">
+
+08:00 AM
+
+</div>
+
+<div class="schedule-details">
+
+<h4>
+
+Registration
+
+</h4>
+
+<p>
+
+Main Registration Tent
+
+</p>
+
+</div>
+
+</div>
+
+<div class="schedule-item">
+
+<div class="schedule-time">
+
+09:30 AM
+
+</div>
+
+<div class="schedule-details">
+
+<h4>
+
+Opening Worship
+
+</h4>
+
+<p>
+
+Main Auditorium
+
+</p>
+
+</div>
+
+</div>
+
+<div class="schedule-item">
+
+<div class="schedule-time">
+
+11:00 AM
+
+</div>
+
+<div class="schedule-details">
+
+<h4>
+
+Sports Fixtures
+
+</h4>
+
+<p>
+
+Football • Volleyball • Dance
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =======================================
+SPORTS SUMMARY
+======================================= -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+My Competition
+
+</h2>
+
+<a href="sports.html">
+
+Open Sports Centre
+
+</a>
+
+</div>
+
+<div class="competition-summary">
+
+<div class="summary-card">
+
+<h5>
+
+Football
+
+</h5>
+
+<h3 id="footballStatus">
+
+Registered
+
+</h3>
+
+<p id="footballFixture">
+
+Next Match:
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="summary-card">
+
+<h5>
+
+Volleyball
+
+</h5>
+
+<h3 id="volleyballStatus">
+
+Not Registered
+
+</h3>
+
+<p>
+
+—
+
+</p>
+
+</div>
+
+<div class="summary-card">
+
+<h5>
+
+Dance
+
+</h5>
+
+<h3 id="danceStatus">
+
+Registered
+
+</h3>
+
+<p id="dancePerformance">
+
+Performance:
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =======================================
+LATEST GALLERY
+======================================= -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Latest Gallery
+
+</h2>
+
+<a href="gallery.html">
+
+View Gallery
+
+</a>
+
+</div>
+
+<div class="gallery-preview-grid">
+
+<div class="gallery-preview">
+
+<img
+
+id="galleryImage1"
+
+src="../assets/images/gallery-placeholder.jpg"
+
+alt="Gallery">
+
+</div>
+
+<div class="gallery-preview">
+
+<img
+
+id="galleryImage2"
+
+src="../assets/images/gallery-placeholder.jpg"
+
+alt="Gallery">
+
+</div>
+
+<div class="gallery-preview">
+
+<img
+
+id="galleryImage3"
+
+src="../assets/images/gallery-placeholder.jpg"
+
+alt="Gallery">
+
+</div>
+
+<div class="gallery-preview">
+
+<img
+
+id="galleryImage4"
+
+src="../assets/images/gallery-placeholder.jpg"
+
+alt="Gallery">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =======================================
+QUICK DOWNLOADS
+======================================= -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Downloads
+
+</h2>
+
+</div>
+
+<div class="download-actions">
+
+<button
+
+class="btn btn-primary"
+
+onclick="location.href='admission-pass.html'">
+
+<i class="fa-solid fa-id-card"></i>
+
+Admission Pass
+
+</button>
+
+<button
+
+class="btn btn-outline"
+
+id="downloadCertificateBtn">
+
+<i class="fa-solid fa-award"></i>
+
+Certificates
+
+</button>
+
+<button
+
+class="btn btn-outline"
+
+onclick="location.href='gallery.html'">
+
+<i class="fa-solid fa-images"></i>
+
+Photos
+
+</button>
+
+<button
+
+class="btn btn-outline"
+
+id="downloadProgramBtn">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+Event Program
+
+</button>
+
+</div>
+
+</div>
+
+<!-- =======================================
+UPCOMING ACTIVITIES
+======================================= -->
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Upcoming Activities
+
+</h2>
+
+</div>
+
+<div class="timeline">
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div>
+
+<h4>
+
+Opening Ceremony
+
+</h4>
+
+<p>
+
+Saturday • 9:00 AM
+
+</p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div>
+
+<h4>
+
+Sports Competitions
+
+</h4>
+
+<p>
+
+Saturday Afternoon
+
+</p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div>
+
+<h4>
+
+Evening Worship Experience
+
+</h4>
+
+<p>
+
+Saturday • 7:00 PM
+
+</p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div>
+
+<h4>
+
+Holy Communion Service
+
+</h4>
+
+<p>
+
+Sunday Morning
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =======================================
+FOOTER
+======================================= -->
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+<p>
+
+GY Summit • Holiness and the Fear of God
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<!-- dashboard.js -->
+
+<script src="../assets/js/app-shell.js"></script>
+<script type="module" src="js/dashboard.js"></script>
+
+</body>
+
+</html>

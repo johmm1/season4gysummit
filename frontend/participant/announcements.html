@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../assets/js/theme-init.js"></script>
+
+
+<title>Announcements | GY Summit 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/responsive.css">
+
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+<link rel="stylesheet" href="../assets/css/themes.css">
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+<link rel="stylesheet" href="../assets/css/participants/announcements.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- ==========================
+SIDEBAR
+========================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img src="../assets/images/logo.png" alt="GY Summit">
+
+<h2>GY Summit</h2>
+
+<p>Participant Portal</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</a>
+
+<a href="profile.html">
+<i class="fa-solid fa-user"></i>
+Profile
+</a>
+
+<a href="admission-pass.html">
+<i class="fa-solid fa-id-card"></i>
+Admission Pass
+</a>
+
+<a href="announcements.html" class="active">
+<i class="fa-solid fa-bullhorn"></i>
+Announcements
+</a>
+
+<a href="sports.html">
+<i class="fa-solid fa-futbol"></i>
+Sports Centre
+</a>
+
+<a href="gallery.html">
+<i class="fa-solid fa-images"></i>
+Gallery
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button id="logoutBtn" class="logout-btn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ==========================
+MAIN CONTENT
+========================== -->
+
+<main class="dashboard-content">
+
+<header class="topbar">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+
+<h1>
+
+Announcements
+
+</h1>
+
+<p>
+
+Latest updates from the Summit Secretariat
+
+</p>
+
+</div>
+
+<div class="participant-profile">
+
+<img
+id="participantPhoto"
+src="../assets/images/avatar-placeholder.png"
+alt="Participant">
+
+<div>
+
+<h4 id="participantName">
+
+Loading...
+
+</h4>
+
+<p id="participantParish">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ==========================
+SEARCH & FILTER
+========================== -->
+
+<section class="announcement-toolbar">
+
+<div class="search-box">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+
+type="text"
+
+id="announcementSearch"
+
+placeholder="Search announcements...">
+
+</div>
+
+<select id="categoryFilter">
+
+<option value="all">
+
+All Announcements
+
+</option>
+
+<option value="pinned">
+
+Pinned Only
+
+</option>
+
+</select>
+
+<div class="announcement-counter">
+
+<i class="fa-solid fa-envelope-open-text"></i>
+
+<span id="unreadCount">
+
+0
+
+</span>
+
+Unread
+
+</div>
+
+</section>
+
+<!-- ==========================
+PINNED ANNOUNCEMENT
+========================== -->
+
+<section class="pinned-announcement">
+
+<div class="pin-icon">
+
+<i class="fa-solid fa-thumbtack"></i>
+
+</div>
+
+<div class="pin-content">
+
+<div class="announcement-meta">
+
+<span class="badge badge-danger">
+
+Pinned
+
+</span>
+
+<span id="pinnedDate">
+
+Loading...
+
+</span>
+
+</div>
+
+<h2 id="pinnedTitle">
+
+Loading...
+
+</h2>
+
+<p id="pinnedPreview">
+
+Loading...
+
+</p>
+
+<button
+
+class="btn btn-primary"
+
+id="readPinnedBtn">
+
+Read Announcement
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ==========================
+ANNOUNCEMENT LIST
+Next Section
+<section class="announcement-list">
+
+
+<!-- ======================================
+Dynamic Announcement Cards
+Loaded by announcement.js
+====================================== -->
+
+<div id="announcementContainer">
+
+</div>
+
+</section>
+
+<!-- ======================================
+EMPTY STATE
+====================================== -->
+
+<section
+
+class="empty-state"
+
+id="emptyAnnouncements"
+
+style="display:none;">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<h3>
+
+No Announcements Found
+
+</h3>
+
+<p>
+
+There are currently no announcements matching your search.
+
+</p>
+
+</section>
+
+<!-- ======================================
+LOAD MORE
+====================================== -->
+
+<div class="load-more-section">
+
+<button
+
+id="loadMoreBtn"
+
+class="btn btn-primary">
+
+<i class="fa-solid fa-angles-down"></i>
+
+Load More
+
+</button>
+
+</div>
+
+<!-- ======================================
+ANNOUNCEMENT MODAL
+====================================== -->
+
+<div
+
+class="modal"
+
+id="announcementModal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2 id="modalTitle">
+
+Announcement
+
+</h2>
+
+<button
+
+id="closeAnnouncement"
+
+class="modal-close">
+
+<i class="fa-solid fa-xmark"></i>
+
+</button>
+
+</div>
+
+<div class="modal-meta">
+
+<span
+
+id="modalCategory"
+
+class="badge badge-info">
+
+General
+
+</span>
+
+<span id="modalDate">
+
+Loading...
+
+</span>
+
+</div>
+
+<div
+
+class="modal-body"
+
+id="modalContent">
+
+Loading...
+
+</div>
+
+<!-- ==============================
+Attachments
+============================== -->
+
+<div
+
+id="attachmentSection"
+
+class="attachment-section">
+
+<h4>
+
+Attachments
+
+</h4>
+
+<div
+
+id="attachmentContainer">
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-outline"
+
+id="markAsReadBtn">
+
+<i class="fa-solid fa-check"></i>
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="../assets/js/app-shell.js"></script>
+<script type="module" src="js/announcements.js"></script>
+
+</body>
+
+</html>

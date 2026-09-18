@@ -1,0 +1,530 @@
+/*=========================================
+GY SUMMIT 2026
+ANIMATIONS.CSS
+Professional UI Animations
+==========================================*/
+
+/* ===============================
+FADE IN
+=============================== */
+
+.fade-in{
+    animation:fadeIn .8s ease forwards;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+
+/* ===============================
+FADE UP
+=============================== */
+
+.fade-up{
+    animation:fadeUp .8s ease forwards;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===============================
+FADE LEFT
+=============================== */
+
+.fade-left{
+    animation:fadeLeft .8s ease forwards;
+}
+
+@keyframes fadeLeft{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(-60px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0);
+
+    }
+
+}
+
+/* ===============================
+FADE RIGHT
+=============================== */
+
+.fade-right{
+
+animation:fadeRight .8s ease forwards;
+
+}
+
+@keyframes fadeRight{
+
+from{
+
+opacity:0;
+
+transform:translateX(60px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
+}
+
+/* ===============================
+ZOOM IN
+=============================== */
+
+.zoom-in{
+
+animation:zoomIn .6s ease;
+
+}
+
+@keyframes zoomIn{
+
+from{
+
+opacity:0;
+
+transform:scale(.8);
+
+}
+
+to{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+}
+
+/* ===============================
+SLIDE DOWN
+=============================== */
+
+.slide-down{
+
+animation:slideDown .6s ease;
+
+}
+
+@keyframes slideDown{
+
+from{
+
+opacity:0;
+
+transform:translateY(-60px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ===============================
+SLIDE UP
+=============================== */
+
+.slide-up{
+
+animation:slideUp .6s ease;
+
+}
+
+@keyframes slideUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(60px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ===============================
+BOUNCE
+=============================== */
+
+.bounce{
+
+animation:bounce 2s infinite;
+
+}
+
+@keyframes bounce{
+
+0%,
+20%,
+50%,
+80%,
+100%{
+
+transform:translateY(0);
+
+}
+
+40%{
+
+transform:translateY(-12px);
+
+}
+
+60%{
+
+transform:translateY(-6px);
+
+}
+
+}
+
+/* ===============================
+FLOAT
+=============================== */
+
+.float{
+
+animation:float 4s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ===============================
+PULSE
+=============================== */
+
+.pulse{
+
+animation:pulse 2s infinite;
+
+}
+
+@keyframes pulse{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.05);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+/* ===============================
+ROTATE
+=============================== */
+
+.rotate{
+
+animation:rotate 10s linear infinite;
+
+}
+
+@keyframes rotate{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* ===============================
+BUTTON HOVER
+=============================== */
+
+.btn{
+
+transition:.3s;
+
+}
+
+.btn:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 12px 30px rgba(0,0,0,.15);
+
+}
+
+/* ===============================
+CARD HOVER
+=============================== */
+
+.card,
+
+.stat-card,
+
+.dashboard-card,
+
+.parish-card,
+
+.department-card{
+
+transition:.35s;
+
+}
+
+.card:hover,
+
+.stat-card:hover,
+
+.dashboard-card:hover,
+
+.parish-card:hover,
+
+.department-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+/* ===============================
+IMAGE HOVER
+=============================== */
+
+.gallery-grid img{
+
+transition:.4s;
+
+}
+
+.gallery-grid img:hover{
+
+transform:scale(1.06);
+
+}
+
+/* ===============================
+QR EFFECT
+=============================== */
+
+.qr-code{
+
+animation:qrGlow 2s infinite;
+
+}
+
+@keyframes qrGlow{
+
+0%{
+
+box-shadow:0 0 0 rgba(200,162,74,.3);
+
+}
+
+50%{
+
+box-shadow:0 0 25px rgba(200,162,74,.8);
+
+}
+
+100%{
+
+box-shadow:0 0 0 rgba(200,162,74,.3);
+
+}
+
+}
+
+/* ===============================
+LOADER
+=============================== */
+
+.loader{
+
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* ===============================
+TOAST
+=============================== */
+
+.toast-show{
+
+animation:toastIn .5s forwards;
+
+}
+
+@keyframes toastIn{
+
+from{
+
+opacity:0;
+
+transform:translateX(120px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
+}
+
+.toast-hide{
+
+animation:toastOut .5s forwards;
+
+}
+
+@keyframes toastOut{
+
+from{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
+to{
+
+opacity:0;
+
+transform:translateX(120px);
+
+}
+
+}
+
+/* ===============================
+TABLE ROW
+=============================== */
+
+table tbody tr{
+
+transition:.3s;
+
+}
+
+table tbody tr:hover{
+
+background:#faf8f2;
+
+transform:scale(1.01);
+
+}
+
+/* ===============================
+HERO TEXT
+=============================== */
+
+.hero h1{
+
+animation:fadeUp 1s ease;
+
+}
+
+.hero h2{
+
+animation:fadeUp 1.2s ease;
+
+}
+
+.hero p{
+
+animation:fadeUp 1.4s ease;
+
+}
+
+.hero-buttons{
+
+animation:fadeUp 1.6s ease;
+
+}

@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../assets/js/theme-init.js"></script>
+
+
+<title>Sports Centre | GY Summit 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/responsive.css">
+
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+<link rel="stylesheet" href="../assets/css/themes.css">
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+<link rel="stylesheet" href="../assets/css/participants/sports.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- ==========================
+SIDEBAR
+========================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img src="../assets/images/logo.png" alt="GY Summit">
+
+<h2>GY Summit</h2>
+
+<p>Participant Portal</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</a>
+
+<a href="profile.html">
+<i class="fa-solid fa-user"></i>
+Profile
+</a>
+
+<a href="admission-pass.html">
+<i class="fa-solid fa-id-card"></i>
+Admission Pass
+</a>
+
+<a href="announcements.html">
+<i class="fa-solid fa-bullhorn"></i>
+Announcements
+</a>
+
+<a href="sports.html" class="active">
+<i class="fa-solid fa-futbol"></i>
+Sports Centre
+</a>
+
+<a href="gallery.html">
+<i class="fa-solid fa-images"></i>
+Gallery
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button class="logout-btn" id="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ==========================
+MAIN CONTENT
+========================== -->
+
+<main class="dashboard-content">
+
+<header class="topbar">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+
+<h1>
+
+Sports Centre
+
+</h1>
+
+<p>
+
+Live fixtures, standings, schedules and competition updates.
+
+</p>
+
+</div>
+
+<div class="participant-profile">
+
+<img
+
+id="participantPhoto"
+
+src="../assets/images/avatar-placeholder.png"
+
+alt="Participant">
+
+<div>
+
+<h4 id="participantName">
+
+Loading...
+
+</h4>
+
+<p id="participantParish">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ==========================
+SPORTS HERO
+========================== -->
+
+<section class="sports-hero">
+
+<div class="hero-content">
+
+<h2>
+
+GY Summit Competitions
+
+</h2>
+
+<p>
+
+Follow Football, Volleyball and Dance competitions throughout the Summit. View fixtures, standings, results and schedules in real time.
+
+</p>
+
+</div>
+
+<div class="hero-icon">
+
+<i class="fa-solid fa-trophy"></i>
+
+</div>
+
+</section>
+
+<!-- ==========================
+SPORTS TABS
+========================== -->
+
+<section class="sports-tabs">
+
+<button
+
+class="sport-tab active"
+
+data-sport="football">
+
+<i class="fa-solid fa-futbol"></i>
+
+Football
+
+</button>
+
+<button
+
+class="sport-tab"
+
+data-sport="volleyball">
+
+<i class="fa-solid fa-volleyball"></i>
+
+Volleyball
+
+</button>
+
+<button
+
+class="sport-tab"
+
+data-sport="dance">
+
+<i class="fa-solid fa-music"></i>
+
+Dance
+
+</button>
+
+</section>
+
+<!-- ==========================
+TODAY'S MATCHES
+Next Section
+========================== --><section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-calendar-day"></i>
+
+Today's Matches
+
+</h3>
+
+<div class="live-indicator">
+
+<span class="live-dot"></span>
+
+Live Updates
+
+</div>
+
+</div>
+
+<div class="today-matches-grid" id="todayMatches">
+
+<!-- Match Card -->
+
+<div class="match-card">
+
+<div class="match-status upcoming">
+
+Upcoming
+
+</div>
+
+<div class="match-time">
+
+09:00 AM
+
+</div>
+
+<div class="match-teams">
+
+<div class="team">
+
+<img src="../assets/images/parishes/kimende.png" alt="Kimende">
+
+<span>Kimende</span>
+
+</div>
+
+<div class="vs">
+
+VS
+
+</div>
+
+<div class="team">
+
+<img src="../assets/images/parishes/githunguri.png" alt="Githunguri">
+
+<span>Githunguri</span>
+
+</div>
+
+</div>
+
+<div class="match-info">
+
+<p>
+
+<i class="fa-solid fa-location-dot"></i>
+
+Main Football Pitch
+
+</p>
+
+<p>
+
+<i class="fa-solid fa-user-tie"></i>
+
+Ref: Peter Mwangi
+
+</p>
+
+</div>
+
+</div>
+
+<!-- Match Card -->
+
+<div class="match-card">
+
+<div class="match-status live">
+
+LIVE
+
+</div>
+
+<div class="match-time">
+
+11:30 AM
+
+</div>
+
+<div class="match-teams">
+
+<div class="team">
+
+<img src="../assets/images/parishes/riabai.png" alt="Riabai">
+
+<span>Riabai</span>
+
+</div>
+
+<div class="score">
+
+2 - 1
+
+</div>
+
+<div class="team">
+
+<img src="../assets/images/parishes/komothai.png" alt="Komothai">
+
+<span>Komothai</span>
+
+</div>
+
+</div>
+
+<div class="match-info">
+
+<p>
+
+<i class="fa-solid fa-location-dot"></i>
+
+Volleyball Court
+
+</p>
+
+<p>
+
+Second Half • 58'
+
+</p>
+
+</div>
+
+</div>
+
+<!-- Match Card -->
+
+<div class="match-card">
+
+<div class="match-status finished">
+
+Finished
+
+</div>
+
+<div class="match-time">
+
+07:00 AM
+
+</div>
+
+<div class="match-teams">
+
+<div class="team">
+
+<img src="../assets/images/parishes/nyathuna.png" alt="Nyathuna">
+
+<span>Nyathuna</span>
+
+</div>
+
+<div class="score">
+
+0 - 3
+
+</div>
+
+<div class="team">
+
+<img src="../assets/images/parishes/kiruri.png" alt="Kiruri">
+
+<span>Kiruri</span>
+
+</div>
+
+</div>
+
+<div class="match-info">
+
+<p>
+
+<i class="fa-solid fa-location-dot"></i>
+
+Main Arena
+
+</p>
+
+<p>
+
+Full Time
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================
+FIXTURES
+Next Section
+========================== --><section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-list"></i>
+
+Competition Fixtures
+
+</h3>
+
+<div class="fixture-tools">
+
+<input
+
+type="text"
+
+id="fixtureSearch"
+
+placeholder="Search team...">
+
+<select id="fixtureRound">
+
+<option value="all">All Rounds</option>
+
+<option value="group">Group Stage</option>
+
+<option value="quarter">Quarter Finals</option>
+
+<option value="semi">Semi Finals</option>
+
+<option value="final">Final</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="fixtures-table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Time</th>
+
+<th>Home</th>
+
+<th></th>
+
+<th>Away</th>
+
+<th>Venue</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="fixturesTable">
+
+<tr>
+
+<td>21 Dec</td>
+
+<td>09:00</td>
+
+<td>Kimende</td>
+
+<td>VS</td>
+
+<td>Githunguri</td>
+
+<td>Main Pitch</td>
+
+<td>
+
+<span class="badge badge-warning">
+
+Upcoming
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>21 Dec</td>
+
+<td>11:30</td>
+
+<td>Riabai</td>
+
+<td>
+
+<strong>2 - 1</strong>
+
+</td>
+
+<td>Komothai</td>
+
+<td>Volleyball Court</td>
+
+<td>
+
+<span class="badge badge-success">
+
+Live
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>21 Dec</td>
+
+<td>14:00</td>
+
+<td>Kiruri</td>
+
+<td>
+
+<strong>3 - 0</strong>
+
+</td>
+
+<td>Nyathuna</td>
+
+<td>Main Arena</td>
+
+<td>
+
+<span class="badge badge-info">
+
+Finished
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<!-- ==========================
+STANDINGS
+Next Section
+========================== --><section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-ranking-star"></i>
+
+Competition Standings
+
+</h3>
+
+<div class="standings-filter">
+
+<select id="groupFilter">
+
+<option value="all">
+
+All Groups
+
+</option>
+
+<option value="A">
+
+Group A
+
+</option>
+
+<option value="B">
+
+Group B
+
+</option>
+
+<option value="C">
+
+Group C
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="standings-table">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Team</th>
+
+<th>P</th>
+
+<th>W</th>
+
+<th>D</th>
+
+<th>L</th>
+
+<th>GF</th>
+
+<th>GA</th>
+
+<th>GD</th>
+
+<th>PTS</th>
+
+</tr>
+
+</thead>
+
+<tbody id="standingsTable">
+
+<tr>
+
+<td>1</td>
+
+<td>
+
+<div class="team-cell">
+
+<img src="../assets/images/parishes/kimende.png">
+
+<span>
+
+Kimende
+
+</span>
+
+</div>
+
+</td>
+
+<td>3</td>
+
+<td>3</td>
+
+<td>0</td>
+
+<td>0</td>
+
+<td>8</td>
+
+<td>1</td>
+
+<td>+7</td>
+
+<td>
+
+<strong>9</strong>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>2</td>
+
+<td>
+
+<div class="team-cell">
+
+<img src="../assets/images/parishes/githunguri.png">
+
+<span>
+
+Githunguri
+
+</span>
+
+</div>
+
+</td>
+
+<td>3</td>
+
+<td>2</td>
+
+<td>0</td>
+
+<td>1</td>
+
+<td>6</td>
+
+<td>4</td>
+
+<td>+2</td>
+
+<td>
+
+<strong>6</strong>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>3</td>
+
+<td>
+
+<div class="team-cell">
+
+<img src="../assets/images/parishes/riabai.png">
+
+<span>
+
+Riabai
+
+</span>
+
+</div>
+
+</td>
+
+<td>3</td>
+
+<td>1</td>
+
+<td>0</td>
+
+<td>2</td>
+
+<td>4</td>
+
+<td>5</td>
+
+<td>-1</td>
+
+<td>
+
+<strong>3</strong>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>4</td>
+
+<td>
+
+<div class="team-cell">
+
+<img src="../assets/images/parishes/kiruri.png">
+
+<span>
+
+Kiruri
+
+</span>
+
+</div>
+
+</td>
+
+<td>3</td>
+
+<td>0</td>
+
+<td>0</td>
+
+<td>3</td>
+
+<td>1</td>
+
+<td>9</td>
+
+<td>-8</td>
+
+<td>
+
+<strong>0</strong>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="qualification-info">
+
+<div class="qualified">
+
+<span></span>
+
+Top teams qualify for Knockout Stage
+
+</div>
+
+<div class="eliminated">
+
+<span></span>
+
+Bottom teams eliminated
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================
+KNOCKOUT BRACKET
+Next Section
+========================== --><section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-trophy"></i>
+
+Knockout Bracket
+
+</h3>
+
+<p>
+
+Automatically updated as teams qualify.
+
+</p>
+
+</div>
+
+<div class="knockout-bracket">
+
+<!-- ======================
+QUARTER FINALS
+====================== -->
+
+<div class="bracket-round">
+
+<h4>
+
+Quarter Finals
+
+</h4>
+
+<div class="bracket-match">
+
+<div class="team">
+
+<span id="qf1Home">
+
+Winner Group A
+
+</span>
+
+</div>
+
+<div class="team">
+
+<span id="qf1Away">
+
+Runner-up Group B
+
+</span>
+
+</div>
+
+</div>
+
+<div class="bracket-match">
+
+<div class="team">
+
+<span id="qf2Home">
+
+Winner Group C
+
+</span>
+
+</div>
+
+<div class="team">
+
+<span id="qf2Away">
+
+Best Runner-up
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================
+SEMI FINALS
+====================== -->
+
+<div class="bracket-round">
+
+<h4>
+
+Semi Finals
+
+</h4>
+
+<div class="bracket-match">
+
+<div class="team">
+
+<span id="sf1Home">
+
+Winner QF1
+
+</span>
+
+</div>
+
+<div class="team">
+
+<span id="sf1Away">
+
+Winner QF2
+
+</span>
+
+</div>
+
+</div>
+
+<div class="bracket-match">
+
+<div class="team">
+
+<span id="sf2Home">
+
+Winner QF3
+
+</span>
+
+</div>
+
+<div class="team">
+
+<span id="sf2Away">
+
+Winner QF4
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================
+FINAL
+====================== -->
+
+<div class="bracket-round final-round">
+
+<h4>
+
+Final
+
+</h4>
+
+<div class="bracket-match championship">
+
+<div class="team">
+
+<span id="finalHome">
+
+Winner SF1
+
+</span>
+
+</div>
+
+<div class="team">
+
+<span id="finalAway">
+
+Winner SF2
+
+</span>
+
+</div>
+
+</div>
+
+<div class="champion-box">
+
+<i class="fa-solid fa-trophy"></i>
+
+<h3>
+
+Champion
+
+</h3>
+
+<p id="championName">
+
+To Be Determined
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================
+TOP SCORERS
+Next Section
+========================== --><section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-medal"></i>
+
+Top Performers
+
+</h3>
+
+<p>
+
+Leading players across the current competition.
+
+</p>
+
+</div>
+
+<div class="top-performers-grid">
+
+<!-- ======================
+TOP SCORERS
+====================== -->
+
+<div class="performer-card">
+
+<div class="performer-header">
+
+<i class="fa-solid fa-futbol"></i>
+
+<h4>
+
+Top Scorers
+
+</h4>
+
+</div>
+
+<div id="topScorersList">
+
+<div class="performer-row">
+
+<span class="rank">
+
+1
+
+</span>
+
+<div class="player-details">
+
+<strong>
+
+John Kamau
+
+</strong>
+
+<small>
+
+Kimende Parish
+
+</small>
+
+</div>
+
+<span class="stat">
+
+6 Goals
+
+</span>
+
+</div>
+
+<div class="performer-row">
+
+<span class="rank">
+
+2
+
+</span>
+
+<div class="player-details">
+
+<strong>
+
+Brian Njoroge
+
+</strong>
+
+<small>
+
+Riabai Parish
+
+</small>
+
+</div>
+
+<span class="stat">
+
+4 Goals
+
+</span>
+
+</div>
+
+<div class="performer-row">
+
+<span class="rank">
+
+3
+
+</span>
+
+<div class="player-details">
+
+<strong>
+
+David Mwangi
+
+</strong>
+
+<small>
+
+Kiruri Parish
+
+</small>
+
+</div>
+
+<span class="stat">
+
+3 Goals
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ======================
+MVP
+====================== -->
+
+<div class="performer-card">
+
+<div class="performer-header">
+
+<i class="fa-solid fa-star"></i>
+
+<h4>
+
+Most Valuable Players
+
+</h4>
+
+</div>
+
+<div id="mvpList">
+
+<div class="performer-row">
+
+<span class="rank">
+
+🏆
+
+</span>
+
+<div class="player-details">
+
+<strong>
+
+Samuel Kariuki
+
+</strong>
+
+<small>
+
+Football
+
+</small>
+
+</div>
+
+<span class="stat">
+
+9.8
+
+</span>
+
+</div>
+
+<div class="performer-row">
+
+<span class="rank">
+
+🏐
+
+</span>
+
+<div class="player-details">
+
+<strong>
+
+Mercy Wanjiku
+
+</strong>
+
+<small>
+
+Volleyball
+
+</small>
+
+</div>
+
+<span class="stat">
+
+9.6
+
+</span>
+
+</div>
+
+<div class="performer-row">
+
+<span class="rank">
+
+💃
+
+</span>
+
+<div class="player-details">
+
+<strong>
+
+Praise Dance Team
+
+</strong>
+
+<small>
+
+Dance
+
+</small>
+
+</div>
+
+<span class="stat">
+
+95%
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================
+DANCE SCHEDULE
+Next Section
+========================== --><section class="card" id="danceScheduleSection">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-music"></i>
+
+Dance Performance Schedule
+
+</h3>
+
+<p>
+
+Performance order for all participating parishes.
+
+</p>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="dance-table">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Parish</th>
+
+<th>Performance</th>
+
+<th>Stage</th>
+
+<th>Time</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="danceScheduleTable">
+
+<tr>
+
+<td>1</td>
+
+<td>Kimende</td>
+
+<td>Praise & Worship Dance</td>
+
+<td>Main Stage</td>
+
+<td>2:00 PM</td>
+
+<td>
+
+<span class="badge badge-warning">
+
+Upcoming
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>2</td>
+
+<td>Githunguri</td>
+
+<td>Contemporary Dance</td>
+
+<td>Main Stage</td>
+
+<td>2:20 PM</td>
+
+<td>
+
+<span class="badge badge-info">
+
+Preparing
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>3</td>
+
+<td>Riabai</td>
+
+<td>Cultural Dance</td>
+
+<td>Main Stage</td>
+
+<td>2:40 PM</td>
+
+<td>
+
+<span class="badge badge-success">
+
+Completed
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>4</td>
+
+<td>Kiruri</td>
+
+<td>Creative Worship</td>
+
+<td>Main Stage</td>
+
+<td>3:00 PM</td>
+
+<td>
+
+<span class="badge badge-warning">
+
+Upcoming
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<!-- ==========================
+MATCH RESULTS
+Next Section
+========================== --><section class="card">
+
+<div class="card-header">
+
+<h3>
+
+<i class="fa-solid fa-flag-checkered"></i>
+
+Competition Results
+
+</h3>
+
+<p>
+
+Latest completed matches and performances.
+
+</p>
+
+</div>
+
+<div class="results-list" id="resultsContainer">
+
+<!-- Result Card -->
+
+<div class="result-card">
+
+<div class="result-header">
+
+<span class="result-date">
+
+21 Dec 2026
+
+</span>
+
+<span class="badge badge-success">
+
+Full Time
+
+</span>
+
+</div>
+
+<div class="result-match">
+
+<div class="team">
+
+<strong>Kimende</strong>
+
+</div>
+
+<div class="result-score">
+
+3 - 1
+
+</div>
+
+<div class="team">
+
+<strong>Kiruri</strong>
+
+</div>
+
+</div>
+
+<div class="result-footer">
+
+<span>
+
+📍 Main Football Pitch
+
+</span>
+
+<span>
+
+⭐ Player of the Match: John Kamau
+
+</span>
+
+</div>
+
+</div>
+
+<!-- Result Card -->
+
+<div class="result-card">
+
+<div class="result-header">
+
+<span class="result-date">
+
+21 Dec 2026
+
+</span>
+
+<span class="badge badge-success">
+
+Completed
+
+</span>
+
+</div>
+
+<div class="result-match">
+
+<div class="team">
+
+<strong>Riabai</strong>
+
+</div>
+
+<div class="result-score">
+
+2 - 0
+
+</div>
+
+<div class="team">
+
+<strong>Komothai</strong>
+
+</div>
+
+</div>
+
+<div class="result-footer">
+
+<span>
+
+📍 Volleyball Court
+
+</span>
+
+<span>
+
+🏐 MVP: Mercy Wanjiku
+
+</span>
+
+</div>
+
+</div>
+
+<!-- Result Card -->
+
+<div class="result-card">
+
+<div class="result-header">
+
+<span class="result-date">
+
+21 Dec 2026
+
+</span>
+
+<span class="badge badge-primary">
+
+Dance
+
+</span>
+
+</div>
+
+<div class="result-match">
+
+<div class="team">
+
+<strong>Kimende Parish</strong>
+
+</div>
+
+<div class="result-score">
+
+96%
+
+</div>
+
+<div class="team">
+
+<strong>Praise Dance</strong>
+
+</div>
+
+</div>
+
+<div class="result-footer">
+
+<span>
+
+📍 Main Stage
+
+</span>
+
+<span>
+
+🏆 Best Choreography
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="../assets/js/app-shell.js"></script>
+<script type="module" src="js/sports.js"></script>
+
+</body>
+
+</html>

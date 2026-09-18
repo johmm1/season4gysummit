@@ -1,0 +1,122 @@
+# GY Summit 2026 — Render Blueprint
+#
+# Push this whole repo to GitHub, then in the Render dashboard:
+# New → Blueprint → connect the repo. Render reads this file and creates
+# the web service below automatically. Every env var marked `sync: false`
+# has no default — you set the real value in the Render dashboard after
+# the Blueprint is created (Render won't let you deploy until required
+# ones are filled in).
+#
+# Database: this does NOT provision a Postgres instance — the app expects
+# an external Supabase or Neon Postgres (see backend/.env.example). Add a
+# Render Postgres resource here instead if you'd rather host the DB on
+# Render itself.
+
+services:
+  - type: web
+    name: gy-summit-2026-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    # Runs the schema sync before every boot so a fresh database (or a
+    # newly added column) is ready without a manual step — safe to re-run.
+    startCommand: npm run db:sync && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+
+      # ---- Frontend URL (for CORS) ----
+      - key: FRONTEND_URL
+        sync: false # e.g. https://your-frontend.vercel.app
+
+      # ---- Database — DATABASE_URL (Neon) or the split DB_* vars (Supabase) ----
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSL
+        value: "true"
+
+      # ---- Auth ----
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: ADMISSION_QR_SECRET
+        generateValue: true
+
+      # ---- TEMPORARY: see the note in .env.example ----
+      - key: SKIP_OTP_VERIFICATION
+        value: "false"
+
+      # ---- Google Sign-In (optional — login only) ----
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+
+      # ---- M-Pesa Daraja ----
+      - key: MPESA_ENV
+        value: sandbox
+      - key: MPESA_CONSUMER_KEY
+        sync: false
+      - key: MPESA_CONSUMER_SECRET
+        sync: false
+      - key: MPESA_SHORTCODE
+        value: "174379"
+      - key: MPESA_PASSKEY
+        sync: false
+      - key: MPESA_CALLBACK_URL
+        sync: false # https://gy-summit-2026-api.onrender.com/api/payments/callback
+
+      # ---- Supabase Storage (gallery/profile photo uploads) ----
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: gy-summit-2026
+
+      # ---- Email notifications (Resend) ----
+      - key: RESEND_API_KEY
+        sync: false
+
+      # ---- SMS notifications (Celcom Africa) ----
+      - key: CELCOM_API_KEY
+        sync: false
+      - key: CELCOM_PARTNER_ID
+        sync: false
+      - key: CELCOM_SHORTCODE
+        value: INFOTEXT
+
+      # ---- WhatsApp notifications (optional — Brevo Transactional WhatsApp) ----
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_WHATSAPP_SENDER
+        sync: false
+      - key: BREVO_WHATSAPP_TEMPLATE_ID
+        sync: false
+
+      # ---- Pricing ----
+      - key: TICKET_PRICE
+        value: "1900"
+
+      # ---- First admin account (npm run seed — run manually via Render Shell once) ----
+      - key: SEED_ADMIN_EMAIL
+        sync: false
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: SEED_ADMIN_NAME
+        sync: false
+      - key: SEED_ADMIN_PHONE
+        sync: false

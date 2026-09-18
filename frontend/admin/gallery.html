@@ -1,0 +1,2608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Media & Certificates | GY Summit 2026
+
+</title>
+
+<!-- Core Styles -->
+
+<link rel="stylesheet"
+href="../assets/css/variables.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="../assets/css/admin.css">
+
+<link rel="stylesheet"
+href="../assets/css/gallery.css">
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img
+src="../assets/images/logo.png"
+alt="GY Summit">
+
+<h2>
+
+GY Summit
+
+</h2>
+
+<p>
+
+Media Centre
+
+</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Finance
+
+</a>
+
+<a href="admissions.html">
+
+<i class="fa-solid fa-door-open"></i>
+
+Admissions
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports
+
+</a>
+
+<a class="active"
+href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Media & Certificates
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<h4>
+
+PCEA Githunguri Presbytery
+
+</h4>
+
+<small>
+
+GY Summit 2026
+
+</small>
+
+</div>
+
+</aside>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<main class="admin-main">
+
+<header class="dashboard-header">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+
+<h1>
+
+Media & Certificates Centre
+
+</h1>
+
+<p>
+
+Manage summit photos, videos, downloadable resources and participant certificates.
+
+</p>
+
+</div>
+
+<div class="header-right">
+
+<div class="notification-btn">
+
+<i class="fa-solid fa-bell"></i>
+
+<span id="notificationBadge">
+
+0
+
+</span>
+
+</div>
+
+<div class="admin-profile">
+
+<img
+src="../assets/images/admin.png"
+alt="Admin">
+
+<div>
+
+<strong id="adminName">
+
+Admin
+
+</strong>
+
+<small id="adminRole">
+
+Online
+
+</small>
+
+</div>
+
+</div>
+
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
+
+</header>
+
+<!-- ======================================================
+GLOBAL SEARCH
+====================================================== -->
+
+<div class="dashboard-search">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+
+type="search"
+
+id="mediaSearch"
+
+placeholder="Search albums, photos, videos, certificates or files...">
+
+</div>
+
+<!-- ======================================================
+STATISTICS
+====================================================== -->
+
+<section class="dashboard-kpis">
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-images"></i>
+
+</div>
+
+<div>
+
+<h2 id="totalPhotos">
+
+0
+
+</h2>
+
+<p>
+
+Photos
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-video"></i>
+
+</div>
+
+<div>
+
+<h2 id="totalVideos">
+
+0
+
+</h2>
+
+<p>
+
+Videos
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-file-arrow-up"></i>
+
+</div>
+
+<div>
+
+<h2 id="totalDownloads">
+
+0
+
+</h2>
+
+<p>
+
+Documents
+
+</p>
+
+</div>
+
+</div>
+
+<div class="kpi-card">
+
+<div class="kpi-icon">
+
+<i class="fa-solid fa-hourglass-half"></i>
+
+</div>
+
+<div>
+
+<h2 id="certificatesGenerated">
+
+0
+
+</h2>
+
+<p>
+
+Pending Approval
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ======================================================
+QUICK ACTIONS
+====================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-bolt"></i>
+
+Quick Actions
+
+</h2>
+
+</div>
+
+<div class="quick-actions-grid">
+
+<button id="uploadPhotos" type="button">
+
+<i class="fa-solid fa-image"></i>
+
+Upload Photos
+
+</button>
+
+<button id="uploadVideos" type="button">
+
+<i class="fa-solid fa-video"></i>
+
+Upload Videos
+
+</button>
+
+<button id="uploadDocuments" type="button">
+
+<i class="fa-solid fa-file-arrow-up"></i>
+
+Upload Documents
+
+</button>
+
+<button id="generateCertificates" type="button">
+
+<i class="fa-solid fa-award"></i>
+
+Certificate Centre
+
+</button>
+
+<button id="manageAlbums" type="button">
+
+<i class="fa-solid fa-folder-open"></i>
+
+Browse Albums
+
+</button>
+
+<button id="storageAnalytics" type="button">
+
+<i class="fa-solid fa-database"></i>
+
+Media Stats
+
+</button>
+
+</div>
+
+</section><!-- ==========================================================
+MEDIA UPLOAD CENTRE
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+Upload Media
+
+</h2>
+
+<div class="storage-indicator">
+
+<i class="fa-solid fa-database"></i>
+
+Cloud Storage Connected
+
+</div>
+
+</div>
+
+<form id="mediaUploadForm">
+
+<div class="form-grid">
+
+<!-- ==========================================
+MEDIA TYPE
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Media Type
+
+</label>
+
+<select id="mediaType" required>
+
+<option value="">Select Type</option>
+
+<option value="photo">📷 Photos</option>
+
+<option value="video">🎥 Videos</option>
+
+<option value="document">📄 Documents</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+ALBUM
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Album
+
+</label>
+
+<select id="albumSelect">
+
+<option value="">Choose Album</option>
+
+<option>Arrival Day</option>
+
+<option>Opening Ceremony</option>
+
+<option>Worship Sessions</option>
+
+<option>Bible Study</option>
+
+<option>Football Tournament</option>
+
+<option>Volleyball Tournament</option>
+
+<option>Choir Festival</option>
+
+<option>Talent Show</option>
+
+<option>Prize Giving</option>
+
+<option>Departure</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+TITLE
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Title
+
+</label>
+
+<input
+
+type="text"
+
+id="mediaTitle"
+
+placeholder="Media title..."
+
+required>
+
+</div>
+
+<!-- ==========================================
+DESCRIPTION
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Description
+
+</label>
+
+<textarea
+
+id="mediaDescription"
+
+rows="5"
+
+placeholder="Describe this upload..."></textarea>
+
+</div>
+
+<!-- ==========================================
+VISIBILITY
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Visibility
+
+</label>
+
+<select id="visibility">
+
+<option value="public">
+
+🌍 Public
+
+</option>
+
+<option value="participants">
+
+👥 Participants Only
+
+</option>
+
+<option value="committee">
+
+🛡 Committee Only
+
+</option>
+
+<option value="private">
+
+🔒 Private
+
+</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+DOWNLOADABLE
+========================================== -->
+
+<div class="form-group">
+
+<label>
+
+Download Permission
+
+</label>
+
+<select id="downloadable">
+
+<option value="true">
+
+Allow Download
+
+</option>
+
+<option value="false">
+
+View Only
+
+</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+UPLOAD AREA
+========================================== -->
+
+<div class="form-group full-width">
+
+<label>
+
+Upload Files
+
+</label>
+
+<div id="mediaDropZone">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+<h3>
+
+Drag & Drop Files Here
+
+</h3>
+
+<p>
+
+or click to browse
+
+</p>
+
+<input
+
+type="file"
+
+id="mediaFiles"
+
+multiple
+
+accept="image/*,video/*,.pdf,.doc,.docx">
+
+</div>
+
+<div id="mediaPreview">
+
+<!-- Preview generated by JS -->
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+UPLOAD ACTIONS
+========================================== -->
+
+<div class="composer-actions">
+
+<button
+
+type="reset"
+
+class="btn btn-secondary">
+
+<i class="fa-solid fa-rotate-left"></i>
+
+Clear
+
+</button>
+
+<button
+
+type="button"
+
+id="saveMediaDraft"
+
+class="btn btn-outline">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Draft
+
+</button>
+
+<button
+
+type="submit"
+
+id="uploadMedia"
+
+class="btn btn-primary">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+Upload to Storage
+
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+<!-- ==========================================================
+UPLOAD PROGRESS
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-spinner"></i>
+
+Upload Progress
+
+</h2>
+
+</div>
+
+<div id="uploadQueue">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-folder-open"></i>
+
+<h3>
+
+No Uploads
+
+</h3>
+
+<p>
+
+Uploads will appear here while transferring to cloud storage.
+
+</p>
+
+</div>
+
+</div>
+
+</section><!-- ==========================================================
+MEDIA LIBRARY
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-photo-film"></i>
+
+Media Library
+
+</h2>
+
+<div class="panel-actions">
+
+<button class="btn btn-outline" id="refreshGallery">
+
+<i class="fa-solid fa-rotate"></i>
+
+Refresh
+
+</button>
+
+<button class="btn btn-outline" id="viewStorageUsage">
+
+<i class="fa-solid fa-hard-drive"></i>
+
+Storage
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+FILTER BAR
+========================================== -->
+
+<div class="history-filters">
+
+<input
+
+type="search"
+
+id="gallerySearch"
+
+placeholder="Search media...">
+
+<select id="galleryAlbum">
+
+<option value="">All Albums</option>
+
+<option>Arrival Day</option>
+
+<option>Opening Ceremony</option>
+
+<option>Worship Sessions</option>
+
+<option>Bible Study</option>
+
+<option>Football Tournament</option>
+
+<option>Volleyball Tournament</option>
+
+<option>Choir Festival</option>
+
+<option>Talent Show</option>
+
+<option>Prize Giving</option>
+
+<option>Departure</option>
+
+</select>
+
+<select id="galleryType">
+
+<option value="">All Media</option>
+
+<option value="photo">Photos</option>
+
+<option value="video">Videos</option>
+
+<option value="document">Documents</option>
+
+</select>
+
+<select id="galleryVisibility">
+
+<option value="">All Statuses</option>
+
+<option value="approved">Approved</option>
+
+<option value="pending">Pending approval</option>
+
+</select>
+
+</div>
+
+<!-- ==========================================
+MEDIA GRID
+========================================== -->
+
+<div class="gallery-grid" id="galleryGrid">
+
+<!-- Loaded dynamically from the API -->
+
+<div class="gallery-empty">
+
+<i class="fa-solid fa-images"></i>
+
+<h3>
+
+No Media Available
+
+</h3>
+
+<p>
+
+Uploaded media will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+DOWNLOADS
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-download"></i>
+
+Downloads
+
+</h2>
+
+</div>
+
+<div class="downloads-table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>File</th>
+
+<th>Category</th>
+
+<th>Size</th>
+
+<th>Downloads</th>
+
+<th>Uploaded</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="downloadsTable">
+
+<tr>
+
+<td colspan="6">
+
+<div class="empty-state">
+
+<i class="fa-solid fa-file-circle-xmark"></i>
+
+<h3>
+
+No Documents
+
+</h3>
+
+<p>
+
+Uploaded documents will appear here.
+
+</p>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+CERTIFICATE CENTRE
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-award"></i>
+
+Certificate Centre
+
+</h2>
+
+</div>
+
+<p style="padding:0 4px 16px;color:#888;font-size:.9rem;">
+
+Participation and Sports Winner certificates are generated for real from your data. Talent and Committee awards stay disabled — there's no judged results or committee-role tracking yet, so generating those would be fabricated.
+
+</p>
+
+<div class="certificate-grid">
+
+<div class="certificate-card">
+
+<i class="fa-solid fa-user-check"></i>
+
+<h3>
+
+Participation
+
+</h3>
+
+<p>
+
+Generate certificates for all confirmed participants.
+
+</p>
+
+<button class="btn btn-primary" id="generateParticipationCerts">
+
+Generate
+
+</button>
+
+</div>
+
+<div class="certificate-card">
+
+<i class="fa-solid fa-futbol"></i>
+
+<h3>
+
+Sports Winners
+
+</h3>
+
+<p>
+
+Football, Volleyball & Dance champions.
+
+</p>
+
+<button class="btn btn-primary" id="generateSportsCerts">
+
+Generate
+
+</button>
+
+</div>
+
+<div class="certificate-card">
+
+<i class="fa-solid fa-music"></i>
+
+<h3>
+
+Talent Awards
+
+</h3>
+
+<p>
+
+Choir, Dance & Talent.
+
+</p>
+
+<button class="btn btn-outline" disabled title="No judging/scoring system exists yet">
+
+Generate
+
+</button>
+
+</div>
+
+<div class="certificate-card">
+
+<i class="fa-solid fa-users"></i>
+
+<h3>
+
+Committee
+
+</h3>
+
+<p>
+
+Committee & Volunteers.
+
+</p>
+
+<button class="btn btn-outline" disabled title="No committee-role tracking exists yet">
+
+Generate
+
+</button>
+
+</div>
+
+</div>
+
+<div class="download-all-certificates" style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border-color, #e5e7eb); display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+
+<strong>Download for printing:</strong>
+
+<select id="downloadAllType">
+<option value="">All types</option>
+<option value="PARTICIPATION">Participation only</option>
+<option value="SPORTS_WINNER">Sports Winners only</option>
+</select>
+
+<select id="downloadAllCategory" style="display:none;">
+<option value="">All categories</option>
+<option value="Football">Football</option>
+<option value="Volleyball">Volleyball</option>
+<option value="Dance">Dance</option>
+</select>
+
+<button class="btn btn-outline" id="downloadAllCertsBtn">
+<i class="fa-solid fa-file-arrow-down"></i>
+Download All as One PDF
+</button>
+
+<span style="color:var(--text-muted, #888); font-size:13px;">One certificate per page — ready to send straight to a printer.</span>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+MEDIA PREVIEW MODAL
+========================================================== -->
+
+<div id="mediaModal" class="modal">
+
+<div class="modal-content large">
+
+<div class="modal-header">
+
+<h2>
+
+Media Preview
+
+</h2>
+
+<button id="closeMediaModal">
+
+<i class="fa-solid fa-xmark"></i>
+
+</button>
+
+</div>
+
+<div id="mediaPreviewContent">
+
+<!-- JS Loads Selected File -->
+
+</div>
+
+<div class="modal-footer">
+
+<button class="btn btn-primary" id="downloadMedia">
+
+<i class="fa-solid fa-download"></i>
+
+Download
+
+</button>
+
+<button class="btn btn-warning" id="editMedia">
+
+<i class="fa-solid fa-pen"></i>
+
+Edit
+
+</button>
+
+<button class="btn btn-danger" id="deleteMedia">
+
+<i class="fa-solid fa-trash"></i>
+
+Delete
+
+</button>
+
+</div>
+
+</div>
+
+</div><!-- ==========================================================
+STORAGE ANALYTICS
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-hard-drive"></i>
+
+Media Breakdown
+
+</h2>
+
+</div>
+
+<div class="analytics-grid">
+
+<div class="analytics-card">
+
+<h4>
+
+Total Items
+
+</h4>
+
+<h2 id="storageUsed">
+
+0
+
+</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h4>
+
+Photos
+
+</h4>
+
+<h2 id="photoStorage">
+
+0
+
+</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h4>
+
+Videos
+
+</h4>
+
+<h2 id="videoStorage">
+
+0
+
+</h2>
+
+</div>
+
+<div class="analytics-card">
+
+<h4>
+
+Documents
+
+</h4>
+
+<h2 id="documentStorage">
+
+0
+
+</h2>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Certificate template management is removed until certificate generation
+     itself is built — an empty template manager for a feature that doesn't
+     exist yet is a dead end, not a working page. -->
+
+<!-- ==========================================================
+PARTICIPANT DOWNLOAD CENTRE
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-users"></i>
+
+Participant Downloads
+
+</h2>
+
+</div>
+
+<div class="download-categories">
+
+<div class="download-category">
+
+<i class="fa-solid fa-images"></i>
+
+<h3>
+
+Photos
+
+</h3>
+
+<p>
+
+Accessible from participant dashboard
+
+</p>
+
+</div>
+
+<div class="download-category">
+
+<i class="fa-solid fa-video"></i>
+
+<h3>
+
+Videos
+
+</h3>
+
+<p>
+
+Streaming & downloads
+
+</p>
+
+</div>
+
+<div class="download-category">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<h3>
+
+Documents
+
+</h3>
+
+<p>
+
+Programs, Notes & Guides
+
+</p>
+
+</div>
+
+<div class="download-category">
+
+<i class="fa-solid fa-award"></i>
+
+<h3>
+
+Certificates
+
+</h3>
+
+<p>
+
+Personal downloadable certificates
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+SYSTEM HEALTH
+========================================================== -->
+
+<section class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-server"></i>
+
+Media Services
+
+</h2>
+
+</div>
+
+<div class="status-list" id="mediaServiceStatus">
+
+<div class="status-item">
+
+<span>Gallery API</span>
+
+<span class="status" id="statusGalleryApi">Checking&hellip;</span>
+
+</div>
+
+<div class="status-item">
+
+<span>Storage Upload</span>
+
+<span class="status success">Configured</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================================
+FOOTER
+========================================================== -->
+
+
+
+<!-- ======================================================
+GALLERY & CERTIFICATE SETTINGS (moved from the old monolithic
+Settings page)
+====================================================== -->
+
+<section class="dashboard-panel full-panel">
+
+<div class="panel-header">
+
+<h2>
+
+<i class="fa-solid fa-gear"></i>
+
+Gallery & Certificate Settings
+
+</h2>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Certificate Configuration
+
+</h2>
+
+</div>
+
+<form id="certificateSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Certificate Prefix
+
+</label>
+
+<input
+type="text"
+id="certificatePrefix"
+placeholder="GY26-CERT">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Starting Certificate Number
+
+</label>
+
+<input
+type="number"
+id="certificateStart"
+min="1">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Verification URL
+
+</label>
+
+<input
+type="url"
+id="verificationUrl">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Certificate Size
+
+</label>
+
+<select id="certificateSize">
+
+<option value="a4">
+
+A4 Landscape
+
+</option>
+
+<option value="a4p">
+
+A4 Portrait
+
+</option>
+
+<option value="letter">
+
+Letter
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_certificateSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Certificate Templates
+
+</h2>
+
+</div>
+
+<form id="certificateTemplatesForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Participation Certificate
+
+</label>
+
+<input
+type="file"
+id="participationTemplate"
+accept=".png,.jpg,.jpeg,.pdf">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Competition Winners
+
+</label>
+
+<input
+type="file"
+id="winnerTemplate"
+accept=".png,.jpg,.jpeg,.pdf">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Officials
+
+</label>
+
+<input
+type="file"
+id="officialTemplate"
+accept=".png,.jpg,.jpeg,.pdf">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Volunteers
+
+</label>
+
+<input
+type="file"
+id="volunteerTemplate"
+accept=".png,.jpg,.jpeg,.pdf">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_certificateTemplatesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Digital Signatures
+
+</h2>
+
+</div>
+
+<form id="digitalSignaturesForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Chairperson Signature
+
+</label>
+
+<input
+type="file"
+accept=".png"
+id="chairSignature">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Secretary Signature
+
+</label>
+
+<input
+type="file"
+accept=".png"
+id="secretarySignature">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Official Stamp
+
+</label>
+
+<input
+type="file"
+accept=".png"
+id="officialStamp">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Background Seal
+
+</label>
+
+<input
+type="file"
+accept=".png"
+id="backgroundSeal">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_digitalSignaturesForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Automatic Generation
+
+</h2>
+
+</div>
+
+<form id="certAutoGenerationForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Generate Participation Certificates
+
+</strong>
+
+<p>
+
+Automatically generate after successful attendance.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="autoParticipation">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Generate Winners Certificates
+
+</strong>
+
+<p>
+
+Automatically generate after results approval.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="autoWinners">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Generate Officials Certificates
+
+</strong>
+
+<p>
+
+Create certificates for committee members.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="autoOfficials">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Include QR Verification
+
+</strong>
+
+<p>
+
+Embed a verification QR code.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="certificateQr">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Participant Download
+
+</strong>
+
+<p>
+
+Participants can download certificates.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="participantDownload">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_certAutoGenerationForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Certificate Text
+
+</h2>
+
+</div>
+
+<form id="certificateTextForm">
+
+<div class="form-grid">
+
+<div class="form-group full-width">
+
+<label>
+
+Participation Message
+
+</label>
+
+<textarea
+rows="5"
+id="participationMessage"></textarea>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Winner Message
+
+</label>
+
+<textarea
+rows="5"
+id="winnerMessage"></textarea>
+
+</div>
+
+<div class="form-group full-width">
+
+<label>
+
+Official Message
+
+</label>
+
+<textarea
+rows="5"
+id="officialMessage"></textarea>
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_certificateTextForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Upload Configuration
+
+</h2>
+
+</div>
+
+<form id="gallerySettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Maximum Upload Size (MB)
+
+</label>
+
+<input
+type="number"
+id="maxUploadSize"
+value="10"
+min="1">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Maximum Photos Per Upload
+
+</label>
+
+<input
+type="number"
+id="maxPhotosPerUpload"
+value="50">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Allowed Image Formats
+
+</label>
+
+<select
+id="allowedFormats"
+multiple>
+
+<option selected>JPG</option>
+
+<option selected>JPEG</option>
+
+<option selected>PNG</option>
+
+<option>WEBP</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Image Quality (%)
+
+</label>
+
+<input
+type="number"
+id="imageQuality"
+value="90"
+min="10"
+max="100">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_gallerySettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Download Permissions
+
+</h2>
+
+</div>
+
+<form id="downloadPermissionsForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Participant Downloads
+
+</strong>
+
+<p>
+
+Participants may download gallery photos.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="allowDownloads">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Download Original Resolution
+
+</strong>
+
+<p>
+
+Download full-size images.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="downloadOriginal">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Login Before Download
+
+</strong>
+
+<p>
+
+Only authenticated participants can download.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="requireGalleryLogin">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_downloadPermissionsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Watermark
+
+</h2>
+
+</div>
+
+<form id="watermarkForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Watermark Image
+
+</label>
+
+<input
+type="file"
+accept=".png"
+id="watermarkImage">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Watermark Position
+
+</label>
+
+<select id="watermarkPosition">
+
+<option>Bottom Right</option>
+
+<option>Bottom Left</option>
+
+<option>Top Right</option>
+
+<option>Top Left</option>
+
+<option>Center</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Watermark Opacity (%)
+
+</label>
+
+<input
+type="number"
+id="watermarkOpacity"
+value="35"
+min="0"
+max="100">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Watermark Size (%)
+
+</label>
+
+<input
+type="number"
+id="watermarkScale"
+value="18">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_watermarkForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Gallery Visibility
+
+</h2>
+
+</div>
+
+<form id="galleryVisibilityForm">
+
+<div class="settings-switches">
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Publish Gallery Automatically
+
+</strong>
+
+<p>
+
+Uploaded photos become visible immediately.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="autoPublishGallery">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Require Admin Approval
+
+</strong>
+
+<p>
+
+Photos remain hidden until approved.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="galleryApproval">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Allow Public Gallery
+
+</strong>
+
+<p>
+
+Visitors may browse photos without logging in.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="publicGallery">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+<label class="switch-row">
+
+<div>
+
+<strong>
+
+Show Download Counter
+
+</strong>
+
+<p>
+
+Track participant downloads.
+
+</p>
+
+</div>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="downloadCounter">
+
+<span class="slider"></span>
+
+</label>
+
+</label>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_galleryVisibilityForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+<div class="dashboard-panel">
+
+<div class="panel-header">
+
+<h2>
+
+Storage Settings
+
+</h2>
+
+</div>
+
+<form id="storageSettingsForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Storage Bucket
+
+</label>
+
+<input
+type="text"
+id="galleryBucket"
+value="gallery"
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Retention Period (Days)
+
+</label>
+
+<input
+type="number"
+id="retentionPeriod"
+value="365">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Thumbnail Width (px)
+
+</label>
+
+<input
+type="number"
+id="thumbnailWidth"
+value="500">
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Thumbnail Height (px)
+
+</label>
+
+<input
+type="number"
+id="thumbnailHeight"
+value="500">
+
+</div>
+
+</div>
+
+
+
+<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+<button type="submit" class="btn btn-primary btn-sm" id="save_storageSettingsForm">
+<i class="fa-solid fa-floppy-disk"></i> Save Changes
+</button>
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+<footer class="admin-footer">
+
+<p>
+
+© 2026 GY Summit Management System
+
+</p>
+
+<p>
+
+PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<!-- ==========================================================
+CLOUDINARY
+========================================================== -->
+
+
+
+
+<script type="module" src="../assets/js/gallery.js"></script>
+
+<script src="../assets/js/app-shell.js"></script>
+
+</body>
+
+</html>

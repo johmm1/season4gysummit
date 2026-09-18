@@ -1,0 +1,40 @@
+{
+  "name": "gy-summit-2026-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GY Summit 2026 API — MySQL/Sequelize, JWT auth, M-Pesa, QR admission, attendance, admin dashboards",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node database/seed.js",
+    "db:sync": "node database/sync.js"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.22.2",
+    "express-rate-limit": "^8.7.0",
+    "google-auth-library": "^9.14.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.0",
+    "pdfkit": "^0.15.0",
+    "pg": "^8.23.0",
+    "pg-hstore": "^2.3.4",
+    "qrcode": "^1.5.4",
+    "sequelize": "^6.37.8",
+    "zod": "^4.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "sequelize-cli": "^6.6.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

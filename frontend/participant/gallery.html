@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../assets/js/theme-init.js"></script>
+
+
+<title>Media Centre | GY Summit 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Global CSS -->
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/responsive.css">
+
+<!-- Participant CSS -->
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+<link rel="stylesheet" href="../assets/css/themes.css">
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+<link rel="stylesheet" href="../assets/css/participants/gallery.css">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- =======================================
+SIDEBAR
+======================================= -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img src="../assets/images/logo.png" alt="GY Summit">
+
+<h2>GY Summit</h2>
+
+<p>Participant Portal</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</a>
+
+<a href="profile.html">
+<i class="fa-solid fa-user"></i>
+Profile
+</a>
+
+<a href="admission-pass.html">
+<i class="fa-solid fa-id-card"></i>
+Admission Pass
+</a>
+
+<a href="announcements.html">
+<i class="fa-solid fa-bullhorn"></i>
+Announcements
+</a>
+
+<a href="sports.html">
+<i class="fa-solid fa-futbol"></i>
+Sports Centre
+</a>
+
+<a href="gallery.html" class="active">
+<i class="fa-solid fa-images"></i>
+Media Centre
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button id="logoutBtn" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<!-- =======================================
+MAIN CONTENT
+======================================= -->
+
+<main class="dashboard-content">
+
+<header class="topbar">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+<h1>Media Centre</h1>
+<p>Every summit memory, synced live from the admin gallery.</p>
+</div>
+
+<div class="topbar-right">
+
+<div class="participant-profile">
+<img id="participantAvatar" src="../assets/images/avatar-placeholder.png" alt="Participant">
+<div>
+<h4 id="participantName">Loading…</h4>
+<p id="participantParish">Loading…</p>
+</div>
+</div>
+
+</div>
+
+</header>
+
+<!-- =========================================
+HERO
+========================================= -->
+
+<section class="gallery-hero">
+
+<div class="hero-content">
+
+<span class="hero-tag">PCEA GITHUNGURI PRESBYTERY</span>
+
+<h2>GY Summit Season 4<br>Media Centre</h2>
+
+<p>Browse official photos and videos as the media team uploads and approves them. Got a great shot from the summit? Share it below — it'll appear here once an admin approves it.</p>
+
+<div style="margin-top:18px;">
+<label for="participantUpload" class="btn-download" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+<i class="fas fa-camera"></i> Share a photo or video
+</label>
+<input type="file" id="participantUpload" accept="image/*,video/*" style="display:none;">
+</div>
+
+</div>
+
+<div class="hero-icon">
+<i class="fas fa-photo-film"></i>
+</div>
+
+</section>
+
+<!-- =========================================
+STATISTICS
+========================================= -->
+
+<section class="stats-grid">
+
+<div class="stat-card">
+<i class="fas fa-images"></i>
+<div>
+<h2 id="statPhotos">0</h2>
+<p>Photos</p>
+</div>
+</div>
+
+<div class="stat-card">
+<i class="fas fa-video"></i>
+<div>
+<h2 id="statVideos">0</h2>
+<p>Videos</p>
+</div>
+</div>
+
+<div class="stat-card">
+<i class="fas fa-file-lines"></i>
+<div>
+<h2 id="statDocuments">0</h2>
+<p>Downloads</p>
+</div>
+</div>
+
+</section>
+
+<!-- =========================================
+SEARCH BAR
+========================================= -->
+
+<section class="download-toolbar">
+
+<div class="download-search">
+<i class="fas fa-search"></i>
+<input type="text" id="gallerySearch" placeholder="Search photos and videos...">
+</div>
+
+</section>
+
+<!-- =========================================
+MEDIA NAVIGATION (tabs beyond All/Photos/Videos
+are generated from the real albums admins upload
+into — see participant/js/gallery.js)
+========================================= -->
+
+<section class="media-tabs" id="mediaTabs">
+
+<button class="tab active" data-tab="all">
+<i class="fas fa-border-all"></i>
+All
+</button>
+
+<button class="tab" data-tab="photo">
+<i class="fas fa-images"></i>
+Photos
+</button>
+
+<button class="tab" data-tab="video">
+<i class="fas fa-video"></i>
+Videos
+</button>
+
+</section>
+
+<!-- =========================================
+GALLERY GRID
+========================================= -->
+
+<section class="section-title">
+<div>
+<h3>Summit Gallery</h3>
+<p id="galleryResultCount">Loading media…</p>
+</div>
+</section>
+
+<section class="gallery-grid" id="galleryGrid">
+
+<div class="gallery-empty">
+<i class="fas fa-spinner fa-spin"></i>
+<h3>Loading gallery…</h3>
+</div>
+
+</section>
+
+<!-- =========================================
+DOCUMENTS
+========================================= -->
+
+<section class="section-title" id="documentsTitle" style="display:none;">
+<div>
+<h3>Downloads</h3>
+<p>Programs, notes and resources shared by the summit team.</p>
+</div>
+</section>
+
+<div id="documentsList" style="display:none;"></div>
+
+<!-- =========================================
+FOOTER
+========================================= -->
+
+<footer class="dashboard-footer">
+<p>© 2026 PCEA Githunguri Presbytery Youth Fellowship</p>
+<small>GY Summit Season 4 Participant Portal</small>
+</footer>
+
+</main>
+
+</div>
+
+<!-- =========================================
+IMAGE MODAL
+========================================= -->
+
+<div class="gallery-modal" id="imageModal">
+<span class="close-gallery" id="closeImageModal">&times;</span>
+<img id="modalImage" src="" alt="">
+<div class="gallery-caption" id="modalCaption"></div>
+</div>
+
+<!-- =========================================
+VIDEO MODAL
+========================================= -->
+
+<div class="video-modal" id="videoModal">
+<span class="close-gallery" id="closeVideoModal">&times;</span>
+<video id="modalVideo" src="" controls style="width:100%;max-width:900px;border-radius:14px;"></video>
+</div>
+
+<script src="../assets/js/app-shell.js"></script>
+<script type="module" src="js/gallery.js"></script>
+
+</body>
+
+</html>

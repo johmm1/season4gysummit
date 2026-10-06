@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Judges | Y-Summit Season 4 2026
+
+</title>
+
+<!-- Core Styles -->
+
+<link rel="stylesheet"
+href="../assets/css/variables.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="../assets/css/admin.css">
+
+<link rel="stylesheet"
+href="../assets/css/gallery.css">
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+<link rel="stylesheet" href="../assets/css/sports.css">
+<link rel="stylesheet" href="../assets/css/judges.css">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-logo">
+
+<img
+src="../assets/images/logo.png"
+alt="Y-Summit">
+
+<h2>
+
+Y-Summit
+
+</h2>
+
+<p>
+
+Media Centre
+
+</p>
+
+</div>
+
+<nav>
+
+<a href="dashboard.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="finance.html">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Finance
+
+</a>
+
+<a href="admissions.html">
+
+<i class="fa-solid fa-door-open"></i>
+
+Admissions
+
+</a>
+
+<a href="participants.html">
+
+<i class="fa-solid fa-users"></i>
+
+Participants
+
+</a>
+
+<a href="sports.html">
+
+<i class="fa-solid fa-futbol"></i>
+
+Sports
+
+</a>
+
+<a class="active" href="judges.html">
+<i class="fa-solid fa-gavel"></i>
+Judges
+</a>
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+Media & Certificates
+
+</a>
+
+<a href="announcements.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Announcements
+
+</a>
+
+<a href="structure.html">
+
+<i class="fa-solid fa-church"></i>
+
+Structure
+
+</a>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<h4>
+
+PCEA Githunguri Presbytery
+
+</h4>
+
+<small>
+
+Y-Summit Season 4 2026
+
+</small>
+
+</div>
+
+</aside>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<main class="admin-main">
+<header class="dashboard-header">
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+<div>
+<h1 id="judgesTitle">Judges</h1>
+<p id="judgesSubtitle">Mark Dance and Folk Song performances.</p>
+</div>
+<div class="header-right">
+<div class="admin-profile">
+<div>
+<strong id="adminName">Judge</strong>
+<small id="adminRole">Online</small>
+</div>
+</div>
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+</div>
+</header>
+
+<!-- ============ JUDGE VIEW: mark performances ============ -->
+<section id="judgeView" hidden>
+<div class="dashboard-panel">
+<div class="panel-header"><h2><i class="fa-solid fa-star"></i> Your performances</h2></div>
+<div class="judge-filters">
+<select id="jfCategory" aria-label="Competition">
+<option value="">All competitions</option>
+<option value="Dance">Dance</option>
+<option value="Folk Song">Folk Song</option>
+</select>
+<select id="jfDay" aria-label="Day"><option value="">All days</option></select>
+<select id="jfStatus" aria-label="Marking status">
+<option value="">All</option>
+<option value="todo">Not yet marked</option>
+<option value="done">Marked by me</option>
+</select>
+</div>
+<p class="judge-help">Mark every criterion from 0 to 10 (halves allowed). Your marks are private to you and the organisers. You can change them until the performance is closed.</p>
+<div id="judgeList" class="judge-list"></div>
+</div>
+</section>
+
+<!-- ============ ADMIN VIEW: judges, results ============ -->
+<section id="adminView" hidden>
+<div class="dashboard-panel">
+<div class="panel-header"><h2><i class="fa-solid fa-user-plus"></i> Add a judge</h2></div>
+<form id="judgeForm" class="form-grid" autocomplete="off">
+<div class="form-group"><label for="jName">Full name</label><input id="jName" required minlength="2" maxlength="120"></div>
+<div class="form-group"><label for="jEmail">Email (their login)</label><input id="jEmail" type="email" required></div>
+<div class="form-group"><label for="jPhone">Phone</label><input id="jPhone" type="tel" required placeholder="0712345678"></div>
+<div class="form-group"><label for="jPassword">Temporary password</label><input id="jPassword" type="text" required minlength="8" placeholder="At least 8 characters"></div>
+<div class="form-group" style="align-self:end"><button class="btn btn-primary" type="submit"><i class="fa-solid fa-plus"></i> Create judge</button></div>
+</form>
+<p class="judge-help">Give the judge their email and temporary password. They sign in at the normal login page and land straight on their marking screen.</p>
+</div>
+
+<div class="dashboard-panel">
+<div class="panel-header"><h2><i class="fa-solid fa-gavel"></i> Judges</h2></div>
+<div id="judgesTable"></div>
+</div>
+
+<div class="dashboard-panel">
+<div class="panel-header"><h2><i class="fa-solid fa-ranking-star"></i> Results</h2></div>
+<div class="judge-filters">
+<select id="lbCategory" aria-label="Competition">
+<option value="Dance">Dance</option>
+<option value="Folk Song">Folk Song</option>
+</select>
+<button class="btn btn-outline btn-sm" type="button" id="lbRefresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+</div>
+<div id="leaderboard"></div>
+<div id="resultDetail"></div>
+</div>
+</section>
+
+<p id="judgesStatus" class="judge-help" role="status"></p>
+</main>
+</div>
+<script type="module" src="../assets/js/judges.js"></script>
+<script src="../assets/js/app-shell.js"></script>
+</body>
+</html>

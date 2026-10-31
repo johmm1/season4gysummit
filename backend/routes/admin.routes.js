@@ -89,12 +89,23 @@ router.get(
 
     const where = { role: "PARTICIPANT" };
     if (req.query.parishId) where.parishId = req.query.parishId;
+    if (req.query.presbyteryId) where.presbyteryId = req.query.presbyteryId;
+    if (req.query.churchId) where.churchId = req.query.churchId;
     if (req.query.gender) where.gender = req.query.gender;
+    if (req.query.medical === "yes") where.hasMedicalCondition = true;
+    if (req.query.medical === "no") where.hasMedicalCondition = false;
+    if (req.query.createdFrom || req.query.createdTo) {
+      where.createdAt = {};
+      if (req.query.createdFrom) where.createdAt[Op.gte] = new Date(`${req.query.createdFrom}T00:00:00.000Z`);
+      if (req.query.createdTo) where.createdAt[Op.lte] = new Date(`${req.query.createdTo}T23:59:59.999Z`);
+    }
     if (search) {
       where[Op.or] = [
         { fullName: { [Op.iLike]: `%${search}%` } },
         { email: { [Op.iLike]: `%${search}%` } },
         { phone: { [Op.iLike]: `%${search}%` } },
+        { idNumber: { [Op.iLike]: `%${search}%` } },
+        { "$admissionCard.cardNumber$": { [Op.iLike]: `%${search}%` } },
       ];
     }
 

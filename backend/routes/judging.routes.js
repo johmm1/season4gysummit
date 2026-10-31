@@ -23,7 +23,7 @@ const { requireAuth, requireRole } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
 const { logAction } = require("../services/auditService");
 const { getForm } = require("../services/settingsService");
-const { normalizePhone } = require("../services/mpesaService");
+const { normalizePhone } = require("../services/phoneUtils");
 
 const router = Router();
 const ADMINS = ["SUPER_ADMIN", "ADMIN", "SPORTS_ADMIN"];

@@ -20,9 +20,7 @@ window.loadParish = async function loadParish(parishName) {
     }
     const parish = parishesCache.find((p) => p.name.toLowerCase() === parishName.toLowerCase());
 
-    const { items: participants } = parish
-      ? await apiFetch(`/admin/participants?parishId=${parish.id}&pageSize=500`)
-      : { items: [] };
+    const participants = parish ? await fetchAllParticipants({ parishId: parish.id }) : [];
 
     const admitted = participants.filter((p) => p.attendances?.some((a) => a.type === "CHECK_IN")).length;
     const registered = participants.length;
@@ -96,11 +94,25 @@ function wireCertificateGeneration() {
   });
 }
 
+
+async function fetchAllParticipants(filters = {}) {
+  const items = [];
+  let page = 1;
+  while (true) {
+    const params = new URLSearchParams({ ...filters, page: String(page), pageSize: "100" });
+    const result = await apiFetch(`/admin/participants?${params}`);
+    items.push(...result.items);
+    if (page >= result.totalPages || !result.items.length) break;
+    page += 1;
+  }
+  return items;
+}
+
 async function loadOverview() {
   try {
-    const [summary, { items }] = await Promise.all([
+    const [summary, items] = await Promise.all([
       apiFetch("/finance/summary"),
-      apiFetch("/admin/participants?pageSize=100"),
+      fetchAllParticipants(),
     ]);
 
     setText("overallRegistered", summary.registeredCount);

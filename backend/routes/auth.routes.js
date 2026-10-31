@@ -142,7 +142,11 @@ router.post(
     user.otpChannel = useChannel;
     await user.save();
 
-    const message = `Your Y-Summit Season 4 2026 verification code is ${rawOtp}. It expires in 10 minutes.`;
+    const frontendUrl = ((process.env.FRONTEND_URL || "").split(",")[0].trim() || req.get("origin") || "").replace(/\/$/, "");
+    const verifyLink = frontendUrl + "/verify-otp.html?email=" + encodeURIComponent(user.email);
+    const message = "Your Y-Summit Season 4 2026 administrator verification code is " + rawOtp +
+      ". It expires in 10 minutes.\n\nVerify your email here: " + verifyLink +
+      "\n\nAfter verification, use Forgot Password on the login page to set your password.";
     try {
       await sendTransactionalEmail(user.email, "Y-Summit Season 4 2026 — Verify your administrator account", message);
     } catch (err) {

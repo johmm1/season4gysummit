@@ -776,7 +776,7 @@ function exportPrayerListTemplate() {
   downloadCsv("y-summit-prayer-list-template.csv", [[
     "Date", "Time", "Prayer Leader", "Presbytery", "Parish", "Church",
     "Prayer Focus", "Notes", "Status",
-  ]]);
+  ], ["", "", "", "", "", "", "", "", ""]]);
 }
 
 function wireReportExports() {

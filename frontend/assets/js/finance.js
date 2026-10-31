@@ -24,7 +24,7 @@ window.loadParish = async function loadParish(parishName) {
       ? await apiFetch(`/admin/participants?parishId=${parish.id}&pageSize=500`)
       : { items: [] };
 
-    const admitted = participants.filter((p) => p.admissionCard).length;
+    const admitted = participants.filter((p) => p.attendances?.some((a) => a.type === "CHECK_IN")).length;
     const registered = participants.length;
     const totalSlots = 50;
 
@@ -104,7 +104,7 @@ async function loadOverview() {
     ]);
 
     setText("overallRegistered", summary.registeredCount);
-    setText("overallPaid", summary.admittedCount);
+    setText("overallPaid", summary.issuedPassCount);
     setText("overallPending", summary.awaitingAdmission);
     setText("overallAdmitted", summary.admittedCount);
 
@@ -113,7 +113,7 @@ async function loadOverview() {
       const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
       setText(`${prefix}Registered`, matches.length);
       setText(`${prefix}Paid`, Math.max(0, 50 - matches.length));
-      setText(`${prefix}Admitted`, matches.filter((i) => i.admissionCard).length);
+      setText(`${prefix}Admitted`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
     }
   } catch (err) {
     showError(err.message || "Could not load finance overview.");

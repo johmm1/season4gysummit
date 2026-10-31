@@ -53,7 +53,7 @@ function escapeAttr(s) {
 
 function wireManualVerify() {
   $("verifyCode")?.addEventListener("click", async () => {
-    const code = $("participantCode")?.value.trim() || $("phoneSearch")?.value.trim();
+    const code = $("admissionCode")?.value.trim() || $("phoneSearch")?.value.trim();
     if (!code) return showError("Enter an admission code or phone number.");
     try {
       // Manual fallback: search participants by the entered code/phone via admin search.
@@ -87,7 +87,7 @@ function wireDecisionButtons() {
 }
 
 async function recordDecision(type, label) {
-  if (!lastScanResult) return showError("Scan or look up a participant first.");
+  if (!lastScanResult) return showError("Look up a participant by admission code first.");
   try {
     const cardId = lastScanResult.participant?.admissionCard?.id;
     if (!cardId) return showError("This participant has no admission code. Please contact an administrator.");

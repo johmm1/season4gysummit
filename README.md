@@ -12,7 +12,6 @@ for participants, registrations, announcements, gallery, and sports.
 - **ORM:** Sequelize
 - **Auth:** JWT + bcrypt (your own, no third-party auth provider)
 - **Image storage:** Cloudinary
-- **Payments:** Safaricom Daraja API (STK Push)
 - **QR/PDF:** `qrcode` + `pdfkit`
 
 ## Structure
@@ -23,8 +22,8 @@ GY-SUMMIT-2026/
 │   ├── config/database.js       Sequelize connection
 │   ├── models/index.js          All tables + associations
 │   ├── middleware/              JWT auth guard, error handler
-│   ├── routes/                  All API endpoints (auth, payments, admin, ...)
-│   ├── services/                M-Pesa, QR, Cloudinary, JWT helpers
+│   ├── routes/                  All API endpoints (auth, registrations, admin, ...)
+│   ├── services/                QR pass, Cloudinary, JWT helpers
 │   ├── database/sync.js         Creates all tables
 │   ├── database/seed.js         Seeds parishes + your first admin
 │   ├── app.js / server.js       Express app + entry point
@@ -262,7 +261,7 @@ back to the typed name with no image.
 
 - **SMS**: Brevo Transactional SMS (`BREVO_API_KEY` plus `BREVO_SMS_SENDER`
   in `.env`; needs SMS credits in your Brevo account), reusing the same
-  phone-normalization already used for M-Pesa. Brevo sends one message per
+  phone-normalization helper. Brevo sends one message per
   request, so publishing an announcement sends in parallel batches of 10,
   respecting the Enable SMS toggle.
 - **WhatsApp**: Brevo Transactional WhatsApp API
@@ -270,7 +269,7 @@ back to the typed name with no image.
   the free-form vs. template caveat above; Brevo sits on top of WhatsApp
   Business, so the same 24-hour-session/approved-template rule from Meta
   still applies (`BREVO_WHATSAPP_TEMPLATE_ID`, optional).
-- Every automatic notification (registration received, payment confirmed,
+- Every automatic notification (registration received, admission pass issued,
   admission card issued, certificate ready, announcement published) now
   sends to **the phone number given at registration**, on every channel
   that's both configured and turned on in Announcements settings.
@@ -338,14 +337,14 @@ are the ones wired to real effects so far:
 
 | Setting (where) | Effect |
 |---|---|
-| Registration Fee (Dashboard → General) | Actual amount charged at signup |
+| Registration Fee (Dashboard → General) | Stored as registration information; no payment is collected in the app |
 | Registration Opens/Closes (Dashboard → General) | Registration API rejects outside this window |
 | Maximum Participants (Dashboard → General) | Registration API rejects once full |
 | Summit Name, Theme, Theme Verse, Venue, Event dates (Dashboard → General) | Shown on `index.html` (hero, countdown, info cards) |
 | Social Media links (Dashboard) | Footer icons on `index.html` |
 | Admission Code Prefix / Starting Number (Admissions) | Real prefix/sequence on issued admission cards |
 | QR Code Size (Admissions) | Actual size of generated QR images |
-| Registration Fee, Payment Deadline / Late Fee (Finance) | Added to the amount charged once the deadline passes |
+
 
 
 | Max Upload Size / Allowed Formats (Gallery) | Enforced on every upload |

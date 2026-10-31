@@ -27,7 +27,7 @@ async function loadStats() {
     const stats = await apiFetch("/admin/dashboard/stats");
     setText("totalParticipants", stats.totalUsers);
     setText("checkedInParticipants", stats.totalCheckIns);
-    setText("pendingPayments", stats.pendingRegistrations);
+    setText("pendingPayments", Math.max(0, stats.totalUsers - stats.totalCheckIns));
     setText("parishCount", stats.totalCongregations ?? 0);
     setText("totalCongregations", stats.totalCongregations ?? 0);
 

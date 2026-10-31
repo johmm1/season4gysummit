@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — admin dashboard
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, formatKes, formatDate, escapeHtml, setText, $, startCountdown } from "./utils.js";
+import { apiFetch, showError, formatDate, escapeHtml, setText, $, startCountdown } from "./utils.js";
 import { CONFIG } from "./config.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
 
@@ -28,8 +28,8 @@ async function loadStats() {
     setText("totalParticipants", stats.totalUsers);
     setText("checkedInParticipants", stats.totalCheckIns);
     setText("pendingPayments", stats.pendingRegistrations);
-    setText("totalRevenue", formatKes(stats.totalRevenue));
     setText("parishCount", stats.totalCongregations ?? 0);
+    setText("totalCongregations", stats.totalCongregations ?? 0);
 
     const highest = stats.topPresbyteries[0];
     const lowest = stats.topPresbyteries[stats.topPresbyteries.length - 1];

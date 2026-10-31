@@ -145,7 +145,7 @@ Admission Control Centre
 
 <p>
 
-Search, verify and admit participants by admission code.
+Search participants by name and record their admission.
 
 </p>
 
@@ -196,7 +196,7 @@ SEARCH BAR
 <input
 type="text"
 id="globalSearch"
-placeholder="Search participant, admission code or phone number...">
+placeholder="Search participants by name...">
 
 </div>
 
@@ -368,86 +368,14 @@ ADMISSION DESK
 
 <section class="admission-workspace">
 
-<!-- Manual admission-code lookup -->
-
 <div class="manual-card">
-
-<div class="card-header">
-
-<h2>
-
-Manual Verification
-
-</h2>
-
-</div>
-
-<label>
-
-Admission Code
-
-</label>
-
-<div class="manual-search">
-
-<input
-type="text"
-id="admissionCode"
-placeholder="GY26-00045">
-
-<button
-class="btn btn-primary"
-id="verifyCode">
-
-Verify
-
-</button>
-
-</div>
-
-<label>
-
-Participant Name
-
-</label>
-
-<div class="manual-search">
-
-<input
-type="text"
-id="participantNameSearch"
-placeholder="Search by participant name">
-
-<button
-class="btn btn-outline">
-
-Search
-
-</button>
-
-</div>
-
-<label>
-
-Phone Number
-
-</label>
-
-<div class="manual-search">
-
-<input
-type="text"
-id="phoneSearch"
-placeholder="07XXXXXXXX">
-
-<button
-class="btn btn-outline">
-
-Search
-
-</button>
-
-</div>
+  <div class="card-header"><h2>Find a Participant</h2></div>
+  <label for="participantNameSearch">Participant name</label>
+  <div class="manual-search">
+    <input type="search" id="participantNameSearch" placeholder="Type at least two letters of their name">
+    <button type="button" class="btn btn-primary" id="searchParticipant">Search</button>
+  </div>
+  <div id="participantSearchResults" class="participant-search-results" aria-live="polite"></div>
 
 <div class="quick-information">
 
@@ -579,7 +507,7 @@ Participant Name
 
 <div>
 
-<label>Admission Code</label>
+<label>Participant Name</label>
 
 <p id="participantCode">
 
@@ -1094,7 +1022,7 @@ Admission Method
 
 <p>
 
-Manual Admission Code
+Name Search
 
 </p>
 
@@ -1110,7 +1038,7 @@ Verification Method
 
 <p id="verificationMethod">
 
-Admission Code
+Participant Name
 
 </p>
 
@@ -1460,7 +1388,7 @@ Admission Configuration
 
 <label>
 
-Admission Code Prefix
+(Removed) Admission Code Prefix
 
 </label>
 
@@ -1475,7 +1403,7 @@ placeholder="GY26">
 
 <label>
 
-Starting Admission Number
+(Removed) Starting Admission Number
 
 </label>
 
@@ -1619,7 +1547,7 @@ Prevent Duplicate Check-in
 
 <p>
 
-Blocks duplicate admissions using the same admission code.
+Prevents duplicate check-ins for the same participant.
 
 </p>
 
@@ -1647,7 +1575,7 @@ Require Profile Completion
 
 <p>
 
-Incomplete profiles cannot generate admission cards.
+Admission is recorded directly against the participant account.
 
 </p>
 

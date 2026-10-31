@@ -28,6 +28,7 @@ if (admin) {
   await initTeamRosters();
   wireTabs();
   wireEditFixtureModal();
+  wireReportExports();
   await loadPageSettings(SPORTS_FORMS);
   wireSettingsForms();
   wireSettingsFileUploads();
@@ -700,3 +701,82 @@ function wireFixtureForm() {
     }
   });
 }
+
+
+function csvCell(value) {
+  const text = String(value ?? "");
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function downloadCsv(filename, rows) {
+  if (!rows.length) {
+    showError("There is no data to export yet.");
+    return;
+  }
+  const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+  const blob = new Blob(["\\uFEFF", csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportFixtureResults(categories) {
+  const selected = allEventsCache.filter((event) => categories.includes(event.category));
+  const rows = [["Date", "Time", "Competition", "Round", "Group", "Home / Performance", "Away", "Home Score", "Away Score", "Venue", "Status"]];
+  for (const event of selected) {
+    const date = event.startsAt ? new Date(event.startsAt) : null;
+    rows.push([
+      date ? date.toLocaleDateString("en-KE") : "",
+      date ? date.toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" }) : "",
+      event.category, event.round, event.group, event.teamHome, event.teamAway,
+      event.scoreHome, event.scoreAway, event.venue, event.status,
+    ]);
+  }
+  const suffix = categories.length === 1 ? categories[0].toLowerCase().replace(/\s+/g, "-") : "all";
+  downloadCsv(`y-summit-fixtures-results-${suffix}.csv`, rows);
+}
+
+async function exportTeamLists() {
+  try {
+    const { teams } = await apiFetch("/sports/teams");
+    const rows = [["Competition", "Team", "Parish", "Gender", "Coach", "Chairperson", "Members"]];
+    for (const team of teams) rows.push([
+      team.category, team.name, team.Parish?.name, team.gender, team.coachName,
+      team.chairpersonName, team.memberCount ?? team.members?.length ?? 0,
+    ]);
+    downloadCsv("y-summit-team-lists.csv", rows);
+  } catch (err) {
+    showError(err.message || "Could not export team lists.");
+  }
+}
+
+async function exportStandingsCsv() {
+  try {
+    const { groups } = await apiFetch("/sports/groups");
+    const rows = [["Competition", "Group", "Type", "Rank", "Team / Performance", "Played", "Won", "Drawn", "Lost", "Goals For", "Goals Against", "Goal Difference", "Points", "Average Score"]];
+    for (const group of groups) {
+      group.teams.forEach((team, index) => rows.push([
+        group.category, group.group, group.type, index + 1, team.team,
+        team.played, team.won, team.drawn, team.lost, team.gf, team.ga, team.gd, team.points, team.average,
+      ]));
+    }
+    downloadCsv("y-summit-standings-results.csv", rows);
+  } catch (err) {
+    showError(err.message || "Could not export standings.");
+  }
+}
+
+function wireReportExports() {
+  $("exportFootball")?.addEventListener("click", () => exportFixtureResults(["Football"]));
+  $("exportVolleyball")?.addEventListener("click", () => exportFixtureResults(["Volleyball"]));
+  $("exportDance")?.addEventListener("click", () => exportFixtureResults(["Dance", "Folk Song"]));
+  $("exportAll")?.addEventListener("click", () => exportFixtureResults([...new Set(allEventsCache.map((event) => event.category))]));
+  $("exportTeams")?.addEventListener("click", exportTeamLists);
+  $("exportStandings")?.addEventListener("click", exportStandingsCsv);
+}
+

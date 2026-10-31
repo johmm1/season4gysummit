@@ -50,9 +50,10 @@ async function loadStats() {
 async function loadFinanceSummary() {
   try {
     const summary = await apiFetch("/finance/summary");
-    setText("financeRevenue", formatKes(summary.succeeded.total));
-    setText("financePaid", summary.succeeded.count);
-    setText("financePending", summary.pending.count);
+    setText("financeRevenue", summary.congregationCount);
+    setText("financePaid", summary.registeredCount);
+    setText("financePending", summary.awaitingAdmission);
+    setText("pendingPayments", summary.awaitingAdmission);
   } catch (err) {
     console.error("Finance summary unavailable to this role:", err.message);
   }

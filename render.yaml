@@ -60,7 +60,6 @@ services:
       # ---- Google Sign-In (optional — login only) ----
       - key: GOOGLE_CLIENT_ID
         sync: false
-        sync: false
 
       # ---- Supabase Storage (gallery/profile photo uploads) ----
       - key: SUPABASE_URL

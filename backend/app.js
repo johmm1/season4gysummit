@@ -11,7 +11,6 @@ const { requestCounter } = require("./middleware/requestCounter");
 const authRoutes = require("./routes/auth.routes");
 const structureRoutes = require("./routes/structure.routes");
 const registrationRoutes = require("./routes/registration.routes");
-const paymentsRoutes = require("./routes/payments.routes");
 const admissionRoutes = require("./routes/admission.routes");
 const attendanceRoutes = require("./routes/attendance.routes");
 const announcementsRoutes = require("./routes/announcements.routes");
@@ -47,7 +46,6 @@ app.get("/health", (_req, res) => res.json({ ok: true, service: "gy-summit-2026-
 app.use("/api/auth", authRoutes);
 app.use("/api/structure", structureRoutes);
 app.use("/api/registration", registrationRoutes);
-app.use("/api/payments", paymentsRoutes);
 app.use("/api/admission", admissionRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/announcements", announcementsRoutes);

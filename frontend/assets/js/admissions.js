@@ -92,7 +92,7 @@ async function recordDecision(type, label) {
   try {
     const cardId = lastScanResult.participant?.admissionCard?.id;
     if (!cardId) return showError("This participant has no admission code. Please contact an administrator.");
-    lastScanResult = await apiFetch(`/admission/${cardId}/admit`, {
+    await apiFetch(`/admission/${cardId}/admit`, {
       method: "POST",
       body: { label: label ? `${label} (manual lookup)` : undefined },
     });

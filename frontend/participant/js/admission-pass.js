@@ -1,4 +1,4 @@
-// Y-Summit Season 4 2026 — participant admission pass (QR code)
+// Y-Summit Season 4 2026 — participant name-based admission details
 import { requireSession, wireLogoutButton } from "../../assets/js/auth.js";
 import { apiFetch, showError, setText, $ } from "../../assets/js/utils.js";
 import { CONFIG } from "../../assets/js/config.js";
@@ -38,14 +38,15 @@ function renderParticipant(user) {
   if (passPhoto && user.avatarUrl) passPhoto.src = user.avatarUrl;
 
   const reg = user.registration;
-  setText("paymentStatus", reg?.status === "CONFIRMED" ? "Paid" : "Pending");
-  const paymentBadge = $("paymentBadge");
-  if (paymentBadge) paymentBadge.className = reg?.status === "CONFIRMED" ? "badge badge-success" : "badge badge-warning";
+  setText("registrationStatus", reg?.status === "CONFIRMED" ? "Registered" : "Pending");
+  const registrationBadge = $("registrationBadge");
+  if (registrationBadge) registrationBadge.className = reg?.status === "CONFIRMED" ? "badge badge-success" : "badge badge-warning";
 }
 
 async function loadCard() {
   try {
     const { participant, admitted } = await apiFetch("/admission/me");
+    setText("admissionStatusText", admitted ? "Checked in" : "Registered");
     setText("admissionStatus", admitted ? "Checked in" : "Registered");
     setText("admissionBadge", admitted ? "Checked in" : "Registration confirmed");
     const badge = $("admissionBadge");

@@ -48,11 +48,10 @@ router.post(
 router.get(
   "/dashboard/stats",
   asyncHandler(async (_req, res) => {
-    const [totalUsers, confirmedRegistrations, pendingRegistrations, totalCongregations, totalCheckIns, byParish] =
+    const [totalUsers, confirmedRegistrations, totalCongregations, totalCheckIns, byParish] =
       await Promise.all([
         User.count({ where: { role: "PARTICIPANT" } }),
         Registration.count({ where: { status: "CONFIRMED" } }),
-        Registration.count({ where: { status: "PENDING_PAYMENT" } }),
         Church.count(),
         Attendance.count({ where: { type: "CHECK_IN" } }),
         User.findAll({
@@ -68,8 +67,6 @@ router.get(
     res.json({
       totalUsers,
       confirmedRegistrations,
-      pendingRegistrations,
-      totalRevenue: 0,
       totalCongregations,
       totalCheckIns,
       topPresbyteries: byParish.map((r) => ({

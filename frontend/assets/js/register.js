@@ -3,7 +3,7 @@
 // are already wired by the inline <script> in register.html. This module
 // handles: dynamic parish->church loading, optional profile photo reminder,
 // and final participant account creation.
-import { apiFetch, showError, $ } from "./utils.js";
+import { apiFetch, showError, showSuccess, $ } from "./utils.js";
 import { setToken } from "./auth.js";
 
 let selectedPresbyteryId = null;
@@ -143,7 +143,9 @@ form?.addEventListener("submit", async (e) => {
     if ($("profilePhoto")?.files?.[0]) sessionStorage.setItem("gySummitAddPhotoReminder", "1");
 
     setToken(result.token);
-    window.location.href = "participant/dashboard.html";
+    showSuccess("Account successfully created. Welcome to Y-Summit!");
+    if (submitBtn) submitBtn.innerHTML = "Account Created";
+    setTimeout(() => { window.location.href = "participant/dashboard.html"; }, 1400);
   } catch (err) {
     showError(err.message || "Registration failed. Please try again.");
     if (submitBtn) {

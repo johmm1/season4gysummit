@@ -20,7 +20,7 @@
 
 const axios = require("axios");
 const { getForm } = require("./settingsService");
-const { normalizePhone } = require("./mpesaService");
+const { normalizePhone } = require("./phoneUtils");
 
 // ---------------- Email (Brevo or Resend) ----------------
 //

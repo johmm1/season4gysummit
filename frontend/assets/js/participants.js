@@ -124,7 +124,7 @@ function renderTable(items) {
         <td>${escapeHtml(u.phone || "—")}</td>
         <td>${escapeHtml(u.medicalCondition || "None")}</td>
         <td>${escapeHtml(u.registration?.status || "—")}</td>
-        <td>${u.admissionCard ? "Issued" : "—"}</td>
+        <td>${u.admissionCard?.isRevoked ? "Revoked" : u.admissionCard ? "Issued" : "—"}</td>
         <td><button class="btn btn-sm btn-outline" data-action="view" data-id="${u.id}">View</button></td>
       </tr>`
     )

@@ -1,10 +1,6 @@
-// Y-Summit Season 4 2026 — admin finance & parish payment/admission tracking
+// Y-Summit Season 4 2026 — registration and admission management
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, showSuccess, formatKes, escapeHtml, debounce, setText, $ } from "./utils.js";
-import { startAdmissionScanner, stopAdmissionScanner } from "./qrScanner.js";
-import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
-
-const FINANCE_FORMS = ["financeSettingsForm", "mpesaSettingsForm", "bankSettingsForm", "paymentControlsForm", "receiptSettingsForm"];
+import { apiFetch, showError, showSuccess, escapeHtml, debounce, setText, $ } from "./utils.js";
 
 // Maps parish name -> the id prefix used in finance.html's per-parish counters,
 // e.g. "Githunguri" -> githunguriRegistered/githunguriPaid/githunguriAdmitted.
@@ -14,7 +10,6 @@ const PARISH_ID_PREFIXES = [
 ];
 
 let parishesCache = null;
-let bankReferencesCache = null;
 
 window.loadParish = async function loadParish(parishName) {
   setText("selectedParishName", `${parishName} Parish`);
@@ -23,29 +18,19 @@ window.loadParish = async function loadParish(parishName) {
       const { items } = await apiFetch("/structure/parishes");
       parishesCache = items;
     }
-    if (!bankReferencesCache) {
-      const { items } = await apiFetch("/admin/bank-references");
-      bankReferencesCache = items;
-    }
-
     const parish = parishesCache.find((p) => p.name.toLowerCase() === parishName.toLowerCase());
-    const bankRef = bankReferencesCache.find((b) => b.parish.toLowerCase() === parishName.toLowerCase());
 
-    const { items: participants } = parish
-      ? await apiFetch(`/admin/participants?parishId=${parish.id}&pageSize=500`)
-      : { items: [] };
+    const participants = parish ? await fetchAllParticipants({ parishId: parish.id }) : [];
 
-    const paid = participants.filter((p) => p.registration?.status === "CONFIRMED").length;
-    const admitted = participants.filter((p) => p.admissionCard).length;
+    const admitted = participants.filter((p) => p.attendances?.some((a) => a.type === "CHECK_IN")).length;
     const registered = participants.length;
-    const totalSlots = bankRef?.totalSlots ?? 50;
+    const totalSlots = 50;
 
-    setText("paidSlots", paid);
+    setText("paidSlots", participants.filter((p) => p.admissionCard && !p.admissionCard.isRevoked).length);
     setText("registeredSlots", registered);
     setText("availableSlots", Math.max(0, totalSlots - registered));
     setText("admittedCount", admitted);
     setText("pendingCount", registered - admitted);
-    setText("bankReference", bankRef?.code || "Not configured");
     setText("capacityLabel", `${registered} / ${totalSlots}`);
 
     const progress = $("capacityProgress");
@@ -64,12 +49,9 @@ if (admin) {
   await loadOverview();
   await loadParticipants();
   wireSearch();
-  wireScanner();
+  wireAdmissionLookup();
   await loadCertificateTemplates();
   wireCertificateGeneration();
-  await loadPageSettings(FINANCE_FORMS);
-  wireSettingsForms();
-  wireSettingsFileUploads();
 }
 
 async function loadCertificateTemplates() {
@@ -112,32 +94,41 @@ function wireCertificateGeneration() {
   });
 }
 
+
+async function fetchAllParticipants(filters = {}) {
+  const items = [];
+  let page = 1;
+  while (true) {
+    const params = new URLSearchParams({ ...filters, page: String(page), pageSize: "100" });
+    const result = await apiFetch(`/admin/participants?${params}`);
+    items.push(...result.items);
+    if (page >= result.totalPages || !result.items.length) break;
+    page += 1;
+  }
+  return items;
+}
+
 async function loadOverview() {
   try {
-    const [summary, { items }] = await Promise.all([
+    const [summary, items] = await Promise.all([
       apiFetch("/finance/summary"),
-      apiFetch("/admin/participants?pageSize=100"),
+      fetchAllParticipants(),
     ]);
 
-    setText("overallRegistered", summary.calculator.registeredCount);
-    setText("overallPaid", summary.succeeded.count);
-    setText("overallPending", summary.pending.count);
+    setText("overallRegistered", summary.registeredCount);
+    setText("overallPaid", summary.issuedPassCount);
+    setText("overallPending", summary.awaitingAdmission);
     setText("overallAdmitted", summary.admittedCount);
 
-    setText("calcRegisteredCount", summary.calculator.registeredCount);
-    setText("calcTicketPrice", formatKes(summary.calculator.ticketPrice));
-    setText("calcExpectedTotal", formatKes(summary.calculator.amountInAccount));
-    setText("calcCollectedTotal", formatKes(summary.calculator.mpesaVerifiedTotal));
-    setText("calcOutstandingTotal", "100%");
 
     for (const prefix of PARISH_ID_PREFIXES) {
       const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
       setText(`${prefix}Registered`, matches.length);
-      setText(`${prefix}Paid`, matches.filter((i) => i.registration?.status === "CONFIRMED").length);
-      setText(`${prefix}Admitted`, matches.filter((i) => i.admissionCard).length);
+      setText(`${prefix}Paid`, matches.filter((i) => i.admissionCard && !i.admissionCard.isRevoked).length);
+      setText(`${prefix}Admitted`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
     }
   } catch (err) {
-    showError(err.message || "Could not load finance overview.");
+    showError(err.message || "Could not load registration and admission overview.");
   }
 }
 
@@ -160,14 +151,23 @@ function renderTable(items) {
     .map(
       (u) => `
       <tr>
+        <td>${u.avatarUrl ? "<img src=\"" + escapeHtml(u.avatarUrl) + "\" alt=\"\" width=\"36\" height=\"36\" style=\"border-radius:50%;object-fit:cover\">" : "—"}</td>
         <td>${escapeHtml(u.admissionCard?.cardNumber || "—")}</td>
         <td>${escapeHtml(u.fullName)}</td>
-        <td>${escapeHtml(u.Parish?.name || "—")}</td>
+        <td>${escapeHtml(u.gender || "—")}</td>
+        <td>${escapeHtml(u.phone || "—")}</td>
         <td>${escapeHtml(u.registration?.status || "—")}</td>
-        <td>${formatKes(u.registration?.payments?.filter((p) => p.status === "SUCCESS").reduce((s, p) => s + p.amount, 0) || 0)}</td>
+        <td>${u.admissionCard?.isRevoked ? "REVOKED" : u.admissionCard ? "ISSUED" : "NOT ISSUED"}</td>
+        <td><button type="button" class="secondary-btn" data-admission-code="${escapeHtml(u.admissionCard?.cardNumber || "")}">View</button></td>
       </tr>`
     )
     .join("");
+  tbody.querySelectorAll("[data-admission-code]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const code = button.dataset.admissionCode;
+      if (code) { $("admissionCode").value = code; lookupByAdmissionCode(); }
+    });
+  });
 }
 
 function wireSearch() {
@@ -178,20 +178,7 @@ function wireSearch() {
 
 let currentCard = null;
 
-function wireScanner() {
-  $("startScanner")?.addEventListener("click", async () => {
-    try {
-      $("scannerPlaceholder")?.classList.add("hidden");
-      await startAdmissionScanner("scannerContainer", { type: "CHECK_IN" }, async (result) => {
-        showAdmissionSuccessModal(result.participant);
-        await loadOverview();
-      });
-    } catch (err) {
-      showError("Could not start camera scanner. Check camera permissions.");
-      $("scannerPlaceholder")?.classList.remove("hidden");
-    }
-  });
-  window.addEventListener("beforeunload", stopAdmissionScanner);
+function wireAdmissionLookup() {
   $("closeSuccessModal")?.addEventListener("click", () => {
     const modal = $("successModal");
     if (modal) modal.style.display = "none";
@@ -234,9 +221,9 @@ function renderVerificationPanel(participant, card, registrationStatus, alreadyA
   const photo = $("participantPhoto");
   if (photo && participant.avatarUrl) photo.src = participant.avatarUrl;
 
-  const paymentBadge = $("paymentStatus");
+  const paymentBadge = $("registrationStatus");
   if (paymentBadge) {
-    paymentBadge.textContent = registrationStatus === "CONFIRMED" ? "PAID" : "NOT VERIFIED";
+    paymentBadge.textContent = registrationStatus === "CONFIRMED" ? "REGISTERED" : "NOT REGISTERED";
     paymentBadge.className = `badge ${registrationStatus === "CONFIRMED" ? "success" : "warning"}`;
   }
 
@@ -287,8 +274,8 @@ function resetVerificationPanel() {
   setText("participantAge", "---------");
   setText("registrationDate", "---------");
   setText("medicalConditions", "No medical information provided.");
-  const paymentBadge = $("paymentStatus");
-  if (paymentBadge) { paymentBadge.textContent = "NOT VERIFIED"; paymentBadge.className = "badge success"; }
+  const paymentBadge = $("registrationStatus");
+  if (paymentBadge) { paymentBadge.textContent = "—"; paymentBadge.className = "badge success"; }
   const admissionBadge = $("admissionStatus");
   if (admissionBadge) { admissionBadge.textContent = "NOT ADMITTED"; admissionBadge.className = "badge warning"; }
   const admitBtn = $("admitParticipant");

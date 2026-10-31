@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — admin dashboard
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, formatKes, formatDate, escapeHtml, setText, $, startCountdown } from "./utils.js";
+import { apiFetch, showError, formatDate, escapeHtml, setText, $, startCountdown } from "./utils.js";
 import { CONFIG } from "./config.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
 
@@ -27,9 +27,9 @@ async function loadStats() {
     const stats = await apiFetch("/admin/dashboard/stats");
     setText("totalParticipants", stats.totalUsers);
     setText("checkedInParticipants", stats.totalCheckIns);
-    setText("pendingPayments", stats.pendingRegistrations);
-    setText("totalRevenue", formatKes(stats.totalRevenue));
-    setText("parishCount", stats.topPresbyteries.length);
+    setText("pendingPayments", Math.max(0, stats.totalUsers - stats.totalCheckIns));
+    setText("parishCount", stats.totalCongregations ?? 0);
+    setText("totalCongregations", stats.totalCongregations ?? 0);
 
     const highest = stats.topPresbyteries[0];
     const lowest = stats.topPresbyteries[stats.topPresbyteries.length - 1];
@@ -50,9 +50,10 @@ async function loadStats() {
 async function loadFinanceSummary() {
   try {
     const summary = await apiFetch("/finance/summary");
-    setText("financeRevenue", formatKes(summary.succeeded.total));
-    setText("financePaid", summary.succeeded.count);
-    setText("financePending", summary.pending.count);
+    setText("financeRevenue", summary.congregationCount);
+    setText("financePaid", summary.registeredCount);
+    setText("financePending", summary.awaitingAdmission);
+    setText("pendingPayments", summary.awaitingAdmission);
   } catch (err) {
     console.error("Finance summary unavailable to this role:", err.message);
   }

@@ -1,23 +1,8 @@
 // Y-Summit Season 4 2026 — startup environment check
-//
-// JWT_SECRET, ADMISSION_QR_SECRET, and the database vars already throw
-// immediately (in jwtService.js / qrService.js / config/database.js) if
-// missing — those are non-negotiable for the app to run at all. This just
-// adds a clear, all-in-one-place boot-time warning for the *optional*
-// integrations (M-Pesa, Cloudinary), which previously failed silently or
-// with a cryptic error the first time someone tried to pay or upload a
-// photo — sometimes days after deploy. Nothing here blocks startup.
+// Warns about optional integrations without blocking local development.
 
 function checkEnv() {
   const warnings = [];
-
-  const mpesaVars = ["MPESA_CONSUMER_KEY", "MPESA_CONSUMER_SECRET", "MPESA_SHORTCODE", "MPESA_PASSKEY", "MPESA_CALLBACK_URL"];
-  const missingMpesa = mpesaVars.filter((v) => !process.env[v]);
-  if (missingMpesa.length) {
-    warnings.push(`M-Pesa payments will fail — missing: ${missingMpesa.join(", ")}`);
-  } else if (process.env.MPESA_CALLBACK_URL && !process.env.MPESA_CALLBACK_URL.startsWith("https://")) {
-    warnings.push("MPESA_CALLBACK_URL should be a public HTTPS URL — Safaricom will not call back to http:// or localhost.");
-  }
 
   const storageVars = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
   const missingStorage = storageVars.filter((v) => !process.env[v]);
@@ -30,9 +15,6 @@ function checkEnv() {
   }
   if ((process.env.BREVO_API_KEY || process.env.RESEND_API_KEY) && !process.env.EMAIL_FROM) {
     warnings.push("EMAIL_FROM is not set — emails rely on Sender Email in Announcements > Email Settings. If that is blank, nothing is sent.");
-  }
-  if (process.env.SKIP_OTP_VERIFICATION === "true") {
-    warnings.push("SKIP_OTP_VERIFICATION is on — new accounts skip email verification. Turn it off once email is delivering.");
   }
   if (!process.env.BREVO_API_KEY) {
     warnings.push("SMS notifications are not configured (BREVO_API_KEY) — turning on SMS in Announcements settings will just log instead of sending.");

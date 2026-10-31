@@ -85,8 +85,6 @@ async function loadSystemHealth() {
     setText("storageStatusTime", now);
     setStatus("cloudinaryStatus", health.storageConfigured, "Configured", "Not configured");
     setText("cloudinaryStatusTime", now);
-    setStatus("mpesaStatus", health.mpesaConfigured, "Configured", "Not configured");
-    setText("mpesaStatusTime", now);
 
     setText("storageUsed", formatBytes(health.storage.galleryBytes));
     setText("databaseSize", health.db.sizeBytes != null ? formatBytes(health.db.sizeBytes) : "N/A");

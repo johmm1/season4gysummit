@@ -215,7 +215,7 @@ type="text"
 
 id="participantSearch"
 
-placeholder="Search by Name, Admission Code or Phone Number">
+placeholder="Search name, email, phone, ID number or admission code">
 
 </div>
 
@@ -413,39 +413,31 @@ All Admission Status
 
 <option value="issued">
 
-Admitted
+Pass Issued
 
 </option>
 
 <option value="not_issued">
 
-Pending
+No Pass
 
 </option>
 
 </select>
 
-<select id="filterPayment">
-
-<option value="">
-
-All Payment Status
-
-</option>
-
-<option value="CONFIRMED">
-
-Paid
-
-</option>
-
-<option value="PENDING_PAYMENT">
-
-Unpaid
-
-</option>
-
+<select id="filterRegistration">
+<option value="">All Registration Status</option>
+<option value="CONFIRMED">Registered</option>
 </select>
+
+<select id="filterMedical">
+<option value="">All Medical Status</option>
+<option value="yes">Medical information declared</option>
+<option value="no">No medical condition declared</option>
+</select>
+
+<input type="date" id="filterCreatedFrom" aria-label="Registered from">
+<input type="date" id="filterCreatedTo" aria-label="Registered to">
 
 </div>
 
@@ -455,23 +447,23 @@ EXPORT BUTTONS
 
 <div class="toolbar-right">
 
-<button class="secondary-btn">
+<button class="secondary-btn" id="exportParticipantsCsv">
 
-<i class="fa-solid fa-file-pdf"></i>
+<i class="fa-solid fa-file-csv"></i>
 
-Export PDF
+Download CSV
 
 </button>
 
-<button class="secondary-btn">
+<button class="secondary-btn" id="exportParticipantsExcel">
 
 <i class="fa-solid fa-file-excel"></i>
 
-Export Excel
+Download CSV
 
 </button>
 
-<button class="primary-btn">
+<button class="primary-btn" id="printParticipantsList">
 
 <i class="fa-solid fa-print"></i>
 
@@ -531,7 +523,7 @@ Complete registry of all summit participants.
 
 <th>Medical Condition</th>
 
-<th>Payment</th>
+<th>Registration</th>
 
 <th>Admission</th>
 
@@ -825,13 +817,13 @@ Summit Details
 
 <div>
 
-<label>Payment Status</label>
+<label>Registration Status</label>
 
 <p>
 
 <span
 
-id="drawerPayment"
+id="drawerRegistration"
 
 class="badge success">
 
@@ -1155,7 +1147,7 @@ Finance Officer
 
 <td>
 
-Manage payments and receipts.
+Manage participant records and admission codes.
 
 </td>
 

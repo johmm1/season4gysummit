@@ -1,7 +1,7 @@
 // Y-Summit Season 4 2026 — registration & ticketing
 const { Router } = require("express");
 const { z } = require("zod");
-const { Registration, Payment, GroupBankReference } = require("../models");
+const { Registration } = require("../models");
 const { requireAuth } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
 const { getSetting } = require("../services/settingsService");
@@ -16,7 +16,6 @@ router.get(
   asyncHandler(async (req, res) => {
     const registration = await Registration.findOne({
       where: { userId: req.auth.userId },
-      include: [{ model: Payment, as: "payments" }],
     });
     if (!registration) throw new ApiError(404, "No registration found");
     res.json({ registration });
@@ -46,23 +45,6 @@ router.post(
     await registration.save();
 
     res.json({ registration });
-  })
-);
-
-router.get(
-  "/verify-bank-reference/:code",
-  asyncHandler(async (req, res) => {
-    const code = req.params.code.trim().toUpperCase();
-    const ref = await GroupBankReference.findOne({ where: { code } });
-    if (!ref || !ref.isActive) return res.json({ valid: false, availableSlots: 0, usedSlots: 0 });
-
-    res.json({
-      valid: ref.usedSlots < ref.totalSlots,
-      parish: ref.parish,
-      availableSlots: Math.max(0, ref.totalSlots - ref.usedSlots),
-      usedSlots: ref.usedSlots,
-      totalSlots: ref.totalSlots,
-    });
   })
 );
 

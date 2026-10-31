@@ -79,15 +79,21 @@ async function loadParticipants(page = 1) {
   try {
     const params = new URLSearchParams({ page: String(page), pageSize: "25" });
     const search = $("participantSearch")?.value.trim();
-    const status = $("filterPayment")?.value;
+    const status = $("filterRegistration")?.value;
     const gender = $("filterGender")?.value;
     const parishId = $("filterParish")?.value;
     const admission = $("filterAdmission")?.value;
+    const medical = $("filterMedical")?.value;
+    const createdFrom = $("filterCreatedFrom")?.value;
+    const createdTo = $("filterCreatedTo")?.value;
     if (search) params.set("search", search);
     if (status) params.set("status", status);
     if (gender) params.set("gender", gender);
     if (parishId) params.set("parishId", parishId);
     if (admission) params.set("admission", admission);
+    if (medical) params.set("medical", medical);
+    if (createdFrom) params.set("createdFrom", createdFrom);
+    if (createdTo) params.set("createdTo", createdTo);
 
     const { items, total, totalPages } = await apiFetch(`/admin/participants?${params}`);
     renderTable(items);
@@ -118,7 +124,7 @@ function renderTable(items) {
         <td>${escapeHtml(u.phone || "—")}</td>
         <td>${escapeHtml(u.medicalCondition || "None")}</td>
         <td>${escapeHtml(u.registration?.status || "—")}</td>
-        <td>${u.admissionCard ? "Issued" : "—"}</td>
+        <td>${u.admissionCard?.isRevoked ? "Revoked" : u.admissionCard ? "Issued" : "—"}</td>
         <td><button class="btn btn-sm btn-outline" data-action="view" data-id="${u.id}">View</button></td>
       </tr>`
     )
@@ -140,8 +146,8 @@ function renderCounts(items, total) {
   setText("totalParticipants", total);
   setText("maleParticipants", items.filter((i) => i.gender === "MALE").length);
   setText("femaleParticipants", items.filter((i) => i.gender === "FEMALE").length);
-  setText("pendingParticipants", items.filter((i) => i.registration?.status === "PENDING_PAYMENT").length);
-  setText("admittedParticipants", items.filter((i) => i.admissionCard).length);
+  setText("pendingParticipants", items.filter((i) => !i.attendances?.some((a) => a.type === "CHECK_IN")).length);
+  setText("admittedParticipants", items.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
 }
 
 function renderPagination(totalPages, page) {
@@ -168,7 +174,7 @@ async function openDrawer(id) {
     setText("drawerRelationship", "Emergency contact");
     setText("drawerEmergencyPhone", user.emergencyContactPhone || "—");
     setText("drawerMedical", user.hasMedicalCondition ? (user.medicalCondition || "Yes") : "None reported");
-    setText("drawerPayment", user.registration?.status || "—");
+    setText("drawerRegistration", user.registration?.status === "CONFIRMED" ? "Registered" : user.registration?.status || "—");
     setText("drawerAdmission", user.admissionCard?.cardNumber || "Not issued");
     setText("drawerAdmissionStatus", user.admissionCard ? (user.admissionCard.isRevoked ? "Revoked" : "Active") : "—");
     setText("drawerDate", formatDate(user.registration?.createdAt));
@@ -217,8 +223,34 @@ $("confirmDelete")?.addEventListener("click", async () => {
 function wireFilters() {
   const debouncedReload = debounce(() => loadParticipants(1), 350);
   $("participantSearch")?.addEventListener("input", debouncedReload);
-  $("filterPayment")?.addEventListener("change", () => loadParticipants(1));
+  $("filterRegistration")?.addEventListener("change", () => loadParticipants(1));
+  $("filterMedical")?.addEventListener("change", () => loadParticipants(1));
+  $("filterCreatedFrom")?.addEventListener("change", () => loadParticipants(1));
+  $("filterCreatedTo")?.addEventListener("change", () => loadParticipants(1));
   $("filterGender")?.addEventListener("change", () => loadParticipants(1));
   $("filterParish")?.addEventListener("change", () => loadParticipants(1));
   $("filterAdmission")?.addEventListener("change", () => loadParticipants(1));
 }
+
+
+function exportParticipantsCsv() {
+  const rows = [["Admission Code", "Name", "Parish", "Gender", "Age", "Phone", "Medical Information", "Registration Status", "Admission Pass"]];
+  document.querySelectorAll("#participantsTable tbody tr").forEach((tr) => {
+    const cells = [...tr.querySelectorAll("td")].map((td) => td.textContent.trim());
+    if (cells.length >= 10) rows.push(cells.slice(1, 10));
+  });
+  if (rows.length === 1) return showError("No participant rows to export.");
+  const csv = rows.map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "y-summit-participants.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+$("exportParticipantsCsv")?.addEventListener("click", exportParticipantsCsv);
+$("exportParticipantsExcel")?.addEventListener("click", exportParticipantsCsv);
+$("printParticipantsList")?.addEventListener("click", () => window.print());
+

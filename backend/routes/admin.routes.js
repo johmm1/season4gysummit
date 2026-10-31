@@ -1,17 +1,18 @@
-// Y-Summit Season 4 2026 — admin: dashboard, participants, settings, admin accounts, bank references
+// Y-Summit Season 4 2026 — admin: dashboard, participants, settings and admin accounts
 const { Router } = require("express");
 const { Op, fn, col } = require("sequelize");
 const { z } = require("zod");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const {
-  User, Registration, Payment, Attendance, GroupBankReference, SystemSetting, Presbytery, Parish, Church, AdmissionCard, AuditLog,
+  User, Registration, Attendance, SystemSetting, Presbytery, Parish, Church, AdmissionCard, AuditLog,
 } = require("../models");
 const { requireAuth, requireRole, ADMIN_ROLES } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
 const { getRequestCount } = require("../middleware/requestCounter");
 const { logAction } = require("../services/auditService");
 const { runBackup, listBackups, getBackupPath } = require("../services/backupService");
-const { normalizePhone } = require("../services/mpesaService");
+const { normalizePhone } = require("../services/phoneUtils");
 const { invalidateSettingsCache, getForm } = require("../services/settingsService");
 const { issueAdmissionCardForUser } = require("../services/admissionService");
 const { notify, emailStatus, sendTransactionalEmail } = require("../services/notificationService");
@@ -47,13 +48,12 @@ router.post(
 router.get(
   "/dashboard/stats",
   asyncHandler(async (_req, res) => {
-    const [totalUsers, confirmedRegistrations, pendingRegistrations, revenueRow, totalCheckIns, byParish] =
+    const [totalUsers, confirmedRegistrations, totalCongregations, totalCheckIns, byParish] =
       await Promise.all([
         User.count({ where: { role: "PARTICIPANT" } }),
         Registration.count({ where: { status: "CONFIRMED" } }),
-        Registration.count({ where: { status: "PENDING_PAYMENT" } }),
-        Payment.sum("amount", { where: { status: "SUCCESS" } }),
-        Attendance.count({ where: { type: "CHECK_IN" } }),
+        Church.count(),
+        Attendance.count({ where: { type: "CHECK_IN" }, distinct: true, col: "userId" }),
         User.findAll({
           attributes: ["parishId", [fn("COUNT", col("User.id")), "count"]],
           where: { role: "PARTICIPANT", parishId: { [Op.ne]: null } },
@@ -67,8 +67,7 @@ router.get(
     res.json({
       totalUsers,
       confirmedRegistrations,
-      pendingRegistrations,
-      totalRevenue: revenueRow || 0,
+      totalCongregations,
       totalCheckIns,
       topPresbyteries: byParish.map((r) => ({
         presbytery: r.Parish?.name || "Unassigned",
@@ -87,18 +86,30 @@ router.get(
 
     const where = { role: "PARTICIPANT" };
     if (req.query.parishId) where.parishId = req.query.parishId;
+    if (req.query.presbyteryId) where.presbyteryId = req.query.presbyteryId;
+    if (req.query.churchId) where.churchId = req.query.churchId;
     if (req.query.gender) where.gender = req.query.gender;
+    if (req.query.medical === "yes") where.hasMedicalCondition = true;
+    if (req.query.medical === "no") where.hasMedicalCondition = false;
+    if (req.query.createdFrom || req.query.createdTo) {
+      where.createdAt = {};
+      if (req.query.createdFrom) where.createdAt[Op.gte] = new Date(`${req.query.createdFrom}T00:00:00.000Z`);
+      if (req.query.createdTo) where.createdAt[Op.lte] = new Date(`${req.query.createdTo}T23:59:59.999Z`);
+    }
     if (search) {
       where[Op.or] = [
         { fullName: { [Op.iLike]: `%${search}%` } },
         { email: { [Op.iLike]: `%${search}%` } },
         { phone: { [Op.iLike]: `%${search}%` } },
+        { idNumber: { [Op.iLike]: `%${search}%` } },
+        { "$admissionCard.cardNumber$": { [Op.iLike]: `%${search}%` } },
       ];
     }
 
     const include = [
       { model: Registration, as: "registration", where: req.query.status ? { status: req.query.status } : undefined, required: Boolean(req.query.status) },
       { model: AdmissionCard, as: "admissionCard", required: req.query.admission === "issued" },
+      { model: Attendance, as: "attendances", required: false },
       { model: Presbytery },
       { model: Parish },
       { model: Church },
@@ -127,7 +138,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.params.id, {
       include: [
-        { model: Registration, as: "registration", include: [{ model: Payment, as: "payments" }] },
+        { model: Registration, as: "registration" },
         { model: AdmissionCard, as: "admissionCard" },
         { model: Attendance, as: "attendances" },
         { model: Presbytery },
@@ -155,41 +166,6 @@ router.patch(
     if (!user) throw new ApiError(404, "Participant not found");
     await user.update(body);
     res.json({ user });
-  })
-);
-
-// ---- Bank references ----
-
-router.get(
-  "/bank-references",
-  requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"),
-  asyncHandler(async (_req, res) => {
-    const items = await GroupBankReference.findAll({ order: [["createdAt", "DESC"]] });
-    res.json({ items });
-  })
-);
-
-router.post(
-  "/bank-references",
-  requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"),
-  asyncHandler(async (req, res) => {
-    const body = z
-      .object({ code: z.string().min(3).max(40), parish: z.string().min(2).max(120), totalSlots: z.number().int().positive() })
-      .parse(req.body);
-    const item = await GroupBankReference.create({ ...body, code: body.code.trim().toUpperCase() });
-    res.status(201).json({ item });
-  })
-);
-
-router.patch(
-  "/bank-references/:id",
-  requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"),
-  asyncHandler(async (req, res) => {
-    const body = z.object({ totalSlots: z.number().int().positive().optional(), isActive: z.boolean().optional() }).parse(req.body);
-    const item = await GroupBankReference.findByPk(req.params.id);
-    if (!item) throw new ApiError(404, "Bank reference not found");
-    await item.update(body);
-    res.json({ item });
   })
 );
 
@@ -228,59 +204,25 @@ router.post(
       fullName: body.fullName,
       passwordHash,
       role: body.role,
+      isVerified: false,
     });
-    res.status(201).json({ admin, temporaryPassword: body.temporaryPassword });
+    const rawOtp = String(crypto.randomInt(100000, 1000000));
+    admin.otpHash = crypto.createHash("sha256").update(rawOtp).digest("hex");
+    admin.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    admin.otpChannel = "email";
+    await admin.save();
+    const frontendUrl = ((process.env.FRONTEND_URL || "").split(",")[0].trim() || req.get("origin") || "").replace(/\/$/, "");
+    const verifyLink = frontendUrl + "/verify-otp.html?email=" + encodeURIComponent(admin.email);
+    try {
+      await sendTransactionalEmail(admin.email, "Y-Summit administrator account verification",
+        "Hello " + admin.fullName + ", your administrator verification code is " + rawOtp +
+        ". It expires in 10 minutes.\n\nVerify your email here: " + verifyLink +
+        "\n\nAfter verification, use Forgot Password on the login page to set your password.");
+    } catch (err) {
+      console.error("[admin-create] verification email failed:", err.message);
+    }
+    res.status(201).json({ admin, verificationRequired: true });
     await logAction(req.auth.userId, "ADMIN_CREATED", "admin_account", admin.id, { email: admin.email, role: admin.role });
-  })
-);
-
-// ---- Payments awaiting manual approval ----
-// Only ever populated when Finance > Payment Controls > "Require Manual
-// Approval" is on — otherwise successful payments auto-confirm and this
-// list is always empty.
-
-router.get(
-  "/registrations/awaiting-approval",
-  requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"),
-  asyncHandler(async (_req, res) => {
-    const registrations = await Registration.findAll({
-      where: { status: "PENDING_PAYMENT" },
-      include: [
-        { model: User, as: "user", attributes: ["id", "fullName", "email", "phone"] },
-        { model: Payment, as: "payments", where: { status: "SUCCESS" }, required: true },
-      ],
-      order: [["createdAt", "DESC"]],
-    });
-    res.json({ registrations });
-  })
-);
-
-router.post(
-  "/registrations/:id/approve",
-  requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"),
-  asyncHandler(async (req, res) => {
-    const registration = await Registration.findByPk(req.params.id, {
-      include: [
-        { model: Payment, as: "payments" },
-        { model: User, as: "user", attributes: ["id", "fullName", "email", "phone"] },
-      ],
-    });
-    if (!registration) throw new ApiError(404, "Registration not found");
-    if (registration.status === "CONFIRMED") throw new ApiError(409, "Already confirmed");
-
-    const hasSuccessfulPayment = registration.payments?.some((p) => p.status === "SUCCESS");
-    if (!hasSuccessfulPayment) throw new ApiError(400, "No successful payment found for this registration");
-
-    registration.status = "CONFIRMED";
-    await registration.save();
-    await issueAdmissionCardForUser(registration.userId);
-
-    notify("notifyPayment", "paymentTemplate", { email: registration.user?.email, phone: registration.user?.phone },
-      "Y-Summit Season 4 2026 — Payment approved",
-      { name: registration.user?.fullName, amount: registration.amountDue });
-
-    await logAction(req.auth.userId, "PAYMENT_MANUALLY_APPROVED", "registration", registration.id, {});
-    res.json({ registration });
   })
 );
 
@@ -353,7 +295,6 @@ router.get(
       uptimeSeconds: Math.round(process.uptime()),
       db: { status: dbStatus, pingMs: dbPingMs, sizeBytes: databaseBytes },
       storageConfigured: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
-      mpesaConfigured: Boolean(process.env.MPESA_CONSUMER_KEY),
       storage: { galleryBytes },
       participantCount,
       memory: { usedMb: Math.round(mem.rss / 1024 / 1024), percent: memPercent },

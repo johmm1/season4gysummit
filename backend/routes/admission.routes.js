@@ -5,7 +5,7 @@ const PDFDocument = require("pdfkit");
 const { AdmissionCard, User, Attendance, Parish, Registration } = require("../models");
 const { requireAuth, requireRole, ADMIN_ROLES } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
-const { renderQrDataUrl, renderQrBuffer, verifyAdmissionToken } = require("../services/qrService");
+const { renderQrDataUrl, renderQrBuffer } = require("../services/qrService");
 const { getForm } = require("../services/settingsService");
 
 const router = Router();
@@ -15,7 +15,7 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const card = await AdmissionCard.findOne({ where: { userId: req.auth.userId } });
-    if (!card) throw new ApiError(404, "No admission card yet — payment must be confirmed first");
+    if (!card) throw new ApiError(404, "No admission pass is available yet. Please contact an administrator.");
     const admissionSettings = await getForm("admissionSettingsForm");
     const qrImage = await renderQrDataUrl(card.qrCode, Number(admissionSettings.qrSize) || 480);
     res.json({ card, qrImage });
@@ -64,40 +64,6 @@ router.get(
   })
 );
 
-const scanSchema = z.object({
-  token: z.string().min(10),
-  type: z.enum(["CHECK_IN", "SESSION", "MEAL", "SPORTS"]).default("CHECK_IN"),
-  label: z.string().max(120).optional(),
-});
-
-router.post(
-  "/scan",
-  requireAuth,
-  requireRole(...ADMIN_ROLES),
-  asyncHandler(async (req, res) => {
-    const body = scanSchema.parse(req.body);
-    const verified = verifyAdmissionToken(body.token);
-    if (!verified) throw new ApiError(400, "Invalid or tampered QR code");
-
-    const card = await AdmissionCard.findOne({ where: { userId: verified.userId }, include: [{ model: User, as: "user", include: [{ model: Parish }] }] });
-    if (!card) throw new ApiError(404, "No admission card matches this code");
-    if (card.isRevoked) throw new ApiError(403, "This admission card has been revoked");
-
-    const attendance = await Attendance.create({
-      userId: card.userId,
-      admissionCardId: card.id,
-      type: body.type,
-      label: body.label,
-      scannedById: req.auth.userId,
-    });
-
-    res.status(201).json({
-      attendance,
-      participant: { fullName: card.user.fullName, cardNumber: card.cardNumber, parish: card.user.Parish?.name },
-    });
-  })
-);
-
 router.get(
   "/lookup/:cardNumber",
   requireAuth,
@@ -132,6 +98,10 @@ router.post(
     const card = await AdmissionCard.findByPk(req.params.cardId, { include: [{ model: User, as: "user", include: [{ model: Parish }] }] });
     if (!card) throw new ApiError(404, "Card not found");
     if (card.isRevoked) throw new ApiError(403, "This admission card has been revoked");
+    const previousCheckIn = await Attendance.findOne({ where: { admissionCardId: card.id, type: "CHECK_IN" } });
+    if (previousCheckIn && !label?.toLowerCase().startsWith("re-entry")) {
+      throw new ApiError(409, "This participant has already been checked in. Use the re-entry option if needed.");
+    }
 
     const attendance = await Attendance.create({
       userId: card.userId,

@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Finance | Y-Summit Season 4 2026</title>
+<title>Registrations | Y-Summit Season 4 2026</title>
 
 <link rel="stylesheet" href="../assets/css/variables.css">
 <link rel="stylesheet" href="../assets/css/style.css">
@@ -136,7 +136,7 @@ Finance & Admission Centre
 
 <p>
 
-Manage parish payments, registrations and admissions.
+Manage participant registrations, admissions and attendance.
 
 </p>
 
@@ -215,7 +215,7 @@ placeholder="Search parish, participant, admission code...">
 
 <p>
 
-Paid Participants
+Admission Passes Issued
 
 </p>
 
@@ -293,7 +293,7 @@ Admitted
 
 <p>
 
-Awaiting Admission
+Awaiting Check-in
 
 </p>
 
@@ -306,130 +306,19 @@ Awaiting Admission
 <!-- ======================================================
 ADMISSION CENTRE
 ====================================================== -->
-
 <section class="dashboard-panel">
+  <div class="section-title">
+    <h2>Admission Centre</h2>
+    <p>Enter a participant admission code to view their details and complete check-in.</p>
+  </div>
+  <div class="admission-card">
+    <label for="admissionCode">Admission Code</label>
+    <input type="text" id="admissionCode" placeholder="GY2026-00001">
+    <button type="button" id="searchAdmission" class="primary-btn"><i class="fa-solid fa-magnifying-glass"></i> Search Participant</button>
+  </div>
+</section>
 
-<div class="section-title">
-
-<h2>
-
-Admission Centre
-
-</h2>
-
-<p>
-
-Scan participant QR code or search using Admission Code.
-
-</p>
-
-</div>
-
-<div class="admission-grid">
-
-<!-- ==========================
-QR SCANNER CARD
-========================== -->
-
-<div class="admission-card">
-
-<div class="card-title">
-
-<i class="fa-solid fa-qrcode"></i>
-
-<h3>
-
-QR Scanner
-
-</h3>
-
-</div>
-
-<div class="scanner-area" id="scannerContainer">
-
-<div class="scanner-placeholder" id="scannerPlaceholder">
-
-<i class="fa-solid fa-camera"></i>
-
-<p>
-
-QR Scanner Preview
-
-</p>
-
-</div>
-
-</div>
-
-<button
-id="startScanner"
-class="primary-btn">
-
-<i class="fa-solid fa-camera"></i>
-
-Start Scanner
-
-</button>
-
-</div>
-
-<!-- ==========================
-ADMISSION CODE CARD
-========================== -->
-
-<div class="admission-card">
-
-<div class="card-title">
-
-<i class="fa-solid fa-keyboard"></i>
-
-<h3>
-
-Admission Code
-
-</h3>
-
-</div>
-
-<label>
-
-Enter Admission Code
-
-</label>
-
-<input
-
-type="text"
-
-id="admissionCode"
-
-placeholder="GY2026-00001">
-
-<button
-
-id="searchAdmission"
-
-class="primary-btn">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-Search Participant
-
-</button>
-
-<div class="search-note">
-
-<i class="fa-solid fa-circle-info"></i>
-
-Use this option if QR scanning fails.
-
-</div>
-
-</div>
-
-</div>
-
-</section><!-- ======================================================
+<!-- ======================================================
 PARTICIPANT VERIFICATION
 ====================================================== -->
 
@@ -445,7 +334,7 @@ Participant Verification
 
 <p>
 
-Participant information loaded after QR Scan or Admission Code Search.
+Participant information loaded after Admission Code Search.
 
 </p>
 
@@ -545,15 +434,15 @@ No Participant Selected
 
 <div>
 
-<label>Payment Status</label>
+<label>Registration Status</label>
 
 <p>
 
 <span
-id="paymentStatus"
+id="registrationStatus"
 class="badge success">
 
-NOT VERIFIED
+REGISTERED
 
 </span>
 
@@ -664,179 +553,19 @@ Print Admission Slip
 </section>
 
 
-<!-- ===========================
-REGISTRATION CALCULATOR
-=========================== -->
-
-<section class="dashboard-panel">
-
-<div class="section-title">
-
-<h2>
-
-<i class="fa-solid fa-calculator"></i>
-
-Registration Calculator
-
-</h2>
-
-<p>
-
-Every participant who registers is treated as fully paid — the amount in account is simply registered participants × ticket price. The M-Pesa figure is kept separately purely for transaction-level audit, not as a payment gate.
-
-</p>
-
-</div>
-
-<div class="overview-grid">
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-users"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcRegisteredCount">
-
-0
-
-</h2>
-
-<p>
-
-Registered Participants
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-tag"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcTicketPrice">
-
-KES 0
-
-</h2>
-
-<p>
-
-Ticket Price
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-equals"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcExpectedTotal">
-
-KES 0
-
-</h2>
-
-<p>
-
-Actual Amount in Account (Registered × Price)
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-mobile-screen"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcCollectedTotal">
-
-KES 0
-
-</h2>
-
-<p>
-
-M-Pesa Verified (audit only)
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-circle-check"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcOutstandingTotal">
-
-100%
-
-</h2>
-
-<p>
-
-Payment Rate
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
 <section class="parish-section">
 
 <div class="section-title">
 
 <h2>
 
-Parish Finance Dashboard
+Parish Registration & Admission Dashboard
 
 </h2>
 
 <p>
 
-Select a parish below to manage its finance and admissions.
+Select a parish below to review registrations and admission progress.
 
 </p>
 
@@ -870,7 +599,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Registered</span>
 
 <strong id="kagaaPaid">50</strong>
 
@@ -934,7 +663,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Available Slots</span>
 
 <strong id="githigaPaid">50</strong>
 
@@ -998,7 +727,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Passes Issued</span>
 
 <strong id="gathanjiPaid">50</strong>
 
@@ -1662,15 +1391,15 @@ Awaiting Admission
 
 <div>
 
-<h2 id="bankReference">
+<h2 id="parishAdmissionInfo">
 
-GY-KAG-001
+Manual admission-code lookup
 
 </h2>
 
 <p>
 
-Bank Reference
+Admission Code
 
 </p>
 
@@ -1818,7 +1547,7 @@ placeholder="Search participant...">
 
 <th>Phone</th>
 
-<th>Payment</th>
+<th>Registration</th>
 
 <th>Admission</th>
 
@@ -1987,599 +1716,6 @@ FOOTER
 ====================================================== -->
 
 
-
-<!-- ======================================================
-FINANCE SETTINGS (moved from the old monolithic Settings page)
-====================================================== -->
-
-<section class="dashboard-panel full-panel">
-
-<div class="panel-header">
-
-<h2>
-
-<i class="fa-solid fa-gear"></i>
-
-Finance Settings
-
-</h2>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-Finance Configuration
-
-</h2>
-
-</div>
-
-<form id="financeSettingsForm">
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-
-Registration Fee (KES)
-
-</label>
-
-<input
-type="number"
-id="financeRegistrationFee"
-min="0">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Currency
-
-</label>
-
-<select id="currency">
-
-<option value="KES">
-
-Kenyan Shilling (KES)
-
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Payment Deadline
-
-</label>
-
-<input
-type="date"
-id="paymentDeadline">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Late Registration Fee (KES)
-
-</label>
-
-<input
-type="number"
-id="lateFee">
-
-</div>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_financeSettingsForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-M-Pesa Configuration
-
-</h2>
-
-</div>
-
-<form id="mpesaSettingsForm">
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-
-Business Type
-
-</label>
-
-<select id="businessType">
-
-<option>
-
-Paybill
-
-</option>
-
-<option>
-
-Buy Goods
-
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Paybill / Till Number
-
-</label>
-
-<input
-type="text"
-id="paybillNumber">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Account Number
-
-</label>
-
-<input
-type="text"
-id="accountNumber">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Business Name
-
-</label>
-
-<input
-type="text"
-id="businessName">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Consumer Key
-
-</label>
-
-<input
-type="password"
-id="consumerKey">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Consumer Secret
-
-</label>
-
-<input
-type="password"
-id="consumerSecret">
-
-</div>
-
-<div class="form-group full-width">
-
-<label>
-
-Callback URL
-
-</label>
-
-<input
-type="url"
-id="callbackUrl"
-readonly>
-
-</div>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_mpesaSettingsForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-Bank Payment
-
-</h2>
-
-</div>
-
-<form id="bankSettingsForm">
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-
-Bank Name
-
-</label>
-
-<input
-type="text"
-id="bankName">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Branch
-
-</label>
-
-<input
-type="text"
-id="bankBranch">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Account Name
-
-</label>
-
-<input
-type="text"
-id="bankAccountName">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Account Number
-
-</label>
-
-<input
-type="text"
-id="bankAccountNumber">
-
-</div>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_bankSettingsForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-Payment Controls
-
-</h2>
-
-</div>
-
-<form id="paymentControlsForm">
-
-<div class="settings-switches">
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Enable M-Pesa
-
-</strong>
-
-<p>
-
-Allow M-Pesa payments.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="enableMpesa"
-checked>
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Enable Bank Payments
-
-</strong>
-
-<p>
-
-Allow bank deposit verification.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="enableBank"
-checked>
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Automatic Verification
-
-</strong>
-
-<p>
-
-Verify Daraja transactions automatically.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="autoVerify">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Allow Manual Approval
-
-</strong>
-
-<p>
-
-Finance officers can approve payments manually.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="manualApproval">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Enable Refunds
-
-</strong>
-
-<p>
-
-Allow refund processing.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input
-type="checkbox"
-id="refundsEnabled">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_paymentControlsForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-Receipt Settings
-
-</h2>
-
-</div>
-
-<form id="receiptSettingsForm">
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-
-Receipt Prefix
-
-</label>
-
-<input
-type="text"
-id="receiptPrefix"
-placeholder="GY26">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Starting Receipt Number
-
-</label>
-
-<input
-type="number"
-id="receiptStart">
-
-</div>
-
-<div class="form-group full-width">
-
-<label>
-
-Receipt Footer
-
-</label>
-
-<textarea
-rows="4"
-id="receiptFooter"></textarea>
-
-</div>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_receiptSettingsForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
 
 </section>
 

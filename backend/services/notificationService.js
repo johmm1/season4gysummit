@@ -20,7 +20,7 @@
 
 const axios = require("axios");
 const { getForm } = require("./settingsService");
-const { normalizePhone } = require("./mpesaService");
+const { normalizePhone } = require("./phoneUtils");
 
 // ---------------- Email (Brevo or Resend) ----------------
 //
@@ -114,7 +114,6 @@ async function emailStatus() {
   const problems = [];
   if (!provider) problems.push("No provider key: add BREVO_API_KEY (or RESEND_API_KEY) in your hosting environment variables.");
   if (!senderEmail) problems.push("No sender address: fill Sender Email in Email Settings, or set EMAIL_FROM.");
-  if (process.env.SKIP_OTP_VERIFICATION === "true") problems.push("SKIP_OTP_VERIFICATION is on, so sign-up verification codes are skipped. Remove it once email works.");
   if (!process.env.FRONTEND_URL) problems.push("FRONTEND_URL is not set, so password-reset links may be broken.");
   return { provider, senderEmail: senderEmail || null, ready: Boolean(provider && senderEmail), problems, last: lastEmailResult };
 }

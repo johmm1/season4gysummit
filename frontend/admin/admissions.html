@@ -145,7 +145,7 @@ Admission Control Centre
 
 <p>
 
-Scan, verify and admit participants in real time.
+Search, verify and admit participants by admission code.
 
 </p>
 
@@ -368,73 +368,7 @@ ADMISSION DESK
 
 <section class="admission-workspace">
 
-<!-- ======================================================
-QR SCANNER
-====================================================== -->
-
-<div class="scanner-card">
-
-<div class="card-header">
-
-<h2>
-
-QR Code Scanner
-
-</h2>
-
-<span class="status active">
-
-READY
-
-</span>
-
-</div>
-
-<div class="scanner-window">
-
-<div class="scanner-frame">
-
-<div class="scan-line"></div>
-
-</div>
-
-<i class="fa-solid fa-qrcode scanner-icon"></i>
-
-<p>
-
-Scan the participant's Admission Pass QR Code.
-
-</p>
-
-</div>
-
-<div class="scanner-actions">
-
-<button class="btn btn-primary"
-id="startScanner">
-
-<i class="fa-solid fa-camera"></i>
-
-Start Camera
-
-</button>
-
-<button class="btn btn-outline"
-id="stopScanner">
-
-<i class="fa-solid fa-stop"></i>
-
-Stop
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ======================================================
-MANUAL VERIFICATION
-====================================================== -->
+<!-- Manual admission-code lookup -->
 
 <div class="manual-card">
 
@@ -521,7 +455,7 @@ Search
 
 <strong>
 
-Scanner
+Manual Verification
 
 </strong>
 
@@ -582,38 +516,6 @@ Today's Admissions
 </div>
 
 </div>
-
-</div>
-
-</section>
-
-<!-- ======================================================
-READY TO SCAN
-====================================================== -->
-
-<section
-id="readyState"
-class="dashboard-panel">
-
-<div class="ready-state">
-
-<div class="ready-icon">
-
-<i class="fa-solid fa-qrcode"></i>
-
-</div>
-
-<h2>
-
-Ready to Scan
-
-</h2>
-
-<p>
-
-Scan a QR Code or enter an Admission Code to retrieve participant details.
-
-</p>
 
 </div>
 
@@ -766,24 +668,6 @@ Participant Name
 <p id="participantId">
 
 —
-
-</p>
-
-</div>
-
-<div>
-
-<label>Payment Status</label>
-
-<p>
-
-<span id="paymentStatus"
-
-class="badge success">
-
-PAID
-
-</span>
 
 </p>
 
@@ -1204,13 +1088,13 @@ Awaiting Decision
 
 <label>
 
-Scanning Device
+Admission Method
 
 </label>
 
 <p>
 
-Main Gate Scanner
+Manual Admission Code
 
 </p>
 
@@ -1226,7 +1110,7 @@ Verification Method
 
 <p id="verificationMethod">
 
-QR Code
+Admission Code
 
 </p>
 
@@ -1665,33 +1549,7 @@ Check-in Rules
 
 <div class="settings-switches">
 
-<label class="switch-row">
 
-<div>
-
-<strong>
-
-Enable QR Check-in
-
-</strong>
-
-<p>
-
-Participants can be admitted by scanning QR codes.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input type="checkbox" id="enableQrCheckin">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
 
 <label class="switch-row">
 
@@ -1761,7 +1619,7 @@ Prevent Duplicate Check-in
 
 <p>
 
-Blocks multiple admissions using the same QR code.
+Blocks duplicate admissions using the same admission code.
 
 </p>
 
@@ -1770,34 +1628,6 @@ Blocks multiple admissions using the same QR code.
 <label class="switch">
 
 <input type="checkbox" id="preventDuplicate">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Require Payment Before Admission
-
-</strong>
-
-<p>
-
-Only verified payments may enter.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input type="checkbox" id="requirePayment">
 
 <span class="slider"></span>
 
@@ -1994,19 +1824,7 @@ id="defaultGate">
 
 </div>
 
-<div class="form-group">
 
-<label>
-
-Maximum Concurrent Scanners
-
-</label>
-
-<input
-type="number"
-id="maxScanners">
-
-</div>
 
 <div class="form-group">
 

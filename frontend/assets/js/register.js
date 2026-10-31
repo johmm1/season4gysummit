@@ -1,9 +1,9 @@
 // Y-Summit Season 4 2026 — registration page
 // Step navigation (next1..next3/back1..back3) and the medical-info toggle
 // are already wired by the inline <script> in register.html. This module
-// handles: dynamic parish->church loading, bank-reference verification,
-// profile photo upload, and final account creation.
-import { apiFetch, showError, showSuccess, $ } from "./utils.js";
+// handles: dynamic parish->church loading, optional profile photo reminder,
+// and final participant account creation.
+import { apiFetch, showError, $ } from "./utils.js";
 import { setToken } from "./auth.js";
 
 let selectedPresbyteryId = null;

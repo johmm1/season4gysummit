@@ -29,7 +29,7 @@ async function loadStats() {
     setText("checkedInParticipants", stats.totalCheckIns);
     setText("pendingPayments", stats.pendingRegistrations);
     setText("totalRevenue", formatKes(stats.totalRevenue));
-    setText("parishCount", stats.topPresbyteries.length);
+    setText("parishCount", stats.totalCongregations ?? 0);
 
     const highest = stats.topPresbyteries[0];
     const lowest = stats.topPresbyteries[stats.topPresbyteries.length - 1];

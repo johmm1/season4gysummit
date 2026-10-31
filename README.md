@@ -1,9 +1,8 @@
 # Y-Summit Season 4 2026 — Event Registration & Management Platform
 
 Full-stack platform for Y-Summit Season 4 2026 (PCEA Githunguri Presbytery):
-registration, M-Pesa payments, parish bank-reference bulk registration, QR
-admission cards, gate check-in, admin dashboards for participants, finance,
-announcements, gallery, and sports.
+registration, admission-code passes, manual gate check-in, admin dashboards
+for participants, registrations, announcements, gallery, and sports.
 
 ## Stack
 
@@ -81,16 +80,6 @@ npm run dev          # http://localhost:4000
 
 Health check: `GET http://localhost:4000/health`
 
-### M-Pesa (Daraja) setup
-
-1. Create an app at developer.safaricom.co.ke under "Lipa Na M-Pesa Online"
-2. For local testing, expose your machine with `ngrok http 4000` and set
-   `MPESA_CALLBACK_URL` to `https://<ngrok-id>.ngrok.io/api/payments/callback`
-3. Use the published sandbox shortcode `174379` and its test passkey until
-   you go live
-4. Switch `MPESA_ENV=production` with your real paybill/till credentials
-   when ready to charge real money
-
 ### Cloudinary (gallery + profile photos)
 
 Free account at cloudinary.com — copy your Cloud Name, API Key, and API
@@ -165,8 +154,7 @@ Email goes out through **Brevo or Resend**, whichever API key is set
 environment variable if that is blank. The sender must be verified with the
 provider (Brevo: Senders; Resend: Domains). Use **Admin > Announcements >
 Email delivery check** to see what is missing and to send a test email.
-While `SKIP_OTP_VERIFICATION=true` sign-ups skip the emailed code; delete that
-variable once the test email arrives.
+Participant registration is immediate without OTP. Newly created administrator accounts must verify their email before first login.
 
 ## 4. Deploy
 
@@ -183,8 +171,7 @@ repo with `frontend` as the root directory), import it — it's static
 HTML, no build step. Update `FRONTEND_URL` on the backend to your Vercel
 URL so CORS allows it.
 
-After both are deployed: set `MPESA_CALLBACK_URL` on Render to your real
-Render URL, and `PRODUCTION_API_URL` in `frontend/assets/js/config.js` to
+After both are deployed: set `PRODUCTION_API_URL` in `frontend/assets/js/config.js` to
 your real Render URL, then redeploy the frontend.
 
 ## Auth model
@@ -208,16 +195,13 @@ or build a small admin page for it (not included yet — see gaps below).
 
 - JWT-based signup/login, full multi-step registration form with a working
   parish → church cascading dropdown
-- Two registration→payment paths: individual M-Pesa STK push, and parish
-  bulk pre-payment via bank-reference codes (admin-issued, slot-limited)
-- HMAC-signed QR admission cards, printable PDF pass, camera-based check-in
-  scanner (html5-qrcode) with live attendance logging
+- Participant self-registration without payment steps
+- Admission-code lookup and manual check-in, with printable admission passes
 - Announcements (admin CRUD, participant feed, pinning)
 - Gallery (Cloudinary signed direct uploads, admin moderation)
 - Sports (fixture creation, live score updates, computed standings)
 - Admin dashboard stats, participant management with search/filter/drawer
-- Finance: per-parish payment/admission breakdown, Excel export, revenue
-  summary
+- Registration and admission overview with downloadable registration exports
 - Admin settings: ~15 settings forms saved generically as JSON, admin
   account creation
 
@@ -293,16 +277,6 @@ back to the typed name with no image.
 - Leave the relevant env vars blank to keep a channel off — the app logs
   what it *would* have sent instead of failing.
 
-## M-Pesa STK push on registration
-
-The STK push now fires automatically as part of `POST /auth/register`
-(standard registration, not the group/bank-reference path) instead of
-needing a separate "Pay Now" step — the participant gets the M-Pesa PIN
-prompt on their phone before the registration API call even returns. A
-Daraja failure here (offline, bad credentials) never fails the
-registration itself; the participant can still pay manually afterwards
-from their dashboard the same way as before.
-
 ## Storage — Supabase (previously Cloudinary)
 
 Gallery photos, profile photos, and admin-uploaded files (certificate
@@ -324,34 +298,6 @@ Supabase project (no internet access in this environment) — the exact
 request/response shape was verified against Supabase's current docs, but
 **test one real upload (e.g. a profile photo) right after deploying**. If
 it fails, the most likely cause is the bucket not being set to public.
-
-## Registration OTP verification
-
-Self-registration now requires verifying an email or SMS code before the
-account can log in — the participant picks the channel on the register
-form. A few design choices worth knowing:
-
-- **Every other account-creation path stays exempt.** `User.isVerified`
-  defaults to `true` at the database level; `POST /auth/register` is the
-  *only* place that explicitly sets it `false`. Admin-created accounts and
-  the seed script's initial admin were never touched and stay usable
-  immediately — this was deliberate specifically so a deploy of this
-  change can't accidentally lock out existing/seeded accounts.
-- Registration itself still succeeds immediately (ticket price, capacity
-  and date checks, the M-Pesa STK push) — only *logging in* is gated on
-  verification, via `POST /auth/verify-otp` (redeemed at
-  `verify-otp.html`). `POST /auth/resend-otp` exists for expired/lost
-  codes, with the same "same response either way" anti-enumeration
-  pattern as forgot-password.
-- Codes are 6 digits, expire in 10 minutes, and — like password reset —
-  are sent via a path that ignores the Announcements "Enable Email/SMS"
-  toggles, since account verification isn't an optional marketing
-  channel.
-- One known limitation: the profile-photo picker on the register form
-  can't actually upload during registration anymore (there's no session
-  token yet, since none is issued until verification) — the participant
-  is told to add it afterwards from their profile page instead of the
-  upload silently failing.
 
 ## Certificate bulk download (for printing)
 
@@ -400,8 +346,8 @@ are the ones wired to real effects so far:
 | Admission Code Prefix / Starting Number (Admissions) | Real prefix/sequence on issued admission cards |
 | QR Code Size (Admissions) | Actual size of generated QR images |
 | Registration Fee, Payment Deadline / Late Fee (Finance) | Added to the amount charged once the deadline passes |
-| Enable M-Pesa / Enable Bank Reference (Finance → Payment Controls) | Registration/payment endpoints reject that method when off |
-| Require Manual Approval (Finance → Payment Controls) | Successful M-Pesa payments wait for `POST /admin/registrations/:id/approve` instead of auto-confirming |
+
+
 | Max Upload Size / Allowed Formats (Gallery) | Enforced on every upload |
 | Auto-Publish / Require Approval (Gallery → Visibility) | Controls whether participant uploads need moderation |
 | Allow Downloads (Gallery → Download Permissions) | Global master switch over every item's own downloadable flag |
@@ -409,7 +355,7 @@ are the ones wired to real effects so far:
 | Enable Football / Volleyball / Dance (Sports → General) | New fixtures in a disabled category are rejected |
 | Football Win/Draw Points (Sports → Football Rules) | Used by the new `GET /api/sports/standings` points table |
 | Dance Scoring weights (Sports) | Used to compute every dance performance's weighted average live |
-| Notification Channels / Auto Messages / Templates (Announcements) | Real email (Brevo), SMS (Brevo), and WhatsApp (Brevo) sent on registration, payment, admission, announcement publish, and certificate issuance |
+| Notification Channels / Auto Messages / Templates (Announcements) | Real email (Brevo), SMS (Brevo), and WhatsApp (Brevo) sent on registration, admission, announcement publish, and certificate issuance |
 
 Watermarking (Gallery) is still not wired — it needs an actual image
 watermark uploaded and processed (e.g. via Cloudinary transformations),

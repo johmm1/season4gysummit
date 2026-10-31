@@ -105,6 +105,7 @@ router.post(
     const { email, otp } = verifyOtpSchema.parse(req.body);
     const user = await User.findOne({ where: { email: email.toLowerCase() } });
 
+    if (!user || user.role === "PARTICIPANT") throw new ApiError(403, "Email verification is only required for administrator accounts.");
     const otpHash = crypto.createHash("sha256").update(otp).digest("hex");
     const valid = user && user.otpHash === otpHash && user.otpExpiresAt && user.otpExpiresAt > new Date();
     if (!valid) throw new ApiError(400, "That code is incorrect or has expired. Request a new one and try again.");
@@ -120,21 +121,21 @@ router.post(
   })
 );
 
-const resendOtpSchema = z.object({ email: z.string().email(), channel: z.enum(["email", "phone"]).optional() });
+const resendOtpSchema = z.object({ email: z.string().email() });
 
 router.post(
   "/resend-otp",
   authLimiter,
   asyncHandler(async (req, res) => {
-    const { email, channel } = resendOtpSchema.parse(req.body);
+    const { email } = resendOtpSchema.parse(req.body);
     const user = await User.findOne({ where: { email: email.toLowerCase() } });
 
     // Same generic response whether or not the account exists / is already
     // verified, so this can't be used to enumerate accounts either.
     const generic = { message: "If that account needs verifying, a new code has been sent." };
-    if (!user || user.isVerified) return res.json(generic);
+    if (!user || user.isVerified || user.role === "PARTICIPANT") return res.json(generic);
 
-    const useChannel = channel || user.otpChannel || "email";
+    const useChannel = "email";
     const rawOtp = String(crypto.randomInt(100000, 1000000));
     user.otpHash = crypto.createHash("sha256").update(rawOtp).digest("hex");
     user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
@@ -143,8 +144,7 @@ router.post(
 
     const message = `Your Y-Summit Season 4 2026 verification code is ${rawOtp}. It expires in 10 minutes.`;
     try {
-      if (useChannel === "phone") await sendSms(user.phone, message);
-      else await sendTransactionalEmail(user.email, "Y-Summit Season 4 2026 — Verify your account", message);
+      await sendTransactionalEmail(user.email, "Y-Summit Season 4 2026 — Verify your administrator account", message);
     } catch (err) {
       console.error("[resend-otp] failed to send:", err.message);
     }
@@ -180,7 +180,7 @@ router.post(
     }
 
     if (!user.isVerified) {
-      throw new ApiError(403, "Please verify your account first — enter the code we sent you, or request a new one.");
+      throw new ApiError(403, "Please verify your administrator account using the code sent to your email.");
     }
 
     user.lastLoginAt = new Date();
@@ -338,7 +338,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.auth.userId, {
       include: [
-        { model: Registration, as: "registration", include: [{ model: Payment, as: "payments" }] },
+        { model: Registration, as: "registration" },
         { model: AdmissionCard, as: "admissionCard" },
         { model: Presbytery },
         { model: Parish },

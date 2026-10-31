@@ -1,4 +1,4 @@
-// Y-Summit Season 4 2026 — admin: dashboard, participants, settings, admin accounts, bank references
+// Y-Summit Season 4 2026 — admin: dashboard, participants, settings and admin accounts
 const { Router } = require("express");
 const { Op, fn, col } = require("sequelize");
 const { z } = require("zod");

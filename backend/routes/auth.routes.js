@@ -5,16 +5,15 @@ const crypto = require("crypto");
 const { z } = require("zod");
 const rateLimit = require("express-rate-limit");
 const { OAuth2Client } = require("google-auth-library");
-const { sequelize, User, Registration, Payment, AdmissionCard, GroupBankReference, Presbytery, Parish, Church } = require("../models");
+const { sequelize, User, Registration, AdmissionCard, Presbytery, Parish, Church } = require("../models");
 const { signToken } = require("../services/jwtService");
 const { issueAdmissionCardForUser } = require("../services/admissionService");
-const { normalizePhone } = require("../services/mpesaService");
+const { normalizePhone } = require("../services/phoneUtils");
 const { logAction } = require("../services/auditService");
 const { requireAuth } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
 const { getForm } = require("../services/settingsService");
-const { notify, sendTransactionalEmail, sendSms } = require("../services/notificationService");
-const { initiateStkPush } = require("../services/mpesaService");
+const { notify, sendTransactionalEmail } = require("../services/notificationService");
 
 // Fallback only — the real values come from the admin's General Settings
 // (generalSettingsForm: registrationFee, maximumParticipants, registrationOpen/Close)
@@ -56,8 +55,6 @@ const registerSchema = z.object({
   medicalNotes: z.string().max(1000).optional(),
   disability: z.string().max(500).optional(),
   avatarUrl: z.string().url().optional(),
-  bankReferenceCode: z.string().max(40).optional(),
-  otpChannel: z.enum(["email", "phone"]).default("email"),
 });
 
 router.post(
@@ -65,198 +62,37 @@ router.post(
   authLimiter,
   asyncHandler(async (req, res) => {
     const body = registerSchema.parse(req.body);
-
     const general = await getForm("generalSettingsForm");
     let ticketPrice = general.registrationFee !== undefined && general.registrationFee !== ""
       ? Number(general.registrationFee)
       : FALLBACK_TICKET_PRICE;
-
-    // Finance > Payment Deadline / Late Fee — adds a surcharge once the
-    // deadline has passed, instead of the deadline being purely decorative.
-    const finance = await getForm("financeSettingsForm");
     const today = new Date().toISOString().slice(0, 10);
-    if (finance.paymentDeadline && today > finance.paymentDeadline && finance.lateFee) {
-      ticketPrice += Number(finance.lateFee);
-    }
-
-    // Registration window — only enforced once the admin has actually set
-    // a date; an unset field means "no restriction" rather than "always closed".
-    if (general.registrationOpen && today < general.registrationOpen) {
-      throw new ApiError(403, `Registration opens on ${general.registrationOpen}.`);
-    }
-    if (general.registrationClose && today > general.registrationClose) {
-      throw new ApiError(403, `Registration closed on ${general.registrationClose}.`);
-    }
-
-    // Capacity — only enforced once the admin has set a positive max.
-    if (general.maximumParticipants) {
-      const cap = Number(general.maximumParticipants);
-      if (cap > 0) {
-        const currentCount = await Registration.count();
-        if (currentCount >= cap) {
-          throw new ApiError(409, "Registration is full. The maximum number of participants has been reached.");
-        }
-      }
-    }
-
-    const existingEmail = await User.findOne({ where: { email: body.email.toLowerCase() } });
-    if (existingEmail) throw new ApiError(409, "An account with this email already exists.");
-
-    let bankReference = null;
-    if (body.bankReferenceCode) {
-      const controls = await getForm("paymentControlsForm");
-      if (controls.enableBank === false) {
-        throw new ApiError(503, "Group/parish bank-reference registration is temporarily disabled. Please register individually via M-Pesa.");
-      }
-      bankReference = await GroupBankReference.findOne({ where: { code: body.bankReferenceCode.trim().toUpperCase() } });
-      if (!bankReference || !bankReference.isActive) throw new ApiError(400, "Bank reference code not found or inactive.");
-      if (bankReference.usedSlots >= bankReference.totalSlots) throw new ApiError(409, "This bank reference has no available slots left.");
-    }
-
+    if (general.registrationOpen && today < general.registrationOpen) throw new ApiError(403, `Registration opens on ${general.registrationOpen}.`);
+    if (general.registrationClose && today > general.registrationClose) throw new ApiError(403, `Registration closed on ${general.registrationClose}.`);
+    if (general.maximumParticipants && Number(general.maximumParticipants) > 0 && await Registration.count() >= Number(general.maximumParticipants)) throw new ApiError(409, "Registration is full.");
+    if (await User.findOne({ where: { email: body.email.toLowerCase() } })) throw new ApiError(409, "An account with this email already exists.");
     const passwordHash = await bcrypt.hash(body.password, 12);
-
-    // TEMPORARY: email isn't sending yet (BREVO_API_KEY not configured
-    // on Render), so nobody can receive the OTP needed to complete
-    // self-registration. SKIP_OTP_VERIFICATION lets registrations go
-    // through anyway — verify accounts immediately and log the person
-    // straight in, no code needed. Meant to come back later: once email
-    // (or SMS) is actually delivering, remove SKIP_OTP_VERIFICATION from
-    // Render's env vars and this whole path is dead code that never runs
-    // — nothing else needs to change back.
-    const skipOtp = process.env.SKIP_OTP_VERIFICATION === "true";
-
     const user = await sequelize.transaction(async (t) => {
-      const created = await User.create(
-        {
-          fullName: body.fullName,
-          email: body.email.toLowerCase(),
-          phone: normalizePhone(body.phone),
-          passwordHash,
-          isVerified: skipOtp || false, // self-registration is the one path that requires OTP verification (unless skipped above)
-          presbyteryId: body.presbyteryId,
-          parishId: body.parishId,
-          churchId: body.churchId,
-          dateOfBirth: body.dateOfBirth || null,
-          gender: body.gender,
-          emergencyContactName: body.emergencyContactName,
-          emergencyContactPhone: body.emergencyContactPhone ? normalizePhone(body.emergencyContactPhone) : undefined,
-          idNumber: body.idNumber,
-          hasMedicalCondition: body.hasMedicalCondition ?? false,
-          medicalCondition: body.medicalCondition,
-          medication: body.medication,
-          allergies: body.allergies,
-          medicalNotes: body.medicalNotes,
-          disability: body.disability,
-          avatarUrl: body.avatarUrl,
-          role: "PARTICIPANT",
-        },
-        { transaction: t }
-      );
-
-      if (bankReference) {
-        const [updatedCount] = await GroupBankReference.update(
-          { usedSlots: bankReference.usedSlots + 1 },
-          { where: { id: bankReference.id, usedSlots: bankReference.usedSlots }, transaction: t }
-        );
-        if (updatedCount === 0) throw new ApiError(409, "This bank reference has no available slots left.");
-
-        await Registration.create(
-          { userId: created.id, ticketType: "GROUP", amountDue: 0, status: "CONFIRMED", bankReferenceId: bankReference.id },
-          { transaction: t }
-        );
-      } else {
-        await Registration.create(
-          { userId: created.id, ticketType: "STANDARD", amountDue: ticketPrice, status: "CONFIRMED" },
-          { transaction: t }
-        );
-      }
-
+      const created = await User.create({
+        fullName: body.fullName, email: body.email.toLowerCase(), phone: normalizePhone(body.phone),
+        passwordHash, isVerified: true, presbyteryId: body.presbyteryId, parishId: body.parishId,
+        churchId: body.churchId, dateOfBirth: body.dateOfBirth || null, gender: body.gender,
+        emergencyContactName: body.emergencyContactName,
+        emergencyContactPhone: body.emergencyContactPhone ? normalizePhone(body.emergencyContactPhone) : undefined,
+        idNumber: body.idNumber, hasMedicalCondition: body.hasMedicalCondition ?? false,
+        medicalCondition: body.medicalCondition, medication: body.medication, allergies: body.allergies,
+        medicalNotes: body.medicalNotes, disability: body.disability, avatarUrl: body.avatarUrl, role: "PARTICIPANT",
+      }, { transaction: t });
+      await Registration.create({ userId: created.id, ticketType: "STANDARD", amountDue: ticketPrice, status: "CONFIRMED" }, { transaction: t });
       return created;
     });
-
     const registration = await Registration.findOne({ where: { userId: user.id } });
-    if (registration.status === "CONFIRMED") {
-      await issueAdmissionCardForUser(user.id);
-    }
-
+    await issueAdmissionCardForUser(user.id);
     notify("notifyRegistration", "registrationTemplate", { email: user.email, phone: user.phone },
       "Y-Summit Season 4 2026 — Registration received",
       { name: user.fullName, ticketType: registration.ticketType, amountDue: registration.amountDue });
-
-    // Auto-trigger the M-Pesa STK push right at registration instead of
-    // making the participant find a separate "Pay Now" step — they get the
-    // PIN prompt on their phone before the registration response even
-    // arrives. Only for the standard (non-bank-reference) path, and only
-    // when M-Pesa is enabled; a failure here (Daraja down, bad creds) must
-    // never fail the registration itself — the participant can still pay
-    // manually from their dashboard afterwards.
-    let stkPush = null;
-    if (registration.status === "PENDING_PAYMENT" && registration.amountDue > 0) {
-      try {
-        const controls = await getForm("paymentControlsForm");
-        if (controls.enableMpesa !== false) {
-          const stk = await initiateStkPush({
-            phone: body.phone,
-            amount: registration.amountDue,
-            accountReference: registration.id,
-            description: "Y-Summit Season 4 2026",
-          });
-          if (stk.ResponseCode === "0") {
-            const payment = await Payment.create({
-              registrationId: registration.id,
-              amount: registration.amountDue,
-              phone: normalizePhone(body.phone),
-              status: "PENDING",
-              merchantRequestId: stk.MerchantRequestID,
-              checkoutRequestId: stk.CheckoutRequestID,
-            });
-            stkPush = { sent: true, paymentId: payment.id, checkoutRequestId: stk.CheckoutRequestID };
-          }
-        }
-      } catch (err) {
-        console.error("[register] STK push failed — participant can still pay manually:", err.response?.data || err.message);
-      }
-    }
-
-    // Self-registration requires OTP verification before a session token
-    // is issued — /auth/verify-otp is what actually logs them in. Admin-
-    // created and seeded accounts skip this entirely (isVerified defaults
-    // to true everywhere except this one path). Also skipped when
-    // SKIP_OTP_VERIFICATION is on — see the note above, near isVerified.
-    let otpDelivery = { channel: body.otpChannel };
-    if (!skipOtp) {
-      try {
-        const rawOtp = String(crypto.randomInt(100000, 1000000));
-        user.otpHash = crypto.createHash("sha256").update(rawOtp).digest("hex");
-        user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-        user.otpChannel = body.otpChannel;
-        await user.save();
-
-        const message = `Your Y-Summit Season 4 2026 verification code is ${rawOtp}. It expires in 10 minutes.`;
-        if (body.otpChannel === "phone") {
-          await sendSms(user.phone, message);
-        } else {
-          await sendTransactionalEmail(user.email, "Y-Summit Season 4 2026 — Verify your account", message);
-        }
-      } catch (err) {
-        console.error("[register] failed to send OTP:", err.message);
-        otpDelivery.error = "We couldn't send the code automatically — use \"Resend code\" on the next screen to try again.";
-      }
-    }
-
-    if (skipOtp) {
-      await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role, otpSkipped: true });
-      const token = signToken(user);
-      return res.status(201).json({ skippedVerification: true, token, user, stkPush });
-    }
-
-    res.status(201).json({
-      requiresVerification: true,
-      email: user.email,
-      otpChannel: body.otpChannel,
-      otpDelivery,
-      stkPush,
-    });
+    await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role });
+    res.status(201).json({ token: signToken(user), user, registration });
   })
 );
 

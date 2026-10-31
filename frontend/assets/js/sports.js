@@ -771,6 +771,14 @@ async function exportStandingsCsv() {
   }
 }
 
+
+function exportPrayerListTemplate() {
+  downloadCsv("y-summit-prayer-list-template.csv", [[
+    "Date", "Time", "Prayer Leader", "Presbytery", "Parish", "Church",
+    "Prayer Focus", "Notes", "Status",
+  ]]);
+}
+
 function wireReportExports() {
   $("exportFootball")?.addEventListener("click", () => exportFixtureResults(["Football"]));
   $("exportVolleyball")?.addEventListener("click", () => exportFixtureResults(["Volleyball"]));
@@ -778,5 +786,6 @@ function wireReportExports() {
   $("exportAll")?.addEventListener("click", () => exportFixtureResults([...new Set(allEventsCache.map((event) => event.category))]));
   $("exportTeams")?.addEventListener("click", exportTeamLists);
   $("exportStandings")?.addEventListener("click", exportStandingsCsv);
+  $("exportPrayerTemplate")?.addEventListener("click", exportPrayerListTemplate);
 }
 

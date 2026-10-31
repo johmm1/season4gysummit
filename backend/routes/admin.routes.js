@@ -211,8 +211,13 @@ router.post(
     admin.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
     admin.otpChannel = "email";
     await admin.save();
+    const frontendUrl = ((process.env.FRONTEND_URL || "").split(",")[0].trim() || req.get("origin") || "").replace(/\/$/, "");
+    const verifyLink = frontendUrl + "/verify-otp.html?email=" + encodeURIComponent(admin.email);
     try {
-      await sendTransactionalEmail(admin.email, "Y-Summit administrator account verification", `Hello ${admin.fullName}, your administrator verification code is ${rawOtp}. It expires in 10 minutes.`);
+      await sendTransactionalEmail(admin.email, "Y-Summit administrator account verification",
+        "Hello " + admin.fullName + ", your administrator verification code is " + rawOtp +
+        ". It expires in 10 minutes.\n\nVerify your email here: " + verifyLink +
+        "\n\nAfter verification, use Forgot Password on the login page to set your password.");
     } catch (err) {
       console.error("[admin-create] verification email failed:", err.message);
     }

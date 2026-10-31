@@ -32,7 +32,7 @@ window.loadParish = async function loadParish(parishName) {
     const registered = participants.length;
     const totalSlots = 50;
 
-    setText("paidSlots", paid);
+    setText("paidSlots", Math.max(0, totalSlots - registered));
     setText("registeredSlots", registered);
     setText("availableSlots", Math.max(0, totalSlots - registered));
     setText("admittedCount", admitted);
@@ -115,16 +115,11 @@ async function loadOverview() {
     setText("overallPending", summary.awaitingAdmission);
     setText("overallAdmitted", summary.admittedCount);
 
-    setText("calcRegisteredCount", summary.calculator.registeredCount);
-    setText("calcTicketPrice", "—");
-    setText("calcExpectedTotal", "—");
-    setText("calcCollectedTotal", "—");
-    setText("calcOutstandingTotal", "—");
 
     for (const prefix of PARISH_ID_PREFIXES) {
       const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
       setText(`${prefix}Registered`, matches.length);
-      setText(`${prefix}Paid`, matches.filter((i) => i.registration?.status === "CONFIRMED").length);
+      setText(`${prefix}Paid`, Math.max(0, 50 - matches.length));
       setText(`${prefix}Admitted`, matches.filter((i) => i.admissionCard).length);
     }
   } catch (err) {
@@ -221,7 +216,7 @@ function renderVerificationPanel(participant, card, registrationStatus, alreadyA
   const photo = $("participantPhoto");
   if (photo && participant.avatarUrl) photo.src = participant.avatarUrl;
 
-  const paymentBadge = $("paymentStatus");
+  const paymentBadge = $("registrationStatus");
   if (paymentBadge) {
     paymentBadge.textContent = registrationStatus === "CONFIRMED" ? "REGISTERED" : "NOT REGISTERED";
     paymentBadge.className = `badge ${registrationStatus === "CONFIRMED" ? "success" : "warning"}`;

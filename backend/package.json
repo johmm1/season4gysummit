@@ -2,7 +2,7 @@
   "name": "gy-summit-2026-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "Y-Summit Season 4 2026 API — MySQL/Sequelize, JWT auth, M-Pesa, QR admission, attendance, admin dashboards",
+  "description": "Y-Summit Season 4 2026 API — PostgreSQL/Sequelize, JWT auth, registration, admission passes, attendance and admin dashboards",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {

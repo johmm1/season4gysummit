@@ -11,14 +11,6 @@
 function checkEnv() {
   const warnings = [];
 
-  const mpesaVars = ["MPESA_CONSUMER_KEY", "MPESA_CONSUMER_SECRET", "MPESA_SHORTCODE", "MPESA_PASSKEY", "MPESA_CALLBACK_URL"];
-  const missingMpesa = mpesaVars.filter((v) => !process.env[v]);
-  if (missingMpesa.length) {
-    warnings.push(`M-Pesa payments will fail — missing: ${missingMpesa.join(", ")}`);
-  } else if (process.env.MPESA_CALLBACK_URL && !process.env.MPESA_CALLBACK_URL.startsWith("https://")) {
-    warnings.push("MPESA_CALLBACK_URL should be a public HTTPS URL — Safaricom will not call back to http:// or localhost.");
-  }
-
   const storageVars = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
   const missingStorage = storageVars.filter((v) => !process.env[v]);
   if (missingStorage.length) {

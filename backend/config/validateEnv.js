@@ -23,9 +23,6 @@ function checkEnv() {
   if ((process.env.BREVO_API_KEY || process.env.RESEND_API_KEY) && !process.env.EMAIL_FROM) {
     warnings.push("EMAIL_FROM is not set — emails rely on Sender Email in Announcements > Email Settings. If that is blank, nothing is sent.");
   }
-  if (process.env.SKIP_OTP_VERIFICATION === "true") {
-    warnings.push("SKIP_OTP_VERIFICATION is on — new accounts skip email verification. Turn it off once email is delivering.");
-  }
   if (!process.env.BREVO_API_KEY) {
     warnings.push("SMS notifications are not configured (BREVO_API_KEY) — turning on SMS in Announcements settings will just log instead of sending.");
   } else if (!process.env.BREVO_SMS_SENDER) {

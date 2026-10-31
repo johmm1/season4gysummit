@@ -14,7 +14,6 @@ const { logAction } = require("../services/auditService");
 const { runBackup, listBackups, getBackupPath } = require("../services/backupService");
 const { normalizePhone } = require("../services/phoneUtils");
 const { invalidateSettingsCache, getForm } = require("../services/settingsService");
-const { issueAdmissionCardForUser } = require("../services/admissionService");
 const { notify, emailStatus, sendTransactionalEmail } = require("../services/notificationService");
 
 const router = Router();

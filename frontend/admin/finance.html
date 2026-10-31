@@ -215,7 +215,7 @@ placeholder="Search parish, participant, admission code...">
 
 <p>
 
-Paid Participants
+Admitted Participants
 
 </p>
 
@@ -293,7 +293,7 @@ Admitted
 
 <p>
 
-Awaiting Admission
+Awaiting Check-in
 
 </p>
 
@@ -439,7 +439,7 @@ No Participant Selected
 <p>
 
 <span
-id="paymentStatus"
+id="registrationStatus"
 class="badge success">
 
 NOT VERIFIED
@@ -553,179 +553,19 @@ Print Admission Slip
 </section>
 
 
-<!-- ===========================
-REGISTRATION CALCULATOR
-=========================== -->
-
-<section class="dashboard-panel">
-
-<div class="section-title">
-
-<h2>
-
-<i class="fa-solid fa-calculator"></i>
-
-Registration Calculator
-
-</h2>
-
-<p>
-
-Every participant who registers is treated as fully paid — the amount in account is simply registered participants × ticket price. 
-
-</p>
-
-</div>
-
-<div class="overview-grid">
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-users"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcRegisteredCount">
-
-0
-
-</h2>
-
-<p>
-
-Registered Participants
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-tag"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcTicketPrice">
-
-KES 0
-
-</h2>
-
-<p>
-
-Ticket Price
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-equals"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcExpectedTotal">
-
-KES 0
-
-</h2>
-
-<p>
-
-Actual Amount in Account (Registered × Price)
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-mobile-screen"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcCollectedTotal">
-
-KES 0
-
-</h2>
-
-<p>
-
-M-Pesa Verified (audit only)
-
-</p>
-
-</div>
-
-</div>
-
-<div class="overview-card">
-
-<div class="overview-icon">
-
-<i class="fa-solid fa-circle-check"></i>
-
-</div>
-
-<div>
-
-<h2 id="calcOutstandingTotal">
-
-100%
-
-</h2>
-
-<p>
-
-Admission Rate
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
 <section class="parish-section">
 
 <div class="section-title">
 
 <h2>
 
-Parish Finance Dashboard
+Parish Registration & Admission Dashboard
 
 </h2>
 
 <p>
 
-Select a parish below to manage its finance and admissions.
+Select a parish below to review registrations and admission progress.
 
 </p>
 
@@ -823,7 +663,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Available Slots</span>
 
 <strong id="githigaPaid">50</strong>
 
@@ -1551,9 +1391,9 @@ Awaiting Admission
 
 <div>
 
-<h2 id="bankReference">
+<h2 id="parishAdmissionInfo">
 
-GY-KAG-001
+Manual admission-code lookup
 
 </h2>
 

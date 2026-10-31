@@ -744,12 +744,23 @@ function exportFixtureResults(categories) {
 async function exportTeamLists() {
   try {
     const { teams } = await apiFetch("/sports/teams");
-    const rows = [["Competition", "Team", "Parish", "Gender", "Coach", "Chairperson", "Members"]];
-    for (const team of teams) rows.push([
-      team.category, team.name, team.Parish?.name, team.gender, team.coachName,
-      team.chairpersonName, team.memberCount ?? team.members?.length ?? 0,
-    ]);
-    downloadCsv("y-summit-team-lists.csv", rows);
+    const rosters = await Promise.all(teams.map(async (team) => {
+      const { members } = await apiFetch(`/sports/teams/${team.id}/members`);
+      return { team, members };
+    }));
+    const rows = [["Competition", "Team", "Parish", "Coach", "Chairperson", "Member", "Gender", "Date of Birth", "Position", "Jersey Number", "Captain"]];
+    for (const { team, members } of rosters) {
+      if (!members.length) {
+        rows.push([team.category, team.name, team.Parish?.name, team.coachName, team.chairpersonName, "", "", "", "", "", ""]);
+        continue;
+      }
+      for (const entry of members) rows.push([
+        team.category, team.name, team.Parish?.name, team.coachName, team.chairpersonName,
+        entry.user?.fullName, entry.user?.gender, entry.user?.dateOfBirth,
+        entry.position, entry.jerseyNumber, entry.isCaptain ? "Yes" : "No",
+      ]);
+    }
+    downloadCsv("y-summit-team-lists-and-rosters.csv", rows);
   } catch (err) {
     showError(err.message || "Could not export team lists.");
   }

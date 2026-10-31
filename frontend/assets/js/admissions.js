@@ -1,7 +1,6 @@
 // Y-Summit Season 4 2026 — admin live admissions / gate check-in
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
 import { apiFetch, showError, showSuccess, setText, $ } from "./utils.js";
-import { startAdmissionScanner, stopAdmissionScanner } from "./qrScanner.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
 
 const ADMISSION_FORMS = ["admissionSettingsForm", "checkinRulesForm", "badgeSettingsForm", "gateSettingsForm"];
@@ -13,7 +12,6 @@ if (admin) {
   wireLogoutButton();
   tickClock();
   await refreshCounts();
-  wireScannerButtons();
   wireManualVerify();
   wireDecisionButtons();
   await loadPageSettings(ADMISSION_FORMS);
@@ -51,26 +49,6 @@ function renderFeed(items) {
 
 function escapeAttr(s) {
   return String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
-}
-
-function wireScannerButtons() {
-  $("startScanner")?.addEventListener("click", async () => {
-    try {
-      await startAdmissionScanner("verificationPanel", { type: "CHECK_IN" }, (result) => {
-        lastScanResult = result;
-        showParticipant(result.participant);
-        refreshCounts();
-      });
-      setText("readyState", "Scanning...");
-    } catch {
-      showError("Could not start camera. Check permissions.");
-    }
-  });
-
-  $("stopScanner")?.addEventListener("click", async () => {
-    await stopAdmissionScanner();
-    setText("readyState", "Idle");
-  });
 }
 
 function wireManualVerify() {
@@ -111,20 +89,12 @@ function wireDecisionButtons() {
 async function recordDecision(type, label) {
   if (!lastScanResult) return showError("Scan or look up a participant first.");
   try {
-    // A camera scan already recorded the attendance the instant it was
-    // scanned (POST /admission/scan happens inside qrScanner.js) — this
-    // decision step just confirms that on screen, so don't record it
-    // again here or it duplicates the attendance entry.
-    if (!lastScanResult.attendance) {
-      const cardId = lastScanResult.participant?.admissionCard?.id;
-      if (!cardId) {
-        return showError("This participant doesn't have an admission card yet — payment must be confirmed first.");
-      }
-      lastScanResult = await apiFetch(`/admission/${cardId}/admit`, {
-        method: "POST",
-        body: { label: label ? `${label} (manual lookup)` : undefined },
-      });
-    }
+    const cardId = lastScanResult.participant?.admissionCard?.id;
+    if (!cardId) return showError("This participant has no admission code. Please contact an administrator.");
+    lastScanResult = await apiFetch(`/admission/${cardId}/admit`, {
+      method: "POST",
+      body: { label: label ? `${label} (manual lookup)` : undefined },
+    });
     setText("decisionStatus", "Admitted");
     showSuccess("Participant admitted.");
     await refreshCounts();

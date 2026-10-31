@@ -6,7 +6,6 @@
 import { apiFetch, showError, showSuccess, $ } from "./utils.js";
 import { setToken } from "./auth.js";
 
-let bankReferenceVerified = false;
 let selectedPresbyteryId = null;
 let selectedParishId = null;
 
@@ -88,38 +87,8 @@ function selectValueAsInt(id) {
   return Number.isFinite(n) ? n : undefined;
 }
 
-// ---- Bank reference verification ----
-$("verifyBank")?.addEventListener("click", async () => {
-  const code = $("bankReference").value.trim();
-  if (!code) {
-    showError("Enter a bank reference number first.");
-    return;
-  }
-  const statusInput = $("referenceStatus");
-  statusInput.value = "Checking...";
-
-  try {
-    const result = await apiFetch(`/registration/verify-bank-reference/${encodeURIComponent(code)}`);
-    $("availableSlots").value = result.availableSlots ?? 0;
-    $("usedSlots").value = result.usedSlots ?? 0;
-
-    if (result.valid) {
-      statusInput.value = `Verified — ${result.parish}`;
-      bankReferenceVerified = true;
-      showSuccess("Bank reference verified. A slot will be reserved for you.");
-    } else {
-      statusInput.value = "Not Verified";
-      bankReferenceVerified = false;
-      showError("That code is invalid, inactive, or fully used. You can still register and pay by M-Pesa after signing in.");
-    }
-  } catch (err) {
-    statusInput.value = "Not Verified";
-    bankReferenceVerified = false;
-    showError(err.message || "Could not verify bank reference right now.");
-  }
-});
-
 // ---- Final submission ----
+
 const form = $("registerForm");
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -143,7 +112,6 @@ form?.addEventListener("submit", async (e) => {
   }
 
   try {
-    const bankReference = $("bankReference")?.value.trim();
     const presbyteryId = selectValueAsInt("presbytery");
     const parishId = selectValueAsInt("parish");
     const churchId = selectValueAsInt("church");
@@ -169,37 +137,13 @@ form?.addEventListener("submit", async (e) => {
         allergies: $("allergies")?.value.trim() || undefined,
         medicalNotes: $("medicalNotes")?.value.trim() || undefined,
         disability: $("disability")?.value.trim() || undefined,
-        bankReferenceCode: bankReferenceVerified && bankReference ? bankReference : undefined,
-        otpChannel: $("otpChannel")?.value || "email",
       },
     });
 
-    if (result.stkPush?.sent) {
-      showSuccess("Registration received! Check your phone for the M-Pesa PIN prompt to pay.");
-    }
+    if ($("profilePhoto")?.files?.[0]) sessionStorage.setItem("gySummitAddPhotoReminder", "1");
 
-    // Uploading needs an authenticated session, which doesn't exist yet —
-    // no token is issued until OTP verification succeeds. Rather than try
-    // to smuggle the File object across a page navigation (it can't
-    // survive one), just let them know to add it afterwards from their
-    // profile page.
-    if ($("profilePhoto")?.files?.[0]) {
-      sessionStorage.setItem("gySummitAddPhotoReminder", "1");
-    }
-
-    // TEMPORARY (matches SKIP_OTP_VERIFICATION on the backend, see
-    // auth.routes.js): while that's on, registration returns a real
-    // session token instead of requiresVerification, so log straight in
-    // rather than sending them to a code-entry screen for a code that
-    // was never generated. Once the backend toggle is removed, this
-    // branch just never fires again — nothing else to revert here.
-    if (result.skippedVerification) {
-      setToken(result.token);
-      window.location.href = "participant/dashboard.html";
-      return;
-    }
-
-    window.location.href = `verify-otp.html?email=${encodeURIComponent(result.email)}&channel=${encodeURIComponent(result.otpChannel)}`;
+    setToken(result.token);
+    window.location.href = "participant/dashboard.html";
   } catch (err) {
     showError(err.message || "Registration failed. Please try again.");
     if (submitBtn) {

@@ -11,7 +11,7 @@ router.use(requireAuth, requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"));
 router.get("/summary", asyncHandler(async (_req, res) => {
   const [registeredCount, issuedPassCount, admittedCount, byTicketType, congregationCount] = await Promise.all([
     User.count({ where: { role: "PARTICIPANT" } }),
-    AdmissionCard.count(),
+    AdmissionCard.count({ where: { isRevoked: false } }),
     Attendance.count({ where: { type: "CHECK_IN" }, distinct: true, col: "userId" }),
     Registration.findAll({
       attributes: ["ticketType", [Registration.sequelize.fn("COUNT", "*"), "count"]],

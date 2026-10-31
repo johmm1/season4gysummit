@@ -234,14 +234,14 @@ function wireFilters() {
 
 
 function exportParticipantsCsv() {
-  const rows = [["Admission Code", "Name", "Email", "Phone", "Parish", "Church", "Gender", "Registration Status", "Medical Information", "Admission Pass"]];
+  const rows = [["Admission Code", "Name", "Parish", "Gender", "Age", "Phone", "Medical Information", "Registration Status", "Admission Pass"]];
   document.querySelectorAll("#participantsTable tbody tr").forEach((tr) => {
     const cells = [...tr.querySelectorAll("td")].map((td) => td.textContent.trim());
     if (cells.length >= 10) rows.push(cells.slice(1, 10));
   });
   if (rows.length === 1) return showError("No participant rows to export.");
   const csv = rows.map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
-  const blob = new Blob(["\\uFEFF", csv], { type: "text/csv;charset=utf-8" });
+  const blob = new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -251,6 +251,6 @@ function exportParticipantsCsv() {
 }
 
 $("exportParticipantsCsv")?.addEventListener("click", exportParticipantsCsv);
-$("exportParticipantsExcel")?.addEventListener("click", () => showError("Use Download CSV to open the participant list in Excel."));
+$("exportParticipantsExcel")?.addEventListener("click", exportParticipantsCsv);
 $("printParticipantsList")?.addEventListener("click", () => window.print());
 

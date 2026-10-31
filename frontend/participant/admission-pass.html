@@ -214,13 +214,13 @@ PAGE HEADER
 
 <h2>
 
-Digital Admission Pass
+Participant Admission Details
 
 </h2>
 
 <p>
 
-Present this QR Code at the registration desk during check-in.
+Your registration is linked to your name. Staff will look you up at the entrance.
 
 </p>
 
@@ -232,7 +232,7 @@ Present this QR Code at the registration desk during check-in.
 id="paymentBadge"
 class="badge badge-success">
 
-Payment Verified
+Registration Confirmed
 
 </span>
 
@@ -355,37 +355,9 @@ Loading...
 
 <div class="pass-center">
 
-<div class="detail">
+<div class="detail"><label>Admission Method</label><h3>Name Search</h3></div>
+<div class="detail"><label>Participant Status</label><h3 id="admissionStatus">Registered</h3></div>
 
-<label>
-
-Admission Number
-
-</label>
-
-<h3 id="admissionNumber">
-
-GY26-000000
-
-</h3>
-
-</div>
-
-<div class="detail">
-
-<label>
-
-Registration Number
-
-</label>
-
-<h3 id="registrationNumber">
-
-REG000000
-
-</h3>
-
-</div>
 
 <div class="detail">
 
@@ -423,29 +395,7 @@ Loading...
 
 <!-- RIGHT -->
 
-<div class="pass-right">
-
-<div class="qr-card">
-
-<img
-
-id="qrCode"
-
-src="../assets/images/qr-placeholder.png"
-
-alt="QR Code">
-
-<p>
-
-Scan During Check-in
-
-</p>
-
-</div>
-
-</div>
-
-</div>
+<div class="pass-right"><div class="qr-card"><i class="fa-solid fa-user-check" style="font-size:72px"></i><p>Show your full name at the registration desk</p></div></div>
 
 <!-- ==========================
 PASS FOOTER
@@ -457,11 +407,11 @@ PASS FOOTER
 
 <strong>
 
-Payment
+Registration
 
 </strong>
 
-<p id="paymentStatus">
+<p id="registrationStatus">
 
 Verified
 
@@ -719,13 +669,13 @@ Participants are expected to report before the official opening time to allow sm
 
 <h4>
 
-QR Code Verification
+Name-based Check-in
 
 </h4>
 
 <p>
 
-Your QR Code will only be scanned once. After successful check-in it becomes inactive.
+Tell the admissions team your registered full name. They will confirm your details and record your arrival.
 
 </p>
 
@@ -851,17 +801,7 @@ Downloads
 
 <div class="download-buttons">
 
-<button
 
-class="btn btn-primary"
-
-id="downloadPassBtn">
-
-<i class="fa-solid fa-file-pdf"></i>
-
-Download PDF Pass
-
-</button>
 
 <button
 
@@ -875,17 +815,7 @@ Print Pass
 
 </button>
 
-<button
 
-class="btn btn-outline"
-
-id="downloadQrBtn">
-
-<i class="fa-solid fa-qrcode"></i>
-
-Download QR Code
-
-</button>
 
 </div>
 

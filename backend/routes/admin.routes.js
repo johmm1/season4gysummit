@@ -53,7 +53,7 @@ router.get(
         User.count({ where: { role: "PARTICIPANT" } }),
         Registration.count({ where: { status: "CONFIRMED" } }),
         Church.count(),
-        Attendance.count({ where: { type: "CHECK_IN" } }),
+        Attendance.count({ where: { type: "CHECK_IN" }, distinct: true, col: "userId" }),
         User.findAll({
           attributes: ["parishId", [fn("COUNT", col("User.id")), "count"]],
           where: { role: "PARTICIPANT", parishId: { [Op.ne]: null } },

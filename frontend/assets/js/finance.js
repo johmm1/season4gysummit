@@ -1,9 +1,6 @@
-// Y-Summit Season 4 2026 — admin finance & parish payment/admission tracking
+// Y-Summit Season 4 2026 — registration and admission management
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, showSuccess, formatKes, escapeHtml, debounce, setText, $ } from "./utils.js";
-import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
-
-const FINANCE_FORMS = ["financeSettingsForm"];
+import { apiFetch, showError, showSuccess, escapeHtml, debounce, setText, $ } from "./utils.js";
 
 // Maps parish name -> the id prefix used in finance.html's per-parish counters,
 // e.g. "Githunguri" -> githunguriRegistered/githunguriPaid/githunguriAdmitted.
@@ -27,7 +24,6 @@ window.loadParish = async function loadParish(parishName) {
       ? await apiFetch(`/admin/participants?parishId=${parish.id}&pageSize=500`)
       : { items: [] };
 
-    const paid = participants.filter((p) => p.registration?.status === "CONFIRMED").length;
     const admitted = participants.filter((p) => p.admissionCard).length;
     const registered = participants.length;
     const totalSlots = 50;
@@ -58,9 +54,6 @@ if (admin) {
   wireAdmissionLookup();
   await loadCertificateTemplates();
   wireCertificateGeneration();
-  await loadPageSettings(FINANCE_FORMS);
-  wireSettingsForms();
-  wireSettingsFileUploads();
 }
 
 async function loadCertificateTemplates() {

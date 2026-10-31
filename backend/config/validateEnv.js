@@ -1,12 +1,5 @@
 // Y-Summit Season 4 2026 — startup environment check
-//
-// JWT_SECRET, ADMISSION_QR_SECRET, and the database vars already throw
-// immediately (in jwtService.js / qrService.js / config/database.js) if
-// missing — those are non-negotiable for the app to run at all. This just
-// adds a clear, all-in-one-place boot-time warning for the *optional*
-// integrations (M-Pesa, Cloudinary), which previously failed silently or
-// with a cryptic error the first time someone tried to pay or upload a
-// photo — sometimes days after deploy. Nothing here blocks startup.
+// Warns about optional integrations without blocking local development.
 
 function checkEnv() {
   const warnings = [];

@@ -15,7 +15,7 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const card = await AdmissionCard.findOne({ where: { userId: req.auth.userId } });
-    if (!card) throw new ApiError(404, "No admission card yet — payment must be confirmed first");
+    if (!card) throw new ApiError(404, "No admission pass is available yet. Please contact an administrator.");
     const admissionSettings = await getForm("admissionSettingsForm");
     const qrImage = await renderQrDataUrl(card.qrCode, Number(admissionSettings.qrSize) || 480);
     res.json({ card, qrImage });

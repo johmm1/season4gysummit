@@ -269,7 +269,7 @@ function resetVerificationPanel() {
   setText("participantAge", "---------");
   setText("registrationDate", "---------");
   setText("medicalConditions", "No medical information provided.");
-  const paymentBadge = $("paymentStatus");
+  const paymentBadge = $("registrationStatus");
   if (paymentBadge) { paymentBadge.textContent = "—"; paymentBadge.className = "badge success"; }
   const admissionBadge = $("admissionStatus");
   if (admissionBadge) { admissionBadge.textContent = "NOT ADMITTED"; admissionBadge.className = "badge warning"; }

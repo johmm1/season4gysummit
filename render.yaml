@@ -57,14 +57,10 @@ services:
       - key: ADMISSION_QR_SECRET
         generateValue: true
 
-      # ---- TEMPORARY: see the note in .env.example ----
-      - key: SKIP_OTP_VERIFICATION
-        value: "false"
-
       # ---- Google Sign-In (optional — login only) ----
       - key: GOOGLE_CLIENT_ID
         sync: false
-        sync: false # https://gy-summit-2026-api.onrender.com/api/payments/callback
+        sync: false
 
       # ---- Supabase Storage (gallery/profile photo uploads) ----
       - key: SUPABASE_URL

@@ -1,7 +1,7 @@
 // Y-Summit Season 4 2026 — registration and admission overview (no payment processing)
 const { Router } = require("express");
 const ExcelJS = require("exceljs");
-const { Registration, User, AdmissionCard, Parish, Church } = require("../models");
+const { Registration, User, AdmissionCard, Attendance, Parish, Church } = require("../models");
 const { requireAuth, requireRole } = require("../middleware/auth");
 const { asyncHandler } = require("../middleware/errorHandler");
 
@@ -9,9 +9,10 @@ const router = Router();
 router.use(requireAuth, requireRole("SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN"));
 
 router.get("/summary", asyncHandler(async (_req, res) => {
-  const [registeredCount, admittedCount, byTicketType, congregationCount] = await Promise.all([
+  const [registeredCount, issuedPassCount, admittedCount, byTicketType, congregationCount] = await Promise.all([
     User.count({ where: { role: "PARTICIPANT" } }),
     AdmissionCard.count(),
+    Attendance.count({ where: { type: "CHECK_IN" } }),
     Registration.findAll({
       attributes: ["ticketType", [Registration.sequelize.fn("COUNT", "*"), "count"]],
       group: ["ticketType"],
@@ -20,6 +21,7 @@ router.get("/summary", asyncHandler(async (_req, res) => {
   ]);
   res.json({
     registeredCount,
+    issuedPassCount,
     admittedCount,
     congregationCount,
     awaitingAdmission: Math.max(0, registeredCount - admittedCount),

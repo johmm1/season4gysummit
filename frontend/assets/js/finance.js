@@ -110,7 +110,7 @@ async function loadOverview() {
       apiFetch("/admin/participants?pageSize=100"),
     ]);
 
-    setText("overallRegistered", summary.calculator.registeredCount);
+    setText("overallRegistered", summary.registeredCount);
     setText("overallPaid", summary.admittedCount);
     setText("overallPending", summary.awaitingAdmission);
     setText("overallAdmitted", summary.admittedCount);

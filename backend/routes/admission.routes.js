@@ -98,6 +98,10 @@ router.post(
     const card = await AdmissionCard.findByPk(req.params.cardId, { include: [{ model: User, as: "user", include: [{ model: Parish }] }] });
     if (!card) throw new ApiError(404, "Card not found");
     if (card.isRevoked) throw new ApiError(403, "This admission card has been revoked");
+    const previousCheckIn = await Attendance.findOne({ where: { admissionCardId: card.id, type: "CHECK_IN" } });
+    if (previousCheckIn && !label?.toLowerCase().startsWith("re-entry")) {
+      throw new ApiError(409, "This participant has already been checked in. Use the re-entry option if needed.");
+    }
 
     const attendance = await Attendance.create({
       userId: card.userId,

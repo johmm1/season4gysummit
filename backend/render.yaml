@@ -30,18 +30,6 @@ services:
         value: "1900"
       - key: JWT_SECRET
         sync: false
-      - key: MPESA_ENV
-        value: production
-      - key: MPESA_CONSUMER_KEY
-        sync: false
-      - key: MPESA_CONSUMER_SECRET
-        sync: false
-      - key: MPESA_SHORTCODE
-        sync: false
-      - key: MPESA_PASSKEY
-        sync: false
-      - key: MPESA_CALLBACK_URL
-        sync: false
       - key: ADMISSION_QR_SECRET
         sync: false
       - key: CLOUDINARY_CLOUD_NAME

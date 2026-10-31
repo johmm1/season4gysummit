@@ -73,6 +73,7 @@ function showParticipant(p) {
   setText("participantChurch", p.parish || "—");
   setText("participantParish", p.parish || "—");
   setText("participantCode", p.cardNumber || "—");
+  setText("registrationStatus", "REGISTERED");
   setText("decisionStatus", "Awaiting decision");
   setText("decisionTime", new Date().toLocaleTimeString("en-KE"));
 }

@@ -26,7 +26,7 @@ window.loadParish = async function loadParish(parishName) {
     const registered = participants.length;
     const totalSlots = 50;
 
-    setText("paidSlots", participants.filter((p) => p.admissionCard).length);
+    setText("paidSlots", participants.filter((p) => p.admissionCard && !p.admissionCard.isRevoked).length);
     setText("registeredSlots", registered);
     setText("availableSlots", Math.max(0, totalSlots - registered));
     setText("admittedCount", admitted);
@@ -124,11 +124,11 @@ async function loadOverview() {
     for (const prefix of PARISH_ID_PREFIXES) {
       const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
       setText(`${prefix}Registered`, matches.length);
-      setText(`${prefix}Paid`, matches.filter((i) => i.admissionCard).length);
+      setText(`${prefix}Paid`, matches.filter((i) => i.admissionCard && !i.admissionCard.isRevoked).length);
       setText(`${prefix}Admitted`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
     }
   } catch (err) {
-    showError(err.message || "Could not load finance overview.");
+    showError(err.message || "Could not load registration and admission overview.");
   }
 }
 
@@ -157,7 +157,7 @@ function renderTable(items) {
         <td>${escapeHtml(u.gender || "—")}</td>
         <td>${escapeHtml(u.phone || "—")}</td>
         <td>${escapeHtml(u.registration?.status || "—")}</td>
-        <td>${u.admissionCard ? "ISSUED" : "NOT ISSUED"}</td>
+        <td>${u.admissionCard?.isRevoked ? "REVOKED" : u.admissionCard ? "ISSUED" : "NOT ISSUED"}</td>
         <td><button type="button" class="secondary-btn" data-admission-code="${escapeHtml(u.admissionCard?.cardNumber || "")}">View</button></td>
       </tr>`
     )

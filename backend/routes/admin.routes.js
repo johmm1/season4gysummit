@@ -101,6 +101,7 @@ router.get(
     const include = [
       { model: Registration, as: "registration", where: req.query.status ? { status: req.query.status } : undefined, required: Boolean(req.query.status) },
       { model: AdmissionCard, as: "admissionCard", required: req.query.admission === "issued" },
+      { model: Attendance, as: "attendances", required: false },
       { model: Presbytery },
       { model: Parish },
       { model: Church },

@@ -20,8 +20,8 @@ function fillForm(user) {
   setText("topParticipantName", user.fullName);
   setText("participantParish", user.Parish?.name || user.Church?.name || "—");
   setText("topParticipantParish", user.Parish?.name || user.Church?.name || "—");
-  setText("registrationNumber", user.admissionCard?.cardNumber ?? "Pending");
-  setText("admissionNumber", user.admissionCard?.cardNumber ?? "Pending");
+  setText("registrationNumber", "Name-based entry");
+  setText("admissionNumber", "Name-based entry");
   setText("registrationDate", formatDate(user.registration?.createdAt));
   setText("lastUpdated", formatDate(user.updatedAt));
 

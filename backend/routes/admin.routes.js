@@ -5,7 +5,7 @@ const { z } = require("zod");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const {
-  User, Registration, Attendance, SystemSetting, Presbytery, Parish, Church, AdmissionCard, AuditLog,
+  User, Registration, Attendance, SystemSetting, Presbytery, Parish, Church, AuditLog,
 } = require("../models");
 const { requireAuth, requireRole, ADMIN_ROLES } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");

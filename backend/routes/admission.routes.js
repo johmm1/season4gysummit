@@ -27,7 +27,7 @@ router.get("/search", requireAuth, requireRole(...ADMIN_ROLES), asyncHandler(asy
   if (name.length < 2) throw new ApiError(400, "Enter at least two letters of the participant's name.");
   const items = await User.findAll({
     where: { role: "PARTICIPANT", fullName: { [Op.iLike]: `%${name}%` } },
-    attributes: ["id", "fullName", "phone", "gender", "dateOfBirth", "avatarUrl", "createdAt"],
+    attributes: ["id", "fullName", "email", "phone", "gender", "dateOfBirth", "idNumber", "avatarUrl", "createdAt", "hasMedicalCondition", "medicalCondition", "medication", "allergies", "disability"],
     include: [
       { model: Parish, attributes: ["name"] },
       { model: Church, attributes: ["name"] },

@@ -312,9 +312,10 @@ ADMISSION CENTRE
     <p>Search by participant name, select the correct person and complete check-in.</p>
   </div>
   <div class="admission-card">
-    <label for="admissionCode">Admission Code</label>
-    <input type="text" id="admissionCode" placeholder="GY2026-00001">
-    <button type="button" id="searchAdmission" class="primary-btn"><i class="fa-solid fa-magnifying-glass"></i> Search Participant</button>
+    <label for="admissionName">Participant Name</label>
+    <input type="search" id="admissionName" placeholder="Enter participant name">
+    <button type="button" id="searchAdmission" class="primary-btn"><i class="fa-solid fa-magnifying-glass"></i> Search by Name</button>
+    <div id="admissionSearchResults" class="participant-search-results" aria-live="polite"></div>
   </div>
 </section>
 

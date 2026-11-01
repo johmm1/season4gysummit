@@ -18,14 +18,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/public.css">
 <link rel="stylesheet" href="assets/css/mobile.css">
-
+<link rel="stylesheet" href="assets/css/registration.css">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
-<body>
+<body class="registration-page">
 
 <!-- =========================
 NAVBAR
@@ -68,7 +68,7 @@ REGISTRATION
 <div class="form-title">
 
 <img src="assets/images/logo.png"
-width="90">
+width="90" alt="Y-Summit logo">
 
 <h1>Participant Registration</h1>
 
@@ -125,7 +125,7 @@ Personal Information
 
 <div class="form-group">
 
-<label>
+<label for="fullname">
 
 Full Name
 
@@ -141,7 +141,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="gender">
 
 Gender
 
@@ -163,7 +163,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="dob">
 
 Date of Birth
 
@@ -178,7 +178,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="idNumber">
 
 National ID / Passport Number
 
@@ -194,7 +194,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="phone">
 
 Phone Number
 
@@ -210,7 +210,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="email">
 
 Email Address
 
@@ -261,7 +261,7 @@ Church Information
 
 <div class="form-group">
 
-<label>
+<label for="presbytery">
 
 Presbytery
 
@@ -279,7 +279,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="parish">
 
 Parish
 
@@ -297,7 +297,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="church">
 
 Church
 
@@ -319,7 +319,7 @@ Select Parish First
 
 <div class="form-group">
 
-<label>
+<label for="emergencyName">
 
 Emergency Contact Name
 
@@ -334,7 +334,7 @@ required>
 
 <div class="form-group">
 
-<label>
+<label for="emergencyPhone">
 
 Emergency Contact Phone
 
@@ -361,7 +361,7 @@ Medical Information
 
 <div class="form-group">
 
-<label>
+<label for="hasMedical">
 
 Do you have any medical condition?
 
@@ -392,7 +392,7 @@ style="display:none;">
 
 <div class="form-group">
 
-<label>
+<label for="medicalCondition">
 
 Medical Condition
 
@@ -406,7 +406,7 @@ id="medicalCondition">
 
 <div class="form-group">
 
-<label>
+<label for="allergies">
 
 Allergies
 
@@ -420,7 +420,7 @@ id="allergies">
 
 <div class="form-group">
 
-<label>
+<label for="medication">
 
 Current Medication
 
@@ -434,7 +434,7 @@ id="medication">
 
 <div class="form-group">
 
-<label>
+<label for="diet">
 
 Special Dietary Requirements
 
@@ -448,7 +448,7 @@ id="diet">
 
 <div class="form-group">
 
-<label>
+<label for="disability">
 
 Disability / Assistance Needed
 
@@ -462,7 +462,7 @@ id="disability">
 
 <div class="form-group">
 
-<label>
+<label for="medicalNotes">
 
 Additional Notes
 
@@ -509,7 +509,6 @@ STEP THREE
 ACCOUNT CREATION
 ===================================== -->
 
-
 <div class="form-step" id="step3" style="display:none;">
 
 <h2>
@@ -518,13 +517,11 @@ Create Account
 
 </h2>
 
-
 <div class="form-grid">
-
 
 <div class="form-group full-width">
 
-<label>
+<label for="profilePhoto">
 
 Profile Photo
 
@@ -537,11 +534,9 @@ accept="image/*">
 
 </div>
 
-
-
 <div class="form-group">
 
-<label>
+<label for="password">
 
 Password
 
@@ -554,11 +549,9 @@ required>
 
 </div>
 
-
-
 <div class="form-group">
 
-<label>
+<label for="confirmPassword">
 
 Confirm Password
 
@@ -570,7 +563,6 @@ id="confirmPassword"
 required>
 
 </div>
-
 
 </div>
 
@@ -588,10 +580,7 @@ After successful registration:
 
 </div>
 
-
-
 <div class="form-navigation">
-
 
 <button
 type="button"
@@ -601,7 +590,6 @@ id="back2">
 Previous
 
 </button>
-
 
 <button
 type="submit"
@@ -613,15 +601,11 @@ Complete Registration
 
 </button>
 
-
 </div>
 
-
 </div>
-
 
 </form>
-
 
 </div>
 
@@ -636,7 +620,6 @@ const stepIndicators = document.querySelectorAll(".step");
 
 let currentStep = 0;
 
-
 function showStep(step){
 
 formSteps.forEach((item)=>{
@@ -645,18 +628,15 @@ item.style.display="none";
 
 });
 
-
 stepIndicators.forEach((item)=>{
 
 item.classList.remove("active");
 
 });
 
-
 formSteps[step].style.display="block";
 
 stepIndicators[step].classList.add("active");
-
 
 window.scrollTo({
 
@@ -668,7 +648,6 @@ behavior:"smooth"
 
 }
 
-
 // NEXT BUTTONS
 
 document.getElementById("next1")
@@ -678,7 +657,6 @@ showStep(1);
 
 };
 
-
 document.getElementById("next2")
 .onclick=function(){
 
@@ -686,9 +664,7 @@ showStep(2);
 
 };
 
-
 // BACK BUTTONS
-
 
 document.getElementById("back1")
 .onclick=function(){
@@ -697,7 +673,6 @@ showStep(0);
 
 };
 
-
 document.getElementById("back2")
 .onclick=function(){
 
@@ -705,82 +680,53 @@ showStep(1);
 
 };
 
-
-
-
 // =====================================
 // MEDICAL INFORMATION TOGGLE
 // =====================================
 
-
 const medicalChoice =
 document.getElementById("hasMedical");
-
 
 const medicalSection =
 document.getElementById("medicalSection");
 
-
-
 medicalChoice.addEventListener("change",()=>{
-
 
 if(medicalChoice.value==="Yes"){
 
-
 medicalSection.style.display="block";
-
 
 }else{
 
-
 medicalSection.style.display="none";
-
 
 }
 
-
 });
-
-
-
 
 // =====================================
 // PASSWORD CHECK
 // =====================================
 
-
 const password =
 document.getElementById("password");
-
 
 const confirmPassword =
 document.getElementById("confirmPassword");
 
-
-
 password.addEventListener("keyup",()=>{
-
 
 if(password.value.length < 8){
 
-
 password.style.borderColor="red";
-
 
 }else{
 
-
 password.style.borderColor="green";
-
 
 }
 
-
 });
-
-
-
 
 </script>
 

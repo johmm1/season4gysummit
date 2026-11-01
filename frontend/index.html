@@ -30,24 +30,25 @@ Y-Summit Season 4 2026 | PCEA Githunguri Presbytery
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Event",
-  "name": "Y-Summit Season 4 2026",
-  "description": "The annual youth gathering of PCEA Githunguri Presbytery, featuring worship, Bible teaching, Christian leadership, sports, missions, networking and fellowship.",
-  "organizer": {
-    "@type": "Organization",
-    "name": "PCEA Githunguri Presbytery"
-  },
-  "location": {
-    "@type": "Place",
-    "name": "Kambui Girls' Senior School",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Githunguri",
-      "addressRegion": "Kiambu County",
-      "addressCountry": "KE"
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://githunguripresbytaryyouthsummit.co.ke/#organization",
+      "name": "PCEA Githunguri Presbytery",
+      "url": "https://githunguripresbytaryyouthsummit.co.ke/",
+      "description": "The Presbyterian church presbytery hosting Y-Summit, an annual youth gathering focused on worship, Bible teaching, Christian leadership, sports and fellowship."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://githunguripresbytaryyouthsummit.co.ke/#website",
+      "url": "https://githunguripresbytaryyouthsummit.co.ke/",
+      "name": "Y-Summit | PCEA Githunguri Presbytery",
+      "publisher": {
+        "@id": "https://githunguripresbytaryyouthsummit.co.ke/#organization"
+      },
+      "inLanguage": "en-KE"
     }
-  },
-  "url": "https://githunguripresbytaryyouthsummit.co.ke/"
+  ]
 }
 </script>
 

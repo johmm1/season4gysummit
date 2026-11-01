@@ -345,7 +345,6 @@ router.get(
     const user = await User.findByPk(req.auth.userId, {
       include: [
         { model: Registration, as: "registration" },
-        { model: AdmissionCard, as: "admissionCard" },
         { model: Presbytery },
         { model: Parish },
         { model: Church },

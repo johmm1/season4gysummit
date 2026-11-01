@@ -199,3 +199,23 @@ video, iframe, canvas, svg, embed, object {
   .quick-information { grid-template-columns: minmax(0, 1fr) !important; }
   .modal-content { max-height: 88vh; overflow-y: auto; }
 }
+
+/* The name-based admissions desk uses one full-width workspace. */
+.admission-workspace { grid-template-columns: minmax(0, 1fr); }
+.manual-card { width: 100%; min-width: 0; }
+.participant-search-results { margin-top: 12px; }
+.participant-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #1f2937;
+  cursor: pointer;
+}
+.participant-result:hover, .participant-result:focus-visible {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}

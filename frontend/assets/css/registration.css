@@ -1,0 +1,281 @@
+/* Registration page responsive layout.
+   Scoped to this page so shared public/admin layouts remain unchanged. */
+
+.registration-page {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.registration-page *,
+.registration-page *::before,
+.registration-page *::after {
+  box-sizing: border-box;
+}
+
+.registration-page .form-section {
+  width: 100%;
+  min-height: 100vh;
+  align-items: flex-start;
+  padding: 112px 20px 48px;
+}
+
+.registration-page .form-container {
+  width: min(100%, 850px);
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.registration-page .form-title img {
+  display: block;
+  width: 76px;
+  height: auto;
+  margin: 0 auto 14px;
+}
+
+.registration-page .form-title h1 {
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.registration-page .form-title p {
+  line-height: 1.6;
+}
+
+.registration-page .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+}
+
+.registration-page .form-group,
+.registration-page .form-group input,
+.registration-page .form-group select,
+.registration-page .form-group textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.registration-page .form-group input,
+.registration-page .form-group select,
+.registration-page .form-group textarea {
+  width: 100%;
+}
+
+.registration-page .form-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.registration-page .form-navigation .btn {
+  min-height: 46px;
+}
+
+.registration-page .stepper {
+  width: 100%;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.registration-page .step {
+  min-width: 0;
+}
+
+.registration-page .step p {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .registration-page .navbar {
+    position: relative;
+    top: auto;
+    left: auto;
+    height: auto;
+    min-height: 68px;
+    padding: 10px 16px;
+    gap: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .registration-page .logo-area {
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 10px;
+  }
+
+  .registration-page .logo-area img {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .registration-page .logo-area h2 {
+    margin: 0;
+    font-size: clamp(13px, 3.5vw, 17px);
+    line-height: 1.25;
+  }
+
+  .registration-page .logo-area small {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .registration-page .navbar nav {
+    flex: 0 0 auto;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .registration-page .navbar nav a {
+    min-height: 40px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .registration-page .form-section {
+    min-height: calc(100vh - 68px);
+    padding: 24px 14px 36px;
+    align-items: flex-start;
+  }
+
+  .registration-page .form-container {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .registration-page .form-title {
+    margin-bottom: 26px;
+  }
+
+  .registration-page .form-title h1 {
+    font-size: clamp(23px, 6vw, 30px);
+  }
+
+  .registration-page .form-step h2 {
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .registration-page .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .registration-page .form-group {
+    margin-bottom: 16px;
+  }
+
+  .registration-page .form-group label {
+    line-height: 1.4;
+  }
+
+  .registration-page .form-group input,
+  .registration-page .form-group select,
+  .registration-page .form-group textarea {
+    min-height: 48px;
+    padding: 12px 13px;
+    font-size: 16px;
+  }
+
+  .registration-page .form-group textarea {
+    min-height: 112px;
+  }
+
+  .registration-page .stepper {
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+  }
+
+  .registration-page .step {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .registration-page .step:not(:last-child)::after {
+    top: 15px;
+    left: 58%;
+    width: 84%;
+  }
+
+  .registration-page .step p {
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .registration-page .form-navigation {
+    gap: 10px;
+  }
+
+  .registration-page .form-navigation .btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .registration-page .form-navigation > div:empty {
+    display: none;
+  }
+
+  .registration-page .alert {
+    padding: 14px;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: 380px) {
+  .registration-page .navbar {
+    padding: 9px 10px;
+    gap: 6px;
+  }
+
+  .registration-page .logo-area {
+    gap: 7px;
+  }
+
+  .registration-page .logo-area img {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .registration-page .logo-area h2 {
+    font-size: 12px;
+  }
+
+  .registration-page .logo-area small {
+    font-size: 10px;
+  }
+
+  .registration-page .navbar nav {
+    gap: 8px;
+  }
+
+  .registration-page .navbar nav a {
+    font-size: 12px;
+  }
+
+  .registration-page .form-section {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .registration-page .form-container {
+    padding: 20px 14px;
+  }
+
+  .registration-page .form-navigation .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}

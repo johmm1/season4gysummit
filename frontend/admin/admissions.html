@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admissions | Y-Summit Season 4 2026</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/admin-desk.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+<div class="admin-layout">
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../assets/images/logo.png" alt="">
+    <h2>Y-Summit</h2>
+    <p>Administration</p>
+  </div>
+  <nav></nav>
+</aside>
+
+<main class="admin-main">
+
+<header class="admin-header">
+  <button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+  <div>
+    <h1>Admissions Desk</h1>
+    <p>Find a participant, confirm payment, assign a dormitory and admit.</p>
+  </div>
+  <div class="header-status">
+    <div class="current-time"><h3 id="liveClock">--:--:--</h3></div>
+  </div>
+  <button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out"><i class="fa-solid fa-right-from-bracket"></i></button>
+</header>
+
+<!-- Totals -->
+<section class="desk-stats" aria-label="Admission totals">
+  <div class="desk-stat"><span>Registered</span><strong id="statRegistered">–</strong></div>
+  <div class="desk-stat"><span>Paid</span><strong id="statPaid">–</strong></div>
+  <div class="desk-stat"><span>Admitted</span><strong id="statAdmitted">–</strong></div>
+  <div class="desk-stat"><span>Collected</span><strong id="statCollected">–</strong></div>
+</section>
+
+<!-- Tabs -->
+<div class="desk-tabs" role="tablist">
+  <button class="desk-tab is-active" data-tab="desk" role="tab"><i class="fa-solid fa-magnifying-glass"></i> Desk</button>
+  <button class="desk-tab" data-tab="slots" role="tab"><i class="fa-solid fa-ticket"></i> Parish slots</button>
+  <button class="desk-tab" data-tab="dorms" role="tab"><i class="fa-solid fa-bed"></i> Dormitories</button>
+  <button class="desk-tab" data-tab="recent" role="tab"><i class="fa-solid fa-clock-rotate-left"></i> Recently admitted</button>
+</div>
+
+<!-- DESK -->
+<section class="desk-pane" id="pane-desk">
+  <div class="desk-search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input id="nameSearch" type="search" autocomplete="off" autofocus
+           placeholder="Type a name — one or two names, spelling doesn’t have to be perfect">
+  </div>
+  <p class="desk-hint" id="searchHint">Start typing to see suggestions. You can also type the last digits of a phone number.</p>
+
+  <div class="desk-grid">
+    <div class="desk-results" id="results" aria-live="polite"></div>
+    <div class="desk-card" id="person" hidden></div>
+  </div>
+</section>
+
+<!-- PARISH SLOTS (bank reference codes) -->
+<section class="desk-pane" id="pane-slots" hidden>
+  <div class="desk-split">
+
+    <div class="desk-card">
+      <div class="desk-card-head">
+        <h2>Add bank reference codes</h2>
+        <p>One line per code: <b>CODE, Parish, Slots</b>. Adding a code that already exists updates its parish and slots.</p>
+      </div>
+      <label class="desk-label" for="codeLines">Codes</label>
+      <textarea id="codeLines" rows="6" placeholder="Example:&#10;GY26-ABC, Githunguri, 40&#10;GY26-XYZ, Kiambaa, 25"></textarea>
+      <div style="margin-top:14px">
+        <button class="desk-btn primary" id="addCodes" type="button"><i class="fa-solid fa-plus"></i> Add / update codes</button>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+      <div class="desk-card">
+        <div class="desk-card-head">
+          <h2>Slots per parish</h2>
+          <p>Every “Mark as paid” at the desk uses one slot on the parish’s code.</p>
+        </div>
+        <div class="desk-table-wrap">
+          <table class="desk-table">
+            <thead><tr><th>Parish</th><th class="num">Codes</th><th class="num">Slots</th><th class="num">Used</th><th class="num">Left</th></tr></thead>
+            <tbody id="slotsSummary"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="desk-card">
+        <div class="desk-card-head"><h2>Bank reference codes</h2></div>
+        <div class="desk-table-wrap">
+          <table class="desk-table">
+            <thead><tr><th>Code</th><th>Parish</th><th class="num">Slots</th><th class="num">Used</th><th class="num">Left</th><th></th></tr></thead>
+            <tbody id="codesBody"><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DORMITORIES -->
+<section class="desk-pane" id="pane-dorms" hidden>
+  <div class="desk-split">
+    <div class="desk-card">
+      <div class="desk-card-head">
+        <h2>Add dormitories</h2>
+        <p>Type one dormitory name per line. Capacity is optional.</p>
+      </div>
+      <label class="desk-label" for="dormNames">Names</label>
+      <textarea id="dormNames" rows="5" placeholder="Example:&#10;Mama Ngina Hostel&#10;Kenyatta House"></textarea>
+      <div class="desk-row">
+        <div>
+          <label class="desk-label" for="dormGender">For</label>
+          <select id="dormGender">
+            <option value="MIXED">Everyone</option>
+            <option value="MALE">Males only</option>
+            <option value="FEMALE">Females only</option>
+          </select>
+        </div>
+        <div>
+          <label class="desk-label" for="dormCapacity">Beds each</label>
+          <input id="dormCapacity" type="number" min="1" placeholder="No limit">
+        </div>
+      </div>
+      <button class="desk-btn primary" id="addDorms" type="button"><i class="fa-solid fa-plus"></i> Add dormitories</button>
+    </div>
+
+    <div class="desk-card">
+      <div class="desk-card-head"><h2>Dormitories</h2></div>
+      <div class="desk-table-wrap">
+        <table class="desk-table">
+          <thead><tr><th>Name</th><th>For</th><th class="num">Beds</th><th class="num">Taken</th><th></th></tr></thead>
+          <tbody id="dormBody"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECENT -->
+<section class="desk-pane" id="pane-recent" hidden>
+  <div class="desk-card">
+    <div class="desk-card-head"><h2>Recently admitted</h2></div>
+    <div id="recentList" class="desk-feed"><p class="muted">Loading…</p></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script type="module" src="../assets/js/admission-desk.js"></script>
+<script src="../assets/js/admin-nav.js"></script>
+<script src="../assets/js/app-shell.js"></script>
+</body>
+</html>

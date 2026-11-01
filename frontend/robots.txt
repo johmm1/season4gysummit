@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /participant/
+Disallow: /api/
+Disallow: /login.html
+Disallow: /forgot-password.html
+Disallow: /reset-password.html
+Disallow: /verify-otp.html
+
+Sitemap: https://githunguripresbytaryyouthsummit.co.ke/sitemap.xml

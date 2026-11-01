@@ -1,0 +1,31 @@
+/* ---------- Judges platform ---------- */
+.judge-filters{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 12px; }
+.judge-filters select{ padding:8px 12px; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--surface); }
+.judge-help{ color:var(--text-light); font-size:.9rem; line-height:1.5; margin:8px 0; }
+.judge-empty{ color:var(--text-light); padding:18px 4px; }
+.judge-list{ display:grid; gap:14px; }
+.judge-card{ border:1px solid var(--border); border-left:5px solid var(--secondary); border-radius:var(--radius-md); padding:14px 16px; background:var(--surface); }
+.judge-card.done{ border-left-color:var(--success); }
+.judge-card .judge-head{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:10px; }
+.judge-note{ font-size:.82rem; font-weight:700; color:var(--text-light); white-space:nowrap; }
+.judge-fields{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:10px; }
+.judge-field{ display:flex; flex-direction:column; gap:4px; font-size:.82rem; }
+.judge-field small{ color:var(--text-muted); }
+.judge-field input{ padding:10px; font-size:1.1rem; font-weight:700; text-align:center; border:1px solid #cdbb9f; border-radius:var(--radius-md); width:100%; }
+.judge-card textarea{ width:100%; min-height:56px; padding:8px 10px; border:1px solid var(--border); border-radius:var(--radius-md); font:inherit; resize:vertical; }
+.judge-card .judge-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:10px; gap:12px; }
+.judge-live{ font-size:1rem; }
+.judge-table{ width:100%; border-collapse:collapse; font-size:.9rem; }
+.judge-table th, .judge-table td{ padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
+.judge-table th{ background:var(--surface-alt); font-size:.8rem; }
+.judge-actions{ display:flex; gap:6px; flex-wrap:wrap; }
+@media (max-width:600px){ .judge-card .judge-head{ flex-direction:column; } .judge-fields{ grid-template-columns:1fr 1fr; } }
+
+.dashboard-panel{ margin-bottom:16px; }
+.judge-form-note{ font-size:.85rem; }
+
+.judge-table thead th{ background:var(--surface-alt) !important; color:var(--text-dark) !important; }
+#judgeForm .form-group{ display:flex; flex-direction:column; gap:6px; }
+#judgeForm label{ font-weight:600; font-size:.85rem; }
+#judgeForm input{ padding:10px 12px; border:1px solid #cdbb9f; border-radius:var(--radius-md); background:var(--surface); color:var(--text-dark); font:inherit; width:100%; box-sizing:border-box; }
+#judgeForm input:focus{ outline:2px solid var(--primary); outline-offset:1px; }

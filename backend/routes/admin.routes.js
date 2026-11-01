@@ -101,23 +101,16 @@ router.get(
         { email: { [Op.iLike]: `%${search}%` } },
         { phone: { [Op.iLike]: `%${search}%` } },
         { idNumber: { [Op.iLike]: `%${search}%` } },
-        { "$admissionCard.cardNumber$": { [Op.iLike]: `%${search}%` } },
       ];
     }
 
     const include = [
       { model: Registration, as: "registration", where: req.query.status ? { status: req.query.status } : undefined, required: Boolean(req.query.status) },
-      { model: AdmissionCard, as: "admissionCard", required: req.query.admission === "issued" },
       { model: Attendance, as: "attendances", required: false },
       { model: Presbytery },
       { model: Parish },
       { model: Church },
     ];
-
-    if (req.query.admission === "not_issued") {
-      include[1].required = false;
-      where["$admissionCard.id$"] = null;
-    }
 
     const { rows, count } = await User.findAndCountAll({
       where,
@@ -138,7 +131,6 @@ router.get(
     const user = await User.findByPk(req.params.id, {
       include: [
         { model: Registration, as: "registration" },
-        { model: AdmissionCard, as: "admissionCard" },
         { model: Attendance, as: "attendances" },
         { model: Presbytery },
         { model: Parish },

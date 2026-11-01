@@ -126,3 +126,76 @@ video, iframe, canvas, svg, embed, object {
     word-break: break-word;
   }
 }
+
+
+/* Admin portal mobile layout: keep the working area readable on phones. */
+@media (max-width: 900px) {
+  .admin-layout { display: block !important; width: 100%; min-width: 0; }
+  .admin-main, .admin-content, .main-content {
+    width: 100% !important;
+    min-width: 0;
+    margin-left: 0 !important;
+    padding: 14px !important;
+  }
+  .admin-header, .page-header, .topbar {
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .admin-header h1, .page-header h1 { font-size: clamp(1.2rem, 5vw, 1.65rem); }
+  .admin-user { max-width: 100%; }
+  .dashboard-panel, .panel, .manual-card, .search-card, .overview-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .admission-workspace { grid-template-columns: minmax(0, 1fr) !important; }
+  .manual-card, .dashboard-panel { padding: 16px !important; }
+  .manual-search { flex-wrap: wrap; }
+  .manual-search input, .manual-search button { width: 100%; min-width: 0; }
+  .participant-search-results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .participant-result {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding: 12px;
+  }
+  .table-responsive, .table-container, .participants-table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { min-width: 620px; }
+  .form-grid, .detail-grid, .overview-grid, .stats-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .form-group, .form-group input, .form-group select, .form-group textarea,
+  input, select, textarea { min-width: 0; max-width: 100%; }
+  .form-navigation, .participant-actions, .download-buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .form-navigation > *, .participant-actions > *, .download-buttons > * {
+    flex: 1 1 100%;
+  }
+  .sidebar { z-index: 1001; }
+  .sidebar-backdrop { z-index: 1000; }
+  .mobile-menu {
+    position: relative;
+    z-index: 1002;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-main, .admin-content, .main-content { padding: 10px !important; }
+  .admin-header { padding: 10px 0; }
+  .overview-card { padding: 14px; gap: 12px; }
+  .overview-card h2 { font-size: 1.6rem; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+  .quick-information { grid-template-columns: minmax(0, 1fr) !important; }
+  .modal-content { max-height: 88vh; overflow-y: auto; }
+}

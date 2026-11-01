@@ -26,7 +26,7 @@ window.loadParish = async function loadParish(parishName) {
     const registered = participants.length;
     const totalSlots = 50;
 
-    setText("paidSlots", admitted);
+    setText("paidSlots", Math.max(0, registered - admitted));
     setText("registeredSlots", registered);
     setText("availableSlots", Math.max(0, totalSlots - registered));
     setText("admittedCount", admitted);
@@ -116,7 +116,7 @@ async function loadOverview() {
     ]);
 
     setText("overallRegistered", summary.registeredCount);
-    setText("overallPaid", summary.admittedCount);
+    setText("overallPaid", summary.congregationCount);
     setText("overallPending", summary.awaitingAdmission);
     setText("overallAdmitted", summary.admittedCount);
 
@@ -124,7 +124,7 @@ async function loadOverview() {
     for (const prefix of PARISH_ID_PREFIXES) {
       const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
       setText(`${prefix}Registered`, matches.length);
-      setText(`${prefix}Paid`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
+      setText(`${prefix}Paid`, matches.length - matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
       setText(`${prefix}Admitted`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
     }
   } catch (err) {

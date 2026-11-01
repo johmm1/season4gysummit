@@ -145,7 +145,7 @@ Admission Control Centre
 
 <p>
 
-Search, verify and admit participants by admission code.
+Search participants by name and record their admission.
 
 </p>
 
@@ -196,7 +196,7 @@ SEARCH BAR
 <input
 type="text"
 id="globalSearch"
-placeholder="Search participant, admission code or phone number...">
+placeholder="Search participants by name...">
 
 </div>
 
@@ -368,86 +368,14 @@ ADMISSION DESK
 
 <section class="admission-workspace">
 
-<!-- Manual admission-code lookup -->
-
 <div class="manual-card">
-
-<div class="card-header">
-
-<h2>
-
-Manual Verification
-
-</h2>
-
-</div>
-
-<label>
-
-Admission Code
-
-</label>
-
-<div class="manual-search">
-
-<input
-type="text"
-id="admissionCode"
-placeholder="GY26-00045">
-
-<button
-class="btn btn-primary"
-id="verifyCode">
-
-Verify
-
-</button>
-
-</div>
-
-<label>
-
-Participant Name
-
-</label>
-
-<div class="manual-search">
-
-<input
-type="text"
-id="participantNameSearch"
-placeholder="Search by participant name">
-
-<button
-class="btn btn-outline">
-
-Search
-
-</button>
-
-</div>
-
-<label>
-
-Phone Number
-
-</label>
-
-<div class="manual-search">
-
-<input
-type="text"
-id="phoneSearch"
-placeholder="07XXXXXXXX">
-
-<button
-class="btn btn-outline">
-
-Search
-
-</button>
-
-</div>
+  <div class="card-header"><h2>Find a Participant</h2></div>
+  <label for="participantNameSearch">Participant name</label>
+  <div class="manual-search">
+    <input type="search" id="participantNameSearch" placeholder="Type at least two letters of their name">
+    <button type="button" class="btn btn-primary" id="searchParticipant">Search</button>
+  </div>
+  <div id="participantSearchResults" class="participant-search-results" aria-live="polite"></div>
 
 <div class="quick-information">
 
@@ -576,18 +504,6 @@ Participant Name
 </h2>
 
 <div class="detail-grid">
-
-<div>
-
-<label>Admission Code</label>
-
-<p id="participantCode">
-
-—
-
-</p>
-
-</div>
 
 <div>
 
@@ -1094,7 +1010,7 @@ Admission Method
 
 <p>
 
-Manual Admission Code
+Name Search
 
 </p>
 
@@ -1110,7 +1026,7 @@ Verification Method
 
 <p id="verificationMethod">
 
-Admission Code
+Participant Name
 
 </p>
 
@@ -1446,250 +1362,13 @@ Admission Settings
 
 <h2>
 
-Admission Configuration
+Admission Display Settings
 
 </h2>
 
 </div>
 
 <form id="admissionSettingsForm">
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-
-Admission Code Prefix
-
-</label>
-
-<input
-type="text"
-id="admissionPrefix"
-placeholder="GY26">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Starting Admission Number
-
-</label>
-
-<input
-type="number"
-id="admissionStartNumber"
-min="1">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-QR Code Size (px)
-
-</label>
-
-<input
-type="number"
-id="qrSize"
-value="300">
-
-</div>
-
-<div class="form-group">
-
-<label>
-
-Badge Size
-
-</label>
-
-<select id="badgeSize">
-
-<option value="a6">A6</option>
-<option value="a7">A7</option>
-<option value="credit-card">Card Size</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_admissionSettingsForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-Check-in Rules
-
-</h2>
-
-</div>
-
-<form id="checkinRulesForm">
-
-<div class="settings-switches">
-
-
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Allow Manual Check-in
-
-</strong>
-
-<p>
-
-Officials may admit participants manually.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input type="checkbox" id="manualCheckin">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Allow Re-entry
-
-</strong>
-
-<p>
-
-Participants can leave and return.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input type="checkbox" id="allowReentry">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Prevent Duplicate Check-in
-
-</strong>
-
-<p>
-
-Blocks duplicate admissions using the same admission code.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input type="checkbox" id="preventDuplicate">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-<label class="switch-row">
-
-<div>
-
-<strong>
-
-Require Profile Completion
-
-</strong>
-
-<p>
-
-Incomplete profiles cannot generate admission cards.
-
-</p>
-
-</div>
-
-<label class="switch">
-
-<input type="checkbox" id="requireProfile">
-
-<span class="slider"></span>
-
-</label>
-
-</label>
-
-</div>
-
-
-
-<div class="form-save-row" style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
-<button type="submit" class="btn btn-primary btn-sm" id="save_checkinRulesForm">
-<i class="fa-solid fa-floppy-disk"></i> Save Changes
-</button>
-</div>
-
-</form>
-
-</div>
-
-<div class="dashboard-panel">
-
-<div class="panel-header">
-
-<h2>
-
-Admission Badge
-
-</h2>
-
-</div>
-
-<form id="badgeSettingsForm">
 
 <div class="form-grid">
 

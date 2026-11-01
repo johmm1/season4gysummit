@@ -31,8 +31,8 @@ function renderProfile(user) {
     reg?.payments?.filter((p) => p.status === "SUCCESS").reduce((sum, p) => sum + p.amount, 0) || 0
   ));
 
-  setText("admissionStatus", user.admissionCard ? "Issued" : "Not yet issued");
-  setText("admissionCode", user.admissionCard?.cardNumber ?? "—");
+  setText("admissionStatus", "Name-based check-in");
+  setText("admissionCode", "Show your full name at the entrance");
 }
 
 async function loadAnnouncementPreview() {

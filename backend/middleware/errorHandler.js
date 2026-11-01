@@ -27,7 +27,9 @@ function errorHandler(err, req, res, next) {
   }
 
   if (err.name === "SequelizeUniqueConstraintError") {
-    return res.status(409).json({ error: "That value is already in use.", details: err.errors?.map((e) => e.message) });
+    const fields = [...new Set((err.errors || []).map((item) => item.path).filter(Boolean))];
+    const label = fields.includes("email") ? "email address" : fields.includes("phone") ? "phone number" : fields.length ? fields.join(", ") : "value";
+    return res.status(409).json({ error: `That ${label} is already registered. Please check the details or sign in.`, details: err.errors?.map((e) => e.message) });
   }
   if (err.name === "SequelizeValidationError") {
     return res.status(400).json({ error: "Validation failed", details: err.errors?.map((e) => e.message) });

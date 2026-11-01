@@ -5,9 +5,8 @@ const crypto = require("crypto");
 const { z } = require("zod");
 const rateLimit = require("express-rate-limit");
 const { OAuth2Client } = require("google-auth-library");
-const { sequelize, User, Registration, AdmissionCard, Presbytery, Parish, Church } = require("../models");
+const { sequelize, User, Registration } = require("../models");
 const { signToken } = require("../services/jwtService");
-const { issueAdmissionCardForUser } = require("../services/admissionService");
 const { normalizePhone } = require("../services/phoneUtils");
 const { logAction } = require("../services/auditService");
 const { requireAuth } = require("../middleware/auth");
@@ -72,7 +71,7 @@ router.post(
     if (general.maximumParticipants && Number(general.maximumParticipants) > 0 && await Registration.count() >= Number(general.maximumParticipants)) throw new ApiError(409, "Registration is full.");
     if (await User.findOne({ where: { email: body.email.toLowerCase() } })) throw new ApiError(409, "An account with this email already exists.");
     const passwordHash = await bcrypt.hash(body.password, 12);
-    const user = await sequelize.transaction(async (t) => {
+    const createdAccount = await sequelize.transaction(async (t) => {
       const created = await User.create({
         fullName: body.fullName, email: body.email.toLowerCase(), phone: normalizePhone(body.phone),
         passwordHash, isVerified: true, presbyteryId: body.presbyteryId, parishId: body.parishId,
@@ -83,16 +82,21 @@ router.post(
         medicalCondition: body.medicalCondition, medication: body.medication, allergies: body.allergies,
         medicalNotes: body.medicalNotes, disability: body.disability, avatarUrl: body.avatarUrl, role: "PARTICIPANT",
       }, { transaction: t });
-      await Registration.create({ userId: created.id, ticketType: "STANDARD", amountDue: ticketPrice, status: "CONFIRMED" }, { transaction: t });
-      return created;
+      const registration = await Registration.create({ userId: created.id, ticketType: "STANDARD", amountDue: ticketPrice, status: "CONFIRMED" }, { transaction: t });
+      return { user: created, registration };
     });
-    const registration = await Registration.findOne({ where: { userId: user.id } });
-    await issueAdmissionCardForUser(user.id);
-    notify("notifyRegistration", "registrationTemplate", { email: user.email, phone: user.phone },
-      "Y-Summit Season 4 2026 — Registration received",
-      { name: user.fullName, ticketType: registration.ticketType, amountDue: registration.amountDue });
-    await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role });
-    res.status(201).json({ token: signToken(user), user, registration });
+    const { user, registration } = createdAccount;
+    try {
+      await Promise.resolve(notify("notifyRegistration", "registrationTemplate", { email: user.email, phone: user.phone },
+        "Y-Summit Season 4 2026 — Registration received",
+        { name: user.fullName, ticketType: registration.ticketType, amountDue: registration.amountDue })).catch((err) => {
+          console.error("[register] notification failed:", err.message);
+        });
+    } catch (err) { console.error("[register] notification failed:", err.message); }
+    try {
+      await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role });
+    } catch (err) { console.error("[register] audit log failed:", err.message); }
+    return res.status(201).json({ success: true, message: "Account successfully created.", token: signToken(user), user, registration });
   })
 );
 
@@ -343,7 +347,6 @@ router.get(
     const user = await User.findByPk(req.auth.userId, {
       include: [
         { model: Registration, as: "registration" },
-        { model: AdmissionCard, as: "admissionCard" },
         { model: Presbytery },
         { model: Parish },
         { model: Church },

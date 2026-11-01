@@ -12,7 +12,7 @@ if (user) {
   setValue("parish", user.Parish?.name);
   setValue("emergencyName", user.emergencyContactName);
   setValue("emergencyPhone", user.emergencyContactPhone);
-  setValue("admissionCode", user.admissionCard?.cardNumber ?? "Not yet issued");
+  setValue("admissionCode", "Name-based check-in");
 
 }
 

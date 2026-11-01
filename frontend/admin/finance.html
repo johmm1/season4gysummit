@@ -187,7 +187,7 @@ Online
 <input
 type="text"
 id="globalSearch"
-placeholder="Search parish, participant, admission code...">
+placeholder="Search parish or participant name...">
 
 </div>
 
@@ -201,7 +201,7 @@ placeholder="Search parish, participant, admission code...">
 
 <div class="overview-icon">
 
-<i class="fa-solid fa-money-check-dollar"></i>
+<i class="fa-solid fa-user-check"></i>
 
 </div>
 
@@ -215,7 +215,7 @@ placeholder="Search parish, participant, admission code...">
 
 <p>
 
-Admission Passes Issued
+Congregations
 
 </p>
 
@@ -309,12 +309,13 @@ ADMISSION CENTRE
 <section class="dashboard-panel">
   <div class="section-title">
     <h2>Admission Centre</h2>
-    <p>Enter a participant admission code to view their details and complete check-in.</p>
+    <p>Search by participant name, select the correct person and complete check-in.</p>
   </div>
   <div class="admission-card">
-    <label for="admissionCode">Admission Code</label>
-    <input type="text" id="admissionCode" placeholder="GY2026-00001">
-    <button type="button" id="searchAdmission" class="primary-btn"><i class="fa-solid fa-magnifying-glass"></i> Search Participant</button>
+    <label for="admissionName">Participant Name</label>
+    <input type="search" id="admissionName" placeholder="Enter participant name">
+    <button type="button" id="searchAdmission" class="primary-btn"><i class="fa-solid fa-magnifying-glass"></i> Search by Name</button>
+    <div id="admissionSearchResults" class="participant-search-results" aria-live="polite"></div>
   </div>
 </section>
 
@@ -334,7 +335,7 @@ Participant Verification
 
 <p>
 
-Participant information loaded after Admission Code Search.
+Participant information appears after selecting a name from the search results.
 
 </p>
 
@@ -371,18 +372,6 @@ No Participant Selected
 </h2>
 
 <div class="detail-grid">
-
-<div>
-
-<label>Admission Code</label>
-
-<p id="participantCode">
-
----------
-
-</p>
-
-</div>
 
 <div>
 
@@ -791,7 +780,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 
 <strong id="gathangariPaid">50</strong>
 
@@ -855,7 +844,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 
 <strong id="riaraPaid">50</strong>
 
@@ -919,7 +908,7 @@ ACTIVE
 
 <div class="card-stat">
 
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 
 <strong id="matugutaPaid">50</strong>
 
@@ -972,7 +961,7 @@ ACTIVE
 <h3>Githunguri Parish</h3>
 
 <div class="card-stat">
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 <strong id="githunguriPaid">50</strong>
 </div>
 
@@ -1021,7 +1010,7 @@ ACTIVE
 <h3>Kahunira Parish</h3>
 
 <div class="card-stat">
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 <strong id="kahuniraPaid">50</strong>
 </div>
 
@@ -1070,7 +1059,7 @@ ACTIVE
 <h3>Gathaithi Parish</h3>
 
 <div class="card-stat">
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 <strong id="gathaithiPaid">50</strong>
 </div>
 
@@ -1120,7 +1109,7 @@ ACTIVE
 <h3>Kamburu Parish</h3>
 
 <div class="card-stat">
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 <strong id="kamburuPaid">50</strong>
 </div>
 
@@ -1170,7 +1159,7 @@ ACTIVE
 <h3>Karuthi Parish</h3>
 
 <div class="card-stat">
-<span>Paid Slots</span>
+<span>Awaiting Check-in</span>
 <strong id="karuthiPaid">50</strong>
 </div>
 
@@ -1269,7 +1258,7 @@ LIVE STATISTICS
 
 <p>
 
-Paid Slots
+Awaiting Check-in
 
 </p>
 
@@ -1393,13 +1382,13 @@ Awaiting Admission
 
 <h2 id="parishAdmissionInfo">
 
-Manual admission-code lookup
+Name-based admission
 
 </h2>
 
 <p>
 
-Admission Code
+Participant name search
 
 </p>
 
@@ -1539,7 +1528,7 @@ placeholder="Search participant...">
 
 <th>Photo</th>
 
-<th>Admission Code</th>
+
 
 <th>Name</th>
 

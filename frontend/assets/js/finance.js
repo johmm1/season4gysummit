@@ -26,7 +26,7 @@ window.loadParish = async function loadParish(parishName) {
     const registered = participants.length;
     const totalSlots = 50;
 
-    setText("paidSlots", participants.filter((p) => p.admissionCard && !p.admissionCard.isRevoked).length);
+    setText("paidSlots", Math.max(0, registered - admitted));
     setText("registeredSlots", registered);
     setText("availableSlots", Math.max(0, totalSlots - registered));
     setText("admittedCount", admitted);
@@ -116,7 +116,7 @@ async function loadOverview() {
     ]);
 
     setText("overallRegistered", summary.registeredCount);
-    setText("overallPaid", summary.issuedPassCount);
+    setText("overallPaid", summary.congregationCount);
     setText("overallPending", summary.awaitingAdmission);
     setText("overallAdmitted", summary.admittedCount);
 
@@ -124,7 +124,7 @@ async function loadOverview() {
     for (const prefix of PARISH_ID_PREFIXES) {
       const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
       setText(`${prefix}Registered`, matches.length);
-      setText(`${prefix}Paid`, matches.filter((i) => i.admissionCard && !i.admissionCard.isRevoked).length);
+      setText(`${prefix}Paid`, matches.length - matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
       setText(`${prefix}Admitted`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
     }
   } catch (err) {
@@ -136,7 +136,7 @@ async function loadParticipants(search) {
   try {
     const params = new URLSearchParams({ pageSize: "50" });
     if (search) params.set("search", search);
-    const { items } = await apiFetch(`/admin/participants?${params}`);
+    const { items } = await apiFetch("/admin/participants?" + params);
     renderTable(items);
   } catch (err) {
     showError(err.message || "Could not load participants.");
@@ -147,142 +147,156 @@ function renderTable(items) {
   const table = $("participantsTable");
   if (!table) return;
   const tbody = table.tagName === "TABLE" ? table.querySelector("tbody") || table : table;
-  tbody.innerHTML = items
-    .map(
-      (u) => `
-      <tr>
-        <td>${u.avatarUrl ? "<img src=\"" + escapeHtml(u.avatarUrl) + "\" alt=\"\" width=\"36\" height=\"36\" style=\"border-radius:50%;object-fit:cover\">" : "—"}</td>
-        <td>${escapeHtml(u.admissionCard?.cardNumber || "—")}</td>
-        <td>${escapeHtml(u.fullName)}</td>
-        <td>${escapeHtml(u.gender || "—")}</td>
-        <td>${escapeHtml(u.phone || "—")}</td>
-        <td>${escapeHtml(u.registration?.status || "—")}</td>
-        <td>${u.admissionCard?.isRevoked ? "REVOKED" : u.admissionCard ? "ISSUED" : "NOT ISSUED"}</td>
-        <td><button type="button" class="secondary-btn" data-admission-code="${escapeHtml(u.admissionCard?.cardNumber || "")}">View</button></td>
-      </tr>`
-    )
-    .join("");
-  tbody.querySelectorAll("[data-admission-code]").forEach((button) => {
+  tbody.innerHTML = items.map((person) => {
+    const admitted = person.attendances?.some((item) => item.type === "CHECK_IN");
+    return `<tr>
+      <td>${person.avatarUrl ? '<img src="' + escapeHtml(person.avatarUrl) + '" alt="" width="36" height="36" style="border-radius:50%;object-fit:cover">' : "—"}</td>
+      <td>${escapeHtml(person.fullName)}</td>
+      <td>${escapeHtml(person.gender || "—")}</td>
+      <td>${escapeHtml(person.phone || "—")}</td>
+      <td>${escapeHtml(person.registration?.status || "—")}</td>
+      <td>${admitted ? "ADMITTED" : "NOT ADMITTED"}</td>
+      <td><button type="button" class="secondary-btn" data-user-id="${escapeHtml(person.id)}">Select</button></td>
+    </tr>`;
+  }).join("");
+  tbody.querySelectorAll("[data-user-id]").forEach((button) => {
     button.addEventListener("click", () => {
-      const code = button.dataset.admissionCode;
-      if (code) { $("admissionCode").value = code; lookupByAdmissionCode(); }
+      const person = items.find((item) => item.id === button.dataset.userId);
+      if (person) selectParticipant(person);
     });
   });
 }
 
 function wireSearch() {
-  const debounced = debounce((e) => loadParticipants(e.target.value.trim()), 350);
+  const debounced = debounce((event) => loadParticipants(event.target.value.trim()), 350);
   $("participantSearch")?.addEventListener("input", debounced);
   $("globalSearch")?.addEventListener("input", debounced);
 }
 
-let currentCard = null;
+let currentParticipant = null;
 
 function wireAdmissionLookup() {
   $("closeSuccessModal")?.addEventListener("click", () => {
     const modal = $("successModal");
     if (modal) modal.style.display = "none";
   });
-
-  $("searchAdmission")?.addEventListener("click", lookupByAdmissionCode);
-  $("admissionCode")?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") lookupByAdmissionCode();
+  $("searchAdmission")?.addEventListener("click", lookupByName);
+  $("admissionName")?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") lookupByName();
   });
-
   $("admitParticipant")?.addEventListener("click", admitCurrentParticipant);
   $("rejectParticipant")?.addEventListener("click", resetVerificationPanel);
   $("printSlip")?.addEventListener("click", () => {
-    if (!currentCard) { showError("No participant selected."); return; }
+    if (!currentParticipant) return showError("Select a participant first.");
     window.print();
   });
 }
 
-async function lookupByAdmissionCode() {
-  const code = $("admissionCode")?.value.trim();
-  if (!code) { showError("Enter an admission code first."); return; }
+async function lookupByName() {
+  const name = $("admissionName")?.value.trim() || "";
+  if (name.length < 2) return showError("Enter at least two letters of the participant's name.");
+  const results = $("admissionSearchResults");
+  if (results) results.textContent = "Searching…";
   try {
-    const { card, participant, registrationStatus, alreadyAdmitted } = await apiFetch(`/admission/lookup/${encodeURIComponent(code)}`);
-    currentCard = card;
-    renderVerificationPanel(participant, card, registrationStatus, alreadyAdmitted);
+    const response = await apiFetch("/admission/search?name=" + encodeURIComponent(name));
+    const items = response.items || [];
+    if (!results) return;
+    if (!items.length) {
+      results.textContent = "No participant found. Check the name and try again.";
+      return;
+    }
+    results.innerHTML = items.map((person) => {
+      const admitted = person.attendances?.length > 0;
+      return `<button type="button" class="participant-result" data-user-id="${escapeHtml(person.id)}">
+        <strong>${escapeHtml(person.fullName)}</strong>
+        <span>${escapeHtml(person.Parish?.name || "Parish not set")} · ${escapeHtml(person.phone || "No phone")}</span>
+        <small>${admitted ? "Already admitted" : "Not yet admitted"}</small>
+      </button>`;
+    }).join("");
+    results.querySelectorAll("[data-user-id]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const person = items.find((item) => item.id === button.dataset.userId);
+        if (person) selectParticipant(person);
+      });
+    });
   } catch (err) {
-    showError(err.message || "No participant found with that admission code.");
+    if (results) results.textContent = "";
+    showError(err.message || "Participant search failed.");
   }
 }
 
-function renderVerificationPanel(participant, card, registrationStatus, alreadyAdmitted) {
+function selectParticipant(person) {
+  currentParticipant = person;
+  renderVerificationPanel(person);
+  $("admissionName") && ($("admissionName").value = person.fullName);
+  $("participantVerification")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderVerificationPanel(participant) {
   setText("participantName", participant.fullName);
-  setText("participantCode", card.cardNumber);
   setText("participantParish", participant.Parish?.name || "—");
   setText("participantPhone", participant.phone || "—");
   setText("participantGender", participant.gender || "—");
-  setText("participantAge", participant.dateOfBirth ? `${calculateAge(participant.dateOfBirth)} yrs` : "—");
+  setText("participantAge", participant.dateOfBirth ? calculateAge(participant.dateOfBirth) + " yrs" : "—");
   setText("registrationDate", participant.createdAt ? new Date(participant.createdAt).toLocaleDateString() : "—");
-
   const photo = $("participantPhoto");
-  if (photo && participant.avatarUrl) photo.src = participant.avatarUrl;
-
-  const paymentBadge = $("registrationStatus");
-  if (paymentBadge) {
-    paymentBadge.textContent = registrationStatus === "CONFIRMED" ? "REGISTERED" : "NOT REGISTERED";
-    paymentBadge.className = `badge ${registrationStatus === "CONFIRMED" ? "success" : "warning"}`;
+  if (photo) photo.src = participant.avatarUrl || "../assets/images/default-user.png";
+  const registered = participant.registration?.status === "CONFIRMED";
+  const registrationBadge = $("registrationStatus");
+  if (registrationBadge) {
+    registrationBadge.textContent = registered ? "REGISTERED" : "NOT REGISTERED";
+    registrationBadge.className = "badge " + (registered ? "success" : "warning");
   }
-
+  const admitted = Boolean(participant.attendances?.length);
   const admissionBadge = $("admissionStatus");
   if (admissionBadge) {
-    admissionBadge.textContent = alreadyAdmitted ? "ALREADY ADMITTED" : "NOT ADMITTED";
-    admissionBadge.className = `badge ${alreadyAdmitted ? "success" : "warning"}`;
+    admissionBadge.textContent = admitted ? "ALREADY ADMITTED" : "NOT ADMITTED";
+    admissionBadge.className = "badge " + (admitted ? "success" : "warning");
   }
-
-  const medicalNotes = [
-    participant.medicalCondition && `Condition: ${participant.medicalCondition}`,
-    participant.allergies && `Allergies: ${participant.allergies}`,
-    participant.disability && `Disability: ${participant.disability}`,
-  ].filter(Boolean);
-  setText("medicalConditions", medicalNotes.length ? medicalNotes.join(" · ") : "No medical information provided.");
-
-  const admitBtn = $("admitParticipant");
-  if (admitBtn) admitBtn.disabled = alreadyAdmitted;
+  const notes = [participant.medicalCondition, participant.allergies, participant.disability].filter(Boolean);
+  setText("medicalConditions", notes.length ? notes.join(" · ") : "No medical information provided.");
+  if ($("admitParticipant")) $("admitParticipant").disabled = admitted;
 }
 
 function calculateAge(dob) {
-  const diff = Date.now() - new Date(dob).getTime();
-  return Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+  return Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 86400000));
 }
 
 async function admitCurrentParticipant() {
-  if (!currentCard) { showError("No participant selected."); return; }
+  if (!currentParticipant) return showError("Search for and select a participant first.");
   try {
-    const { participant } = await apiFetch(`/admission/${currentCard.id}/admit`, { method: "POST" });
-    showAdmissionSuccessModal(participant);
-    const admissionBadge = $("admissionStatus");
-    if (admissionBadge) { admissionBadge.textContent = "ALREADY ADMITTED"; admissionBadge.className = "badge success"; }
-    const admitBtn = $("admitParticipant");
-    if (admitBtn) admitBtn.disabled = true;
+    const result = await apiFetch("/admission/" + encodeURIComponent(currentParticipant.id) + "/admit", {
+      method: "POST",
+      body: { label: "Finance desk name-based check-in" },
+    });
+    showAdmissionSuccessModal(result.participant);
+    currentParticipant.attendances = [{ scannedAt: result.attendance.scannedAt }];
+    const badge = $("admissionStatus");
+    if (badge) { badge.textContent = "ALREADY ADMITTED"; badge.className = "badge success"; }
+    if ($("admitParticipant")) $("admitParticipant").disabled = true;
     await loadOverview();
+    await loadParticipants($("participantSearch")?.value.trim() || "");
   } catch (err) {
     showError(err.message || "Could not admit this participant.");
   }
 }
 
 function resetVerificationPanel() {
-  currentCard = null;
+  currentParticipant = null;
   setText("participantName", "No Participant Selected");
-  setText("participantCode", "---------");
-  setText("participantParish", "---------");
-  setText("participantPhone", "---------");
-  setText("participantGender", "---------");
-  setText("participantAge", "---------");
-  setText("registrationDate", "---------");
+  setText("participantParish", "—");
+  setText("participantPhone", "—");
+  setText("participantGender", "—");
+  setText("participantAge", "—");
+  setText("registrationDate", "—");
   setText("medicalConditions", "No medical information provided.");
-  const paymentBadge = $("registrationStatus");
-  if (paymentBadge) { paymentBadge.textContent = "—"; paymentBadge.className = "badge success"; }
-  const admissionBadge = $("admissionStatus");
-  if (admissionBadge) { admissionBadge.textContent = "NOT ADMITTED"; admissionBadge.className = "badge warning"; }
-  const admitBtn = $("admitParticipant");
-  if (admitBtn) admitBtn.disabled = false;
+  const registered = $("registrationStatus");
+  if (registered) { registered.textContent = "—"; registered.className = "badge success"; }
+  const admitted = $("admissionStatus");
+  if (admitted) { admitted.textContent = "NOT ADMITTED"; admitted.className = "badge warning"; }
+  if ($("admitParticipant")) $("admitParticipant").disabled = false;
   const photo = $("participantPhoto");
   if (photo) photo.src = "../assets/images/default-user.png";
-  $("admissionCode") && ($("admissionCode").value = "");
 }
 
 function showAdmissionSuccessModal(participant) {

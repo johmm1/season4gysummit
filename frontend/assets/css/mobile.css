@@ -1,0 +1,272 @@
+/* ===========================================
+   Y-SUMMIT SEASON 4 2026 — SITEWIDE MOBILE SAFETY NET
+   ===========================================
+   Loaded LAST on every page, after every other stylesheet, on purpose:
+   this file exists to catch mobile-breaking gaps in the 20+ page-specific
+   CSS files (missing small-phone breakpoints, a couple of undefined
+   wrapper classes, iOS-only quirks) without having to hunt down every
+   instance individually. Most rules here are deliberately generic —
+   they target *patterns* used consistently across the codebase (e.g.
+   every grid layout class ends in "-grid") rather than one page at a
+   time, so a new page that follows the same naming conventions is
+   covered automatically.
+
+   A few rules use !important. That's intentional here, not a shortcut:
+   this file's whole job is to be the final, guaranteed word on a small,
+   specific list of mobile failure modes, regardless of which page-level
+   stylesheet(s) happen to be loaded above it or how specific their
+   selectors are. It is not used for anything else in this file.
+*/
+
+
+/* ---------------------------------------------
+   1. Media never wider than its container
+   (variables.css already does this for <img>; this extends the same
+   safety to everything else that can overflow a narrow screen)
+--------------------------------------------- */
+
+video, iframe, canvas, svg, embed, object {
+  max-width: 100%;
+}
+
+
+/* ---------------------------------------------
+   2. Tables: guarantee the two wrapper classes actually used
+   sitewide (.table-responsive, .table-wrapper) scroll horizontally
+   instead of blowing out the page width. Belt-and-suspenders: this
+   backstops the .table-responsive fix already made in admissions.css,
+   in case any future page reuses these class names without also
+   pulling in a stylesheet that defines them.
+--------------------------------------------- */
+
+.table-responsive,
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* ---------------------------------------------
+   3. iOS Safari zooms the whole page in when a focused form field has
+   a font-size under 16px. Two page stylesheets (gallery, announcements)
+   were fixed at the source; this is the sitewide backstop so the same
+   mistake anywhere else doesn't reintroduce the zoom-on-focus jump.
+--------------------------------------------- */
+
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+
+/* ---------------------------------------------
+   4. Small-phone grid collapse (≤480px), applied to every layout class
+   that follows this codebase's own "*-grid" naming convention
+   (.stats-grid, .summary-grid, .form-grid, .health-grid, .admission-grid,
+   etc. — 30+ of them). Most already collapse to 1 column at 768px/992px
+   in their own file; this only changes anything on the handful that
+   didn't, and is a no-op (same 1fr) everywhere else.
+--------------------------------------------- */
+
+@media (max-width: 480px) {
+  [class*="-grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ---------------------------------------------
+   5. Modal dialogs already cap themselves at 90-95% width, but their
+   padding was tuned for desktop — on a 320-360px phone that leaves
+   very little room for actual content. Tighten it only at phone widths.
+--------------------------------------------- */
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 20px !important;
+    width: 94% !important;
+  }
+}
+
+
+/* ---------------------------------------------
+   6. Comfortable tap targets on touchscreens. Only widens things that
+   are currently smaller than the ~44px minimum touch-target guideline;
+   never shrinks anything.
+--------------------------------------------- */
+
+@media (max-width: 600px) {
+  .btn,
+  button:not(.icon-btn):not(.notification-btn),
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+  }
+
+  .sidebar nav a,
+  .navbar nav a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+
+/* ---------------------------------------------
+   7. Long unbroken strings (emails, long names, church/parish names,
+   URLs pasted into announcements) can force a table cell or card wider
+   than the screen even inside a scrollable wrapper's non-table children.
+--------------------------------------------- */
+
+@media (max-width: 480px) {
+  .card, .panel, .dashboard-panel, .summary-card, .stat-card,
+  .modal-content, td, th {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+
+/* Admin portal mobile layout: keep the working area readable on phones. */
+@media (max-width: 900px) {
+  .admin-layout { display: block !important; width: 100%; min-width: 0; }
+  .admin-main, .admin-content, .main-content {
+    width: 100% !important;
+    min-width: 0;
+    margin-left: 0 !important;
+    padding: 14px !important;
+  }
+  .admin-header, .page-header, .topbar {
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .admin-header h1, .page-header h1 { font-size: clamp(1.2rem, 5vw, 1.65rem); }
+  .admin-user { max-width: 100%; }
+  .dashboard-panel, .panel, .manual-card, .search-card, .overview-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .admission-workspace { grid-template-columns: minmax(0, 1fr) !important; }
+  .manual-card, .dashboard-panel { padding: 16px !important; }
+  .manual-search { flex-wrap: wrap; }
+  .manual-search input, .manual-search button { width: 100%; min-width: 0; }
+  .participant-search-results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .participant-result {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding: 12px;
+  }
+  .table-responsive, .table-container, .participants-table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { min-width: 620px; }
+  .form-grid, .detail-grid, .overview-grid, .stats-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .form-group, .form-group input, .form-group select, .form-group textarea,
+  input, select, textarea { min-width: 0; max-width: 100%; }
+  .form-navigation, .participant-actions, .download-buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .form-navigation > *, .participant-actions > *, .download-buttons > * {
+    flex: 1 1 100%;
+  }
+  .sidebar { z-index: 1001; }
+  .sidebar-backdrop { z-index: 1000; }
+  .mobile-menu {
+    position: relative;
+    z-index: 1002;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-main, .admin-content, .main-content { padding: 10px !important; }
+  .admin-header { padding: 10px 0; }
+  .overview-card { padding: 14px; gap: 12px; }
+  .overview-card h2 { font-size: 1.6rem; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+  .quick-information { grid-template-columns: minmax(0, 1fr) !important; }
+  .modal-content { max-height: 88vh; overflow-y: auto; }
+}
+
+/* The name-based admissions desk uses one full-width workspace. */
+.admission-workspace { grid-template-columns: minmax(0, 1fr); }
+.manual-card { width: 100%; min-width: 0; }
+.participant-search-results { margin-top: 12px; }
+.participant-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #1f2937;
+  cursor: pointer;
+}
+.participant-result:hover, .participant-result:focus-visible {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+
+/* ---------------------------------------------
+   8. Public site (index) — fluid, phone-friendly typography.
+   Base sizes in style.css are fixed px values tuned for desktop; these
+   clamp() rules scale them smoothly from 320px phones up to desktop so
+   nothing is cut off or needs pinch-zoom, without changing the desktop look.
+--------------------------------------------- */
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { line-height: 1.6; overflow-wrap: break-word; }
+
+.cta-fee {
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+.cta-fee strong {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .22);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .hero h1            { font-size: clamp(1.7rem, 8vw, 2.4rem); line-height: 1.15; }
+  .hero h2            { font-size: clamp(1.05rem, 4.6vw, 1.4rem); line-height: 1.3; }
+  .hero .theme        { font-size: clamp(1.05rem, 4.4vw, 1.4rem); }
+  .hero .tagline      { font-size: clamp(.95rem, 4vw, 1.15rem); }
+  .hero .verse        { font-size: clamp(.9rem, 3.8vw, 1rem); }
+  .section-title,
+  .about-content h2,
+  .countdown h2       { font-size: clamp(1.5rem, 6.4vw, 2rem); line-height: 1.2; }
+  .section-subtitle,
+  .about-content p    { font-size: clamp(.95rem, 3.9vw, 1.05rem); }
+  .stat-card h3       { font-size: clamp(1.9rem, 9vw, 2.6rem); }
+  .stat-card p        { font-size: clamp(.9rem, 3.8vw, 1rem); }
+  .cta                { padding: 60px 6%; }
+  .cta h2             { font-size: clamp(1.5rem, 6.6vw, 2.1rem); line-height: 1.2; }
+  .cta p              { font-size: clamp(.98rem, 4vw, 1.15rem); margin-bottom: 20px; }
+  .cta-fee            { font-size: clamp(1rem, 4.4vw, 1.25rem); }
+  .cta a              { padding: 14px 32px; min-height: 44px; }
+  .announcement-card h3 { font-size: clamp(1.05rem, 4.6vw, 1.25rem); }
+}
+
+@media (max-width: 400px) {
+  .hero h1            { font-size: 1.6rem; }
+  .logo-area h2       { font-size: 1rem; }
+  .logo-area small    { font-size: .7rem; }
+}

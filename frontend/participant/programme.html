@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../assets/js/theme-init.js"></script>
+
+<title>Programme | Y-Summit Season 4 2026</title>
+
+<link rel="icon" href="../assets/images/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/responsive.css">
+
+<link rel="stylesheet" href="../assets/css/participants/layout.css">
+<link rel="stylesheet" href="../assets/css/themes.css">
+<link rel="stylesheet" href="../assets/css/participants/components.css">
+<link rel="stylesheet" href="../assets/css/participants/programme.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+<!-- ==========================
+SIDEBAR
+========================== -->
+
+<aside class="sidebar">
+
+<div class="sidebar-header">
+
+<img src="../assets/images/logo.png" alt="Y-Summit">
+
+<h2>Y-Summit</h2>
+
+<p>Participant Portal</p>
+
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</a>
+
+<a href="profile.html">
+<i class="fa-solid fa-user"></i>
+Profile
+</a>
+
+<a href="admission-pass.html">
+<i class="fa-solid fa-id-card"></i>
+Admission Pass
+</a>
+
+<a href="programme.html" class="active">
+<i class="fa-solid fa-calendar-days"></i>
+Programme
+</a>
+
+<a href="announcements.html">
+<i class="fa-solid fa-bullhorn"></i>
+Announcements
+</a>
+
+<a href="sports.html">
+<i class="fa-solid fa-futbol"></i>
+Sports Centre
+</a>
+
+<a href="gallery.html">
+<i class="fa-solid fa-images"></i>
+Gallery
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button id="logoutBtn" class="logout-btn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</aside>
+
+<!-- ==========================
+MAIN CONTENT
+========================== -->
+
+<main class="dashboard-content">
+
+<header class="topbar">
+
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+
+<div>
+
+<h1>Programme</h1>
+
+<p>Your day-by-day guide to the Summit</p>
+
+</div>
+
+<div class="participant-profile">
+
+<img
+id="participantPhoto"
+src="../assets/images/avatar-placeholder.png"
+alt="Participant">
+
+<div>
+
+<h4 id="participantName">Loading...</h4>
+
+<p id="participantParish">Loading...</p>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ==========================
+HERO
+========================== -->
+
+<section class="pg-hero">
+
+<span class="pg-hero-eyebrow"><i class="fa-solid fa-calendar-days"></i> Youth Summit • Programme Timetable</span>
+
+<h2>GYS 2026</h2>
+
+<p class="pg-hero-dates" id="heroDates">15 Dec – 19 December 2026</p>
+
+<div class="pg-hero-row">
+
+<span class="pg-pill" id="heroStatus">Loading...</span>
+
+<span class="pg-pill pg-pill-draft"><i class="fa-solid fa-pen-ruler"></i> Draft timetable — times may change</span>
+
+</div>
+
+</section>
+
+<!-- ==========================
+DAY TABS + FILTERS
+========================== -->
+
+<section class="pg-controls">
+
+<div class="pg-tabs" id="dayTabs" role="tablist" aria-label="Summit days"></div>
+
+<div class="pg-filters" id="filterChips" aria-label="Filter activities"></div>
+
+</section>
+
+<!-- ==========================
+DAY HEADER + TIMELINE
+========================== -->
+
+<section class="pg-day-header" id="dayHeader"></section>
+
+<section class="pg-timeline" id="timeline" aria-live="polite"></section>
+
+<p class="pg-footnote">
+<i class="fa-solid fa-circle-info"></i>
+Tap a phone number to call the facilitator. Watch the Announcements page for any last-minute changes.
+</p>
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 PCEA Githunguri Presbytery Youth Fellowship
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="../assets/js/app-shell.js"></script>
+<script type="module" src="js/programme.js"></script>
+
+</body>
+
+</html>

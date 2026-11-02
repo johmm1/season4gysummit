@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports | Y-Summit Season 4 2026</title>
+
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/admin-desk.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+
+<body>
+<div class="admin-layout">
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../assets/images/logo.png" alt="">
+    <h2>Y-Summit</h2>
+    <p>Administration</p>
+  </div>
+  <nav></nav>
+</aside>
+
+<main class="admin-main">
+
+<header class="admin-header">
+  <button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+  <div>
+    <h1>Department Reports</h1>
+    <p>Send your department’s report as a PDF to the super admin.</p>
+  </div>
+  <button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out"><i class="fa-solid fa-right-from-bracket"></i></button>
+</header>
+
+<div class="desk-split">
+
+  <div class="desk-card">
+    <div class="desk-card-head">
+      <h2>Send a report</h2>
+      <p>PDF only, up to 10 MB.</p>
+    </div>
+
+    <label class="desk-label" for="repDept">Department</label>
+    <select id="repDept">
+      <option value="">— Select department —</option>
+      <option>Finance</option>
+      <option>Admissions</option>
+      <option>Sports</option>
+      <option>Dance &amp; Folk Song</option>
+      <option>Worship &amp; Programme</option>
+      <option>Welfare &amp; Health</option>
+      <option>Catering</option>
+      <option>Accommodation</option>
+      <option>Security</option>
+      <option>Media &amp; Publicity</option>
+      <option>Logistics &amp; Transport</option>
+      <option>Other</option>
+    </select>
+
+    <label class="desk-label" for="repTitle">Report title</label>
+    <input id="repTitle" type="text" maxlength="160" placeholder="e.g. Day 1 sports report" class="desk-input">
+
+    <label class="desk-label" for="repSummary">Short note (optional)</label>
+    <textarea id="repSummary" rows="3" maxlength="2000" placeholder="Anything the super admin should know before opening it"></textarea>
+
+    <label class="desk-label" for="repFile">PDF file</label>
+    <input id="repFile" type="file" accept="application/pdf,.pdf" class="desk-input">
+
+    <div style="margin-top:16px">
+      <button class="desk-btn primary" id="sendReport" type="button"><i class="fa-solid fa-paper-plane"></i> Send report</button>
+    </div>
+  </div>
+
+  <div class="desk-card">
+    <div class="desk-card-head">
+      <h2 id="listTitle">Reports</h2>
+    </div>
+    <div class="desk-row">
+      <div>
+        <label class="desk-label" for="filterDept">Department</label>
+        <select id="filterDept"><option value="">All departments</option></select>
+      </div>
+      <div>
+        <label class="desk-label" for="filterStatus">Status</label>
+        <select id="filterStatus">
+          <option value="">All</option>
+          <option value="SUBMITTED">Waiting for review</option>
+          <option value="REVIEWED">Reviewed</option>
+        </select>
+      </div>
+    </div>
+    <div class="desk-table-wrap">
+      <table class="desk-table">
+        <thead><tr><th>Report</th><th>From</th><th>Status</th><th></th></tr></thead>
+        <tbody id="repBody"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</main>
+</div>
+
+<script type="module" src="../assets/js/reports.js"></script>
+<script src="../assets/js/admin-nav.js"></script>
+<script src="../assets/js/app-shell.js"></script>
+</body>
+</html>

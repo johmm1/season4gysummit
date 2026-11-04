@@ -1628,7 +1628,7 @@ Audit Logs
 
 <p>
 
-Tracks logins, settings changes, admin account creation, gallery approvals/deletions, sports roster changes, and backups. Other modules aren't instrumented yet.
+Tracks successful and failed logins, registrations, and authenticated page visits, alongside administrative changes. PDF exports can be filtered by user, event, module and date.
 
 </p>
 
@@ -1665,6 +1665,7 @@ Module
 <option value="">All Modules</option>
 
 <option value="auth">Authentication</option>
+<option value="page">Page Visits</option>
 
 <option value="settings">Settings</option>
 
@@ -1693,6 +1694,8 @@ Action
 <option value="">All Actions</option>
 
 <option value="LOGIN">Login</option>
+<option value="REGISTER">Registration</option>
+<option value="PAGE_VIEW">Page Visit</option>
 
 <option value="LOGIN_FAILED">Login Failed</option>
 
@@ -1766,7 +1769,7 @@ Export Logs
 
 <th>Date & Time</th>
 
-<th>Administrator</th>
+<th>User</th>
 
 <th>Module</th>
 
@@ -1993,7 +1996,7 @@ Delete Old Logs
 
 <i class="fa-solid fa-download"></i>
 
-Download Full Audit Report
+Download PDF Activity Report
 
 </button>
 

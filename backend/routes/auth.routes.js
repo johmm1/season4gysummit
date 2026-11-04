@@ -111,7 +111,7 @@ router.post(
         });
     } catch (err) { console.error("[register] notification failed:", err.message); }
     try {
-      await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role });
+      await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
     } catch (err) { console.error("[register] audit log failed:", err.message); }
     return res.status(201).json({ success: true, message: "Account successfully created.", token: signToken(user), user, registration });
   })
@@ -138,7 +138,7 @@ router.post(
 
     if (!matches.length) {
       await logAction(accounts[0]?.id || null, "LOGIN_FAILED", "auth", accounts[0]?.id || null,
-        { identifier, reason: accounts.length ? "bad_password" : "no_such_account" });
+        { identifier, reason: accounts.length ? "bad_password" : "no_such_account", ip: req.ip, userAgent: req.get("user-agent") });
       throw new ApiError(401, "Invalid email/phone or password.");
     }
     if (matches.length > 1) {
@@ -147,13 +147,13 @@ router.post(
 
     const user = matches[0];
     if (!user.isActive) {
-      await logAction(user.id, "LOGIN_FAILED", "auth", user.id, { reason: "account_deactivated" });
+      await logAction(user.id, "LOGIN_FAILED", "auth", user.id, { reason: "account_deactivated", ip: req.ip, userAgent: req.get("user-agent") });
       throw new ApiError(403, "This account has been deactivated.");
     }
 
     user.lastLoginAt = new Date();
     await user.save();
-    await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role });
+    await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
 
     const token = signToken(user);
     res.json({ token, user });
@@ -208,12 +208,12 @@ router.post(
       throw new ApiError(404, `No Y-Summit account found for ${payload.email}. Register first, then Google Sign-In will work.`);
     }
     if (!user.isActive) {
-      await logAction(user.id, "LOGIN_FAILED", "auth", user.id, { reason: "account_deactivated", via: "google" });
+      await logAction(user.id, "LOGIN_FAILED", "auth", user.id, { reason: "account_deactivated", via: "google", ip: req.ip, userAgent: req.get("user-agent") });
       throw new ApiError(403, "This account has been deactivated.");
     }
     user.lastLoginAt = new Date();
     await user.save();
-    await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, via: "google" });
+    await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, via: "google", ip: req.ip, userAgent: req.get("user-agent") });
 
     const token = signToken(user);
     res.json({ token, user });

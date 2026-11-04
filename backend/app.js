@@ -9,6 +9,7 @@ const { errorHandler, notFoundHandler } = require("./middleware/errorHandler");
 const { requestCounter } = require("./middleware/requestCounter");
 
 const authRoutes = require("./routes/auth.routes");
+const activityRoutes = require("./routes/activity.routes");
 const structureRoutes = require("./routes/structure.routes");
 const registrationRoutes = require("./routes/registration.routes");
 const admissionRoutes = require("./routes/admission.routes");
@@ -53,6 +54,7 @@ app.use(requestCounter);
 app.get("/health", (_req, res) => res.json({ ok: true, service: "gy-summit-2026-api" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/activity", activityRoutes);
 app.use("/api/structure", structureRoutes);
 app.use("/api/registration", registrationRoutes);
 app.use("/api/admission", admissionRoutes);

@@ -243,7 +243,7 @@ function populateAdminFilter(logs) {
   if (!select) return;
   const admins = new Map();
   logs.forEach((l) => { if (l.actor) admins.set(l.actor.id, l.actor.fullName); });
-  select.innerHTML = '<option value="">All Administrators</option>' +
+  select.innerHTML = '<option value="">All Users</option>' +
     [...admins.entries()].map(([id, name]) => `<option value="${id}">${escapeHtml(name)}</option>`).join("");
 }
 

@@ -1,5 +1,6 @@
 // Y-Summit Season 4 2026 — admin: dashboard, participants, settings and admin accounts
 const { Router } = require("express");
+const PDFDocument = require("pdfkit");
 const { Op, fn, col } = require("sequelize");
 const { z } = require("zod");
 const bcrypt = require("bcryptjs");
@@ -317,15 +318,66 @@ router.get(
 
 // ---- Audit logs ----
 
+function auditLogFilters(query) {
+  const where = {};
+  if (query.entityType) where.entityType = String(query.entityType).slice(0, 60);
+  if (query.action) where.action = String(query.action).slice(0, 80);
+  if (query.actorId) where.actorId = String(query.actorId).slice(0, 80);
+  const dates = {};
+  if (query.dateFrom && /^\\d{4}-\\d{2}-\\d{2}$/.test(query.dateFrom)) dates[Op.gte] = new Date(`${query.dateFrom}T00:00:00.000Z`);
+  if (query.dateTo && /^\\d{4}-\\d{2}-\\d{2}$/.test(query.dateTo)) dates[Op.lte] = new Date(`${query.dateTo}T23:59:59.999Z`);
+  if (Object.keys(dates).length) where.createdAt = dates;
+  return where;
+}
+
+router.get(
+  "/audit-logs/export.pdf",
+  requireRole("SUPER_ADMIN", "ADMIN"),
+  asyncHandler(async (req, res) => {
+    const where = auditLogFilters(req.query);
+    const logs = await AuditLog.findAll({
+      where,
+      include: [{ model: User, as: "actor", attributes: ["id", "fullName", "email"] }],
+      order: [["createdAt", "DESC"]],
+      limit: 5000,
+    });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="gy-summit-activity-log-${new Date().toISOString().slice(0, 10)}.pdf"`);
+    const doc = new PDFDocument({ size: "A4", margin: 42, bufferPages: true });
+    doc.pipe(res);
+    doc.fontSize(18).font("Helvetica-Bold").text("GY Summit - Activity & Audit Report");
+    doc.moveDown(0.3).fontSize(9).font("Helvetica")
+      .text(`Generated: ${new Date().toLocaleString("en-KE", { timeZone: "Africa/Nairobi" })} EAT`)
+      .text(`Records included: ${logs.length}`)
+      .text("Scope: authenticated account activity. Page views are recorded when a signed-in user opens a portal page.");
+    doc.moveDown();
+    doc.fontSize(9).font("Helvetica-Bold").text("DATE / TIME     USER     EVENT     PAGE / DETAILS");
+    doc.moveTo(42, doc.y + 4).lineTo(553, doc.y + 4).stroke();
+    doc.moveDown(0.6);
+
+    for (const log of logs) {
+      const meta = typeof log.metadata === "string" ? (() => { try { return JSON.parse(log.metadata); } catch { return {}; } })() : (log.metadata || {});
+      const date = new Date(log.createdAt).toLocaleString("en-KE", { timeZone: "Africa/Nairobi" });
+      const user = log.actor?.fullName || meta.identifier || "Unknown / system";
+      const detail = [meta.path || log.entityId || "", meta.title || "", meta.ip ? `IP ${meta.ip}` : ""].filter(Boolean).join(" | ");
+      const line = `${date} | ${user} | ${log.action} | ${log.entityType} | ${detail}`;
+      if (doc.y > 755) doc.addPage();
+      doc.font("Helvetica").fontSize(7.5).text(line, { width: 510, lineGap: 2 });
+    }
+
+    if (!logs.length) doc.fontSize(10).text("No activity matched the selected filters.");
+    doc.end();
+  })
+);
+
 router.get(
   "/audit-logs",
   requireRole("SUPER_ADMIN", "ADMIN"),
   asyncHandler(async (req, res) => {
     const page = Math.max(1, parseInt(req.query.page || "1", 10));
     const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize || "50", 10)));
-    const where = {};
-    if (req.query.entityType) where.entityType = req.query.entityType;
-    if (req.query.action) where.action = req.query.action;
+    const where = auditLogFilters(req.query);
 
     const { rows, count } = await AuditLog.findAndCountAll({
       where,

@@ -5,7 +5,7 @@
 // platform-wide: authentication policy, backups, system health, and audit
 // logs — none of which belong to any one page.
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, showSuccess, escapeHtml, setText, $ } from "./utils.js";
+import { apiFetch, apiDownload, showError, showSuccess, escapeHtml, setText, $ } from "./utils.js";
 import { CONFIG } from "./config.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
 
@@ -192,23 +192,25 @@ function renderAuditLogs(logs) {
   tbody.innerHTML = logs.map((log) => `
     <tr>
       <td>${new Date(log.createdAt).toLocaleString()}</td>
-      <td>${escapeHtml(log.actor?.fullName || "System")}</td>
+      <td>${escapeHtml(log.actor?.fullName || readLogMetadata(log).identifier || "System")}</td>
       <td>${escapeHtml(log.entityType)}</td>
       <td>${escapeHtml(log.action)}</td>
       <td>${escapeHtml(summarizeLog(log))}</td>
-      <td>--</td>
+      <td>${escapeHtml(readLogMetadata(log).ip || "—")}</td>
       <td><span class="status ${log.action.includes("FAILED") ? "error" : "success"}">${log.action.includes("FAILED") ? "Failed" : "Success"}</span></td>
     </tr>`).join("");
 }
 
+function readLogMetadata(log) {
+  if (!log?.metadata) return {};
+  try { return typeof log.metadata === "string" ? JSON.parse(log.metadata) : log.metadata; }
+  catch { return {}; }
+}
+
 function summarizeLog(log) {
-  if (!log.metadata) return "";
-  try {
-    const m = typeof log.metadata === "string" ? JSON.parse(log.metadata) : log.metadata;
-    return Object.entries(m).map(([k, v]) => `${k}: ${v}`).join(", ");
-  } catch {
-    return "";
-  }
+  const m = readLogMetadata(log);
+  return [m.path, m.title, m.reason, m.via, m.role].filter(Boolean).join(" · ") ||
+    Object.entries(m).filter(([k]) => !["ip", "userAgent"].includes(k)).map(([k, v]) => `${k}: ${v}`).join(", ");
 }
 
 function renderSecurityEvents(logs) {
@@ -268,10 +270,20 @@ function wireAuditControls() {
   $("exportAuditLogs")?.addEventListener("click", () => exportLogsAsCsv(allAuditLogs));
   $("downloadAuditReportBtn")?.addEventListener("click", async () => {
     try {
-      const { logs } = await apiFetch("/admin/audit-logs?pageSize=100");
-      exportLogsAsCsv(logs);
+      const params = new URLSearchParams();
+      const actorId = $("auditAdminFilter")?.value;
+      const entityType = $("auditModuleFilter")?.value;
+      const action = $("auditActionFilter")?.value;
+      const date = $("auditDateFilter")?.value;
+      if (actorId) params.set("actorId", actorId);
+      if (entityType) params.set("entityType", entityType);
+      if (action) params.set("action", action);
+      if (date) { params.set("dateFrom", date); params.set("dateTo", date); }
+      const suffix = params.toString() ? `?${params.toString()}` : "";
+      await apiDownload(`/admin/audit-logs/export.pdf${suffix}`, `gy-summit-activity-log-${new Date().toISOString().slice(0, 10)}.pdf`);
+      showSuccess("PDF activity report downloaded.");
     } catch (err) {
-      showError(err.message || "Could not generate report.");
+      showError(err.message || "Could not generate PDF report.");
     }
   });
 

@@ -324,8 +324,8 @@ function auditLogFilters(query) {
   if (query.action) where.action = String(query.action).slice(0, 80);
   if (query.actorId) where.actorId = String(query.actorId).slice(0, 80);
   const dates = {};
-  if (query.dateFrom && /^\\d{4}-\\d{2}-\\d{2}$/.test(query.dateFrom)) dates[Op.gte] = new Date(`${query.dateFrom}T00:00:00.000Z`);
-  if (query.dateTo && /^\\d{4}-\\d{2}-\\d{2}$/.test(query.dateTo)) dates[Op.lte] = new Date(`${query.dateTo}T23:59:59.999Z`);
+  if (query.dateFrom && /^\d{4}-\d{2}-\d{2}$/.test(query.dateFrom)) dates[Op.gte] = new Date(`${query.dateFrom}T00:00:00.000Z`);
+  if (query.dateTo && /^\d{4}-\d{2}-\d{2}$/.test(query.dateTo)) dates[Op.lte] = new Date(`${query.dateTo}T23:59:59.999Z`);
   if (Object.keys(dates).length) where.createdAt = dates;
   return where;
 }

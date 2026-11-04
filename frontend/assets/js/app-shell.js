@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSidebarToggle();
   injectFooter();
   initThemeSwitcher();
+  trackPageView();
 });
 
 function initSidebarToggle() {
@@ -167,4 +168,35 @@ function setTheme(theme) {
   }
   document.documentElement.setAttribute("data-theme", theme);
   window.dispatchEvent(new CustomEvent("gySummitThemeChange", { detail: { theme } }));
+}
+
+
+/**
+ * Records authenticated portal page visits. Anonymous browsing is not tracked.
+ * Only pathname + page title are sent; query strings are deliberately omitted.
+ */
+function trackPageView() {
+  let token = null;
+  try { token = localStorage.getItem("gySummitToken"); } catch { return; }
+  if (!token) return;
+
+  const host = window.location.hostname;
+  const apiBase = ["localhost", "127.0.0.1"].includes(host)
+    ? "http://localhost:4000/api"
+    : "https://gy-summit-2026-api.onrender.com/api";
+
+  fetch(`${apiBase}/activity/page-view`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      path: window.location.pathname,
+      title: document.title || "",
+    }),
+    keepalive: true,
+  }).catch(() => {
+    // Activity tracking must never interrupt normal navigation.
+  });
 }

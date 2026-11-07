@@ -582,13 +582,10 @@ router.post(
       } else {
         const rules = body.category === "Football" ? await getForm("footballRulesForm") : {};
         const duration = Number(rules.footballDuration);
-        plan = planner.planGroupCompetition({
-          ...common,
-          category: body.category,
-          slots: body.slots,
-          maxPerDay: body.maxPerDay,
-          durationMin: Number.isFinite(duration) && duration >= 20 && duration <= 120 ? duration : undefined,
-        });
+        const options = { ...common, category: body.category, slots: body.slots, maxPerDay: body.maxPerDay,
+          durationMin: Number.isFinite(duration) && duration >= 20 && duration <= 120 ? duration : undefined };
+        plan = body.category === "Football" && teams.length === 11
+          ? planner.planElevenChurchCup(options) : planner.planGroupCompetition(options);
       }
     } catch (err) {
       throw new ApiError(400, err.message);
@@ -671,6 +668,59 @@ router.post(
     const pending = groupEvents.filter((e) => e.status !== "COMPLETED");
     if (!judged && pending.length) {
       throw new ApiError(409, `${pending.length} group fixture(s) are still to be completed.`);
+    }
+
+    // Special eleven-church cup progression. Best loser is the closest defeat
+    // (goal difference), then the highest goals scored.
+    const cupEvents = category === "Football" ? await SportsEvent.findAll({ where: { category, bracketSlot: { [Op.ne]: null } } }) : [];
+    if (cupEvents.some((e) => /^PA[1-3]$/.test(e.bracketSlot || ""))) {
+      const bySlot = Object.fromEntries(cupEvents.map((e) => [e.bracketSlot, e]));
+      const get = (slots) => slots.map((s) => bySlot[s]).filter(Boolean);
+      const winner = (e) => e.scoreHome > e.scoreAway ? e.teamHome : e.teamAway;
+      const loser = (e) => e.scoreHome > e.scoreAway ? e.teamAway : e.teamHome;
+      const stats = (e) => {
+        const homeLost = e.scoreHome < e.scoreAway;
+        return { team: loser(e), gd: homeLost ? e.scoreHome-e.scoreAway : e.scoreAway-e.scoreHome, gf: homeLost ? e.scoreHome : e.scoreAway };
+      };
+      const bestLoser = (events) => events.map(stats).sort((a,b) => b.gd-a.gd || b.gf-a.gf || a.team.localeCompare(b.team))[0];
+      const complete = (events, label) => {
+        const pending = events.filter((e) => e.status !== "COMPLETED" || e.scoreHome == null || e.scoreAway == null || e.scoreHome === e.scoreAway);
+        if (pending.length) throw new ApiError(409, label + ": " + pending.length + " match(es) need a completed, non-drawn result.");
+      };
+      let filled = 0;
+      const poolA = get(["PA1","PA2","PA3"]), poolB = get(["PB1","PB2"]);
+      if (poolA.length !== 3 || poolB.length !== 2) throw new ApiError(409, "Cup fixtures incomplete. Regenerate the football plan.");
+      complete([...poolA,...poolB], "Opening pool matches");
+      const poolBLoser = bestLoser(poolB), pb3 = bySlot.PB3;
+      if (!pb3) throw new ApiError(409, "Pool B play-off is missing.");
+      if (pb3.teamAway !== poolBLoser.team) { await pb3.update({ teamAway: poolBLoser.team }); filled++; }
+      if (pb3.status !== "COMPLETED" || pb3.scoreHome == null || pb3.scoreAway == null || pb3.scoreHome === pb3.scoreAway) {
+        return res.json({category,stage:"POOL_B_PLAYOFF",filled,bestLoser:poolBLoser.team,message:"Pool B's fifth team must play the best loser before cross-pool fixtures can be filled."});
+      }
+      const cross = get(["CP1","CP2","CP3"]);
+      if (cross.length !== 3) throw new ApiError(409, "Cross-pool fixtures are missing.");
+      const aWinners = poolA.map(winner), bWinners = [winner(poolB[0]),winner(poolB[1]),winner(pb3)];
+      for (let i=0;i<3;i++) if (cross[i].teamHome !== aWinners[i] || cross[i].teamAway !== bWinners[i]) {
+        await cross[i].update({teamHome:aWinners[i],teamAway:bWinners[i]}); filled++;
+      }
+      if (cross.some((e) => e.status !== "COMPLETED" || e.scoreHome == null || e.scoreAway == null || e.scoreHome === e.scoreAway)) {
+        return res.json({category,stage:"CROSS_POOL",filled,qualifiers:{poolA:aWinners,poolB:bWinners},message:"Cross-pool fixtures filled. Complete all three matches to determine the four semi-finalists."});
+      }
+      const cWinners = cross.map(winner), cBestLoser = bestLoser(cross);
+      const sf1=bySlot.SF1, sf2=bySlot.SF2;
+      if (!sf1 || !sf2) throw new ApiError(409, "Semi-final placeholders are missing.");
+      if (sf1.teamHome !== cWinners[0] || sf1.teamAway !== cWinners[1]) { await sf1.update({teamHome:cWinners[0],teamAway:cWinners[1]}); filled++; }
+      if (sf2.teamHome !== cWinners[2] || sf2.teamAway !== cBestLoser.team) { await sf2.update({teamHome:cWinners[2],teamAway:cBestLoser.team}); filled++; }
+      if ([sf1,sf2].some((e) => e.status !== "COMPLETED" || e.scoreHome == null || e.scoreAway == null || e.scoreHome === e.scoreAway)) {
+        return res.json({category,stage:"SEMI_FINALS",filled,bestLoser:cBestLoser.team,message:"Semi-finals filled. Complete both matches to determine the final and third-place teams."});
+      }
+      const third=bySlot.THIRD, final=bySlot.F;
+      if (!third || !final) throw new ApiError(409, "Final placeholders are missing.");
+      const semiWinners=[winner(sf1),winner(sf2)], semiLosers=[loser(sf1),loser(sf2)];
+      if (third.teamHome !== semiLosers[0] || third.teamAway !== semiLosers[1]) { await third.update({teamHome:semiLosers[0],teamAway:semiLosers[1]}); filled++; }
+      if (final.teamHome !== semiWinners[0] || final.teamAway !== semiWinners[1]) { await final.update({teamHome:semiWinners[0],teamAway:semiWinners[1]}); filled++; }
+      await logAction(req.auth.userId,"ELEVEN_CHURCH_CUP_ADVANCED","sports",null,{filled});
+      return res.json({category,stage:"FINALS",filled,finalists:semiWinners,thirdPlace:semiLosers});
     }
 
     // ---------- Dance / Folk Song: top two per heat by judges' average ----------

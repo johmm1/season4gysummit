@@ -24,6 +24,7 @@ if (admin) {
   wireLogoutButton();
   await loadEvents();
   wireFixtureForm();
+  $("sportsSearch")?.addEventListener("input", () => renderFixturesTable(allEventsCache));
   initFixturePlanner({ onSaved: async () => { await loadEvents(); await loadTeamsOverview($("teamsOverviewFilter")?.value); } });
   await initTeamRosters();
   wireTabs();
@@ -461,6 +462,8 @@ async function loadEvents(category) {
 }
 
 function renderFixturesTable(events) {
+  const query = ($("sportsSearch")?.value || "").trim().toLocaleLowerCase();
+  const visibleEvents = query ? events.filter((e) => [e.category, e.name, e.teamHome, e.teamAway, e.venue, e.status, e.group, e.round].filter(Boolean).join(" ").toLocaleLowerCase().includes(query)) : events;
   // masterTimeline is the real Fixtures-tab table (Time | Competition |
   // Fixture | Venue | Official | Status | Actions). The football/volleyball/
   // dance tab tables are part of the documented out-of-scope mockup — only
@@ -469,12 +472,12 @@ function renderFixturesTable(events) {
   if (!table) return;
   const tbody = table.tagName === "TABLE" ? table.querySelector("tbody") || table : table;
 
-  if (!events.length) {
-    tbody.innerHTML = `<tr><td colspan="7">No fixtures scheduled yet.</td></tr>`;
+  if (!visibleEvents.length) {
+    tbody.innerHTML = `<tr><td colspan="7">${query ? "No fixtures match your search." : "No fixtures scheduled yet."}</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = events
+  tbody.innerHTML = visibleEvents
     .map(
       (e) => `
       <tr data-id="${e.id}">
@@ -492,7 +495,7 @@ function renderFixturesTable(events) {
     .join("");
 
   tbody.querySelectorAll('[data-action="edit"]').forEach((btn) =>
-    btn.addEventListener("click", () => openEditFixtureModal(events.find((e) => e.id === btn.dataset.id)))
+    btn.addEventListener("click", () => openEditFixtureModal(visibleEvents.find((e) => e.id === btn.dataset.id)))
   );
 }
 

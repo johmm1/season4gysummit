@@ -18,6 +18,7 @@ export async function apiFetch(path, options = {}) {
   };
 
   const res = await fetch(`${CONFIG.API_BASE_URL}${path}`, {
+    cache: options.method && options.method.toUpperCase() !== "GET" ? undefined : "no-store",
     ...options,
     headers,
     body:

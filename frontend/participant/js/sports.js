@@ -26,10 +26,16 @@ if (user) {
   const photo = $("participantPhoto");
   if (photo && user.avatarUrl) photo.src = user.avatarUrl;
   hideUnsupportedSections();
+  clearFixturePlaceholders();
   await loadFixtures();
   await loadTimetable();
   wireControls();
   wireSportTabs();
+  // Keep participant fixtures in sync with the database without manual refresh.
+  window.setInterval(() => loadFixtures(), 30000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) loadFixtures();
+  });
 }
 
 function wireSportTabs() {
@@ -55,6 +61,15 @@ function hideUnsupportedSections() {
   }
 }
 
+function clearFixturePlaceholders() {
+  const fixtures = $("fixturesTable");
+  if (fixtures) fixtures.innerHTML = `<tr><td colspan="7">Loading the latest fixtures…</td></tr>`;
+  const today = $("todayMatches");
+  if (today) today.innerHTML = "<p>Loading the latest matches…</p>";
+  const results = $("resultsContainer");
+  if (results) results.innerHTML = "<p>Loading the latest results…</p>";
+}
+
 async function loadFixtures(category) {
   try {
     const { events } = await apiFetch(category ? `/sports?category=${encodeURIComponent(category)}` : "/sports");
@@ -71,6 +86,10 @@ async function loadFixtures(category) {
     renderBracket(events);
     renderDanceSchedule(events);
   } catch (err) {
+    const table = $("fixturesTable");
+    if (table) table.innerHTML = `<tr><td colspan="7">Fixtures could not be refreshed. Please try again.</td></tr>`;
+    const today = $("todayMatches");
+    if (today) today.innerHTML = "<p>Today’s matches could not be refreshed.</p>";
     showError(err.message || "Could not load sports fixtures.");
   }
 }

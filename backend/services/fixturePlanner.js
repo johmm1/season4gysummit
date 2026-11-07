@@ -297,8 +297,11 @@ function planElevenChurchCup(options) {
   const days = pickGameDays(resolveDays(options));
   if (days.length < 4) throw new Error("The 11-church cup needs Tuesday, Wednesday, Thursday and Friday event days.");
   const [tue, wed, thu, fri] = days;
-  const poolA = teams.slice(0, 6);
-  const poolB = teams.slice(6, 11);
+  const poolA = options.poolA ? [...options.poolA] : teams.slice(0, 6);
+  const poolB = options.poolB ? [...options.poolB] : teams.slice(6, 11);
+  if (poolA.length !== 6 || poolB.length !== 5 || new Set([...poolA, ...poolB]).size !== 11 || [...poolA, ...poolB].some((team) => !teams.includes(team))) {
+    throw new Error("Assign six different churches to Pool A and five different churches to Pool B. Every football team must appear exactly once.");
+  }
   const venue = (options.venues && options.venues[0]) || "Main Pitch";
   const duration = options.durationMin || FB_MIN;
   const gender = options.gender || "MIXED";

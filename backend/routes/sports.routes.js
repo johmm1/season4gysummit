@@ -588,8 +588,14 @@ router.post(
         const duration = Number(rules.footballDuration);
         const options = { ...common, category: body.category, slots: body.slots, maxPerDay: body.maxPerDay,
           durationMin: Number.isFinite(duration) && duration >= 20 && duration <= 120 ? duration : undefined };
-        plan = body.category === "Football" && teams.length === 11
-          ? planner.planElevenChurchCup(options) : planner.planGroupCompetition(options);
+        if (body.category === "Football") {
+          if (teams.length !== 11) {
+            throw new Error(`The football cup is configured for 11 churches, but the system currently has ${teams.length} Football teams. Check the parish/team setup before generating fixtures.`);
+          }
+          plan = planner.planElevenChurchCup(options);
+        } else {
+          plan = planner.planGroupCompetition(options);
+        }
       }
     } catch (err) {
       throw new ApiError(400, err.message);

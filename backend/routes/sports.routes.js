@@ -665,8 +665,9 @@ router.post(
     });
     if (!groupEvents.length) throw new ApiError(404, `No ${category} group fixtures found. Plan the fixtures first.`);
 
+    const hasElevenChurchCup = category === "Football" && groupEvents.some((e) => /^PA[1-3]$/.test(e.bracketSlot || ""));
     const pending = groupEvents.filter((e) => e.status !== "COMPLETED");
-    if (!judged && pending.length) {
+    if (!judged && pending.length && !hasElevenChurchCup) {
       throw new ApiError(409, `${pending.length} group fixture(s) are still to be completed.`);
     }
 

@@ -608,15 +608,21 @@ router.post(
       perDay[date] = (perDay[date] || 0) + 1;
     }
 
+    let responseFixtures = fixtures;
     if (!body.preview) {
       await sequelize.transaction(async (transaction) => {
         if (planned.length) await SportsEvent.destroy({ where: { id: { [Op.in]: [...plannedIds] } }, transaction });
         await SportsEvent.bulkCreate(
           fixtures.map(({ matchday, ...f }) => f),
-          { transaction }
+          { transaction, validate: true }
         );
       });
-      await logAction(req.auth.userId, "FIXTURES_PLANNED", "sports", null, { category: body.category, groups: plan.groupCount, fixtures: fixtures.length });
+      // Read back from Postgres after commit; return the persisted rows and IDs.
+      responseFixtures = await SportsEvent.findAll({
+        where: { category: body.category, round: { [Op.ne]: null } },
+        order: [["startsAt", "ASC"]],
+      });
+      await logAction(req.auth.userId, "FIXTURES_PLANNED", "sports", null, { category: body.category, groups: plan.groupCount, fixtures: responseFixtures.length });
     }
 
     res.status(body.preview ? 200 : 201).json({
@@ -624,7 +630,7 @@ router.post(
       category: body.category,
       groups: plan.groups,
       perDay,
-      fixtures: fixtures.map(serializeFixture),
+      fixtures: responseFixtures.map(serializeFixture),
     });
   })
 );

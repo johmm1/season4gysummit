@@ -16,7 +16,9 @@ export function initFixturePlanner({ onSaved } = {}) {
     $("plannerGroupsView").innerHTML = "";
     $("plannerDaysView").innerHTML = "";
     setStatus("");
+    loadPoolAssignments();
   });
+  loadPoolAssignments();
 
   // The older per-sport "Generate Fixtures" / "Schedule Performance"
   // buttons had no handler — send them to the planner with that sport picked.
@@ -28,12 +30,14 @@ export function initFixturePlanner({ onSaved } = {}) {
     if (busy) return;
     const category = $("plannerCategory").value;
     const groupCount = Number($("plannerGroups").value) || undefined;
+    const pools = category === "Football" ? selectedPools() : {};
+    if (category === "Football" && pools.error) { setStatus(pools.error, "error"); return; }
     busy = true;
     setStatus(preview ? "Building preview…" : "Generating and saving…");
     try {
       let data;
       try {
-        data = await post({ category, groupCount, preview });
+        data = await post({ category, groupCount, preview, ...pools });
       } catch (err) {
         // Fixtures already exist: ask before rebuilding them.
         if (!preview && err.status === 409 && /replace: true/.test(err.message)) {
@@ -41,7 +45,7 @@ export function initFixturePlanner({ onSaved } = {}) {
             setStatus("Cancelled — existing fixtures kept.");
             return;
           }
-          data = await post({ category, groupCount, preview, replace: true });
+          data = await post({ category, groupCount, preview, replace: true, ...pools });
         } else {
           throw err;
         }
@@ -82,8 +86,37 @@ export function initFixturePlanner({ onSaved } = {}) {
   }
 }
 
-function post({ category, groupCount, preview, replace = false }) {
-  return apiFetch("/sports/plan-fixtures", { method: "POST", body: { category, groupCount, preview, replace } });
+function post({ category, groupCount, preview, replace = false, poolA, poolB }) {
+  return apiFetch("/sports/plan-fixtures", { method: "POST", body: { category, groupCount, preview, replace, poolA, poolB } });
+}
+
+async function loadPoolAssignments() {
+  const panel = $("plannerPoolAssignment");
+  if (!panel) return;
+  const isFootball = $("plannerCategory")?.value === "Football";
+  panel.hidden = !isFootball;
+  if (!isFootball) return;
+  try {
+    const data = await apiFetch("/sports/teams?category=Football");
+    const teams = (data.teams || []).map((t) => t.name).filter(Boolean).sort((a,b) => a.localeCompare(b));
+    const a = $("plannerPoolA"), b = $("plannerPoolB");
+    if (!a || !b || a.options.length) return;
+    const fill = (select, chosen) => {
+      select.innerHTML = teams.map((name) => "<option value=\"" + escapeHtml(name) + "\" " + (chosen.includes(name) ? "selected" : "") + ">" + escapeHtml(name.replace(/\\s+Football$/i, "")) + "</option>").join("");
+    };
+    fill(a, teams.slice(0, 6));
+    fill(b, teams.slice(6, 11));
+  } catch (err) {
+    setStatus("Could not load football teams for pool assignment: " + (err.message || "try again"), "error");
+  }
+}
+
+function selectedPools() {
+  const a = [...($("plannerPoolA")?.selectedOptions || [])].map((o) => o.value);
+  const b = [...($("plannerPoolB")?.selectedOptions || [])].map((o) => o.value);
+  if (a.length !== 6 || b.length !== 5) return { error: "Select exactly 6 churches in Pool A and 5 in Pool B before generating fixtures." };
+  if (new Set([...a, ...b]).size !== 11) return { error: "A church cannot appear in both pools." };
+  return { poolA: a, poolB: b };
 }
 
 function openPlanner(category) {

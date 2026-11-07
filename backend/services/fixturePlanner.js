@@ -285,6 +285,47 @@ const ROUND_LABEL = { SEMI: "Semi-Final", FINAL: "Final" };
 
 // ---------- the planners ----------
 
+/**
+ * Eleven-church football cup: Pool A has six teams (three opening ties);
+ * Pool B has five (two ties, then the fifth team plays the best loser).
+ * Three pool winners per pool meet cross-pool; three winners + best loser
+ * qualify for two semi-finals, followed by third place and the final.
+ */
+function planElevenChurchCup(options) {
+  const teams = [...new Set(options.teams || [])];
+  if (teams.length !== 11) throw new Error(`The 11-church cup requires exactly 11 football teams (found ${teams.length}).`);
+  const days = pickGameDays(resolveDays(options));
+  if (days.length < 4) throw new Error("The 11-church cup needs Tuesday, Wednesday, Thursday and Friday event days.");
+  const [tue, wed, thu, fri] = days;
+  const poolA = teams.slice(0, 6);
+  const poolB = teams.slice(6, 11);
+  const venue = (options.venues && options.venues[0]) || "Main Pitch";
+  const duration = options.durationMin || FB_MIN;
+  const gender = options.gender || "MIXED";
+  const fixtures = [];
+  const add = (slot, round, date, time, home, away, group, name) => fixtures.push({
+    name: name || `Football ${slot}`, category: "Football", gender, round,
+    group: group || null, bracketSlot: slot, teamHome: home || null, teamAway: away || null,
+    venue, startsAt: eatDate(date, time), matchday: null,
+  });
+  poolA.forEach((team, i) => { if (i % 2 === 0) add(`PA${i/2+1}`, "GROUP", tue, ["14:00","15:00","16:00"][i/2], team, poolA[i+1], "A", `Pool A — ${team} vs ${poolA[i+1]}`); });
+  add("PB1","GROUP",tue,"17:00",poolB[0],poolB[1],"B",`Pool B — ${poolB[0]} vs ${poolB[1]}`);
+  add("PB2","GROUP",tue,"17:45",poolB[2],poolB[3],"B",`Pool B — ${poolB[2]} vs ${poolB[3]}`);
+  add("PB3","GROUP",wed,"15:30",poolB[4],"Best Loser","B",`Pool B — ${poolB[4]} vs Best Loser`);
+  for(let i=1;i<=3;i++) add(`CP${i}`,"QUARTER",wed,["16:15","17:00","17:45"][i-1],`Pool A Winner ${i}`,`Pool B Winner ${i}`,null,`Cross-Pool Match ${i}`);
+  add("SF1","SEMI",thu,"15:30","Winner Cross Match 1","Winner Cross Match 2",null,"Semi-Final I");
+  add("SF2","SEMI",thu,"16:30","Winner Cross Match 3","Best Loser",null,"Semi-Final II");
+  add("THIRD","FINAL",fri,"14:00","Loser Semi-Final I","Loser Semi-Final II",null,"Third-Place Match");
+  add("F","FINAL",fri,"15:15","Winner Semi-Final I","Winner Semi-Final II",null,"Final");
+  return {
+    category:"Football", groupCount:2,
+    groups:[{group:"A",teams:poolA},{group:"B",teams:poolB}],
+    fixtures, days,
+  };
+}
+
+
+
 function resolveDays(options) {
   const days = options.days && options.days.length ? options.days : dayRange(options.eventStart, options.eventEnd);
   if (days.length < 3) throw new Error("At least 3 event days are needed to plan groups, knockouts and a final.");
@@ -531,6 +572,7 @@ module.exports = {
   KNOCKOUT_SEEDS,
   EAT_OFFSET,
   planGroupCompetition,
+  planElevenChurchCup,
   planJudged,
   planDance,
   isJudgedCategory,

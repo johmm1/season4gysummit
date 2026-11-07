@@ -506,6 +506,8 @@ const PLAN_CATEGORIES = ["Football", "Volleyball", "Dance", "Folk Song"];
 
 const planSchema = z.object({
   category: z.enum(PLAN_CATEGORIES),
+  poolA: z.array(z.string().min(1).max(80)).length(6).optional(),
+  poolB: z.array(z.string().min(1).max(80)).length(5).optional(),
   groupCount: z.number().int().min(1).max(8).optional(), // judged competitions only; Football/Volleyball always use 4 groups
   days: z.array(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).optional(),
   venues: z.array(z.string().min(1).max(120)).optional(),

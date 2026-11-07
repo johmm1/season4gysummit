@@ -572,6 +572,8 @@ router.post(
       ...dates,
       days: body.days,
       groupCount: judging.isJudged(body.category) ? body.groupCount : undefined,
+      poolA: body.poolA,
+      poolB: body.poolB,
       venues: body.venues,
       existing,
       teams: teams.map((t) => t.name),

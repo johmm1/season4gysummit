@@ -2236,3 +2236,124 @@ font-size:1.5rem;
 }
 
 }
+
+/* ==========================================================
+   ADMIN COMMAND CENTRE — PROFESSIONAL VISUAL REFINEMENT
+   Scoped to the admin dashboard; preserves existing IDs and JS.
+========================================================== */
+.admin-main{
+  max-width:1600px;
+  margin-left:260px;
+  padding:30px clamp(18px,3vw,42px);
+  background:#f5f7fb;
+  min-height:100vh;
+}
+.dashboard-header{
+  background:#fff;
+  border:1px solid #e8edf4;
+  border-radius:18px;
+  padding:22px 26px;
+  margin-bottom:22px;
+  box-shadow:0 5px 20px rgba(16,24,40,.045);
+}
+.dashboard-header h1{font-size:clamp(1.45rem,2.2vw,2rem);color:#172033;margin:0 0 5px}
+.dashboard-header p{color:#718096;margin:0;font-size:.92rem}
+.header-right{gap:16px}
+.dashboard-search{
+  max-width:720px;
+  background:#fff;
+  border:1px solid #e3e9f1;
+  border-radius:13px;
+  padding:4px 15px;
+  margin:0 0 24px;
+  box-shadow:0 3px 12px rgba(16,24,40,.025);
+}
+.dashboard-search input{border:0!important;box-shadow:none!important;background:transparent}
+.dashboard-kpis{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(205px,1fr));
+  gap:16px;
+  margin:0 0 26px;
+}
+.dashboard-kpis .kpi-card{
+  min-width:0;
+  padding:21px;
+  background:#fff;
+  border:1px solid #e7ecf3;
+  border-radius:16px;
+  box-shadow:0 4px 16px rgba(16,24,40,.04);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.dashboard-kpis .kpi-card:hover{
+  transform:translateY(-3px);
+  border-color:#d7e0eb;
+  box-shadow:0 12px 26px rgba(16,24,40,.08);
+}
+.dashboard-kpis .kpi-icon{
+  width:48px;height:48px;border-radius:13px;
+  display:grid;place-items:center;font-size:1.15rem;
+  background:#fff2e8;color:#d85c08;
+}
+.dashboard-kpis .kpi-content h2{font-size:1.85rem;line-height:1.1;color:#172033}
+.dashboard-kpis .kpi-content p{font-weight:700;color:#344054;margin:5px 0 2px}
+.dashboard-kpis .kpi-content small{color:#8491a3;font-size:.78rem}
+.operations-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+  align-items:stretch;
+}
+.operations-grid .dashboard-panel{
+  min-width:0;
+  margin:0;
+  padding:23px;
+  border:1px solid #e7ecf3;
+  border-radius:17px;
+  background:#fff;
+  box-shadow:0 4px 18px rgba(16,24,40,.04);
+}
+.operations-grid .panel-header{
+  display:flex;flex-direction:row;align-items:center;gap:12px;
+  padding-bottom:14px;margin-bottom:17px;border-bottom:1px solid #edf0f5;
+}
+.operations-grid .panel-header h2{font-family:var(--font-body);font-size:1rem;font-weight:700;color:#263247}
+.operations-grid .panel-header a{font-size:.82rem;font-weight:700}
+.operations-grid .mini-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}
+.operations-grid .mini-stat{
+  padding:15px;border:1px solid #edf0f5;border-radius:12px;background:#f8fafc;
+}
+.operations-grid .mini-stat label{font-size:.76rem;color:#758196}
+.operations-grid .mini-stat h3{font-family:var(--font-body);font-size:1.35rem;color:#172033;margin-top:7px}
+.operations-grid .empty-state{
+  padding:24px 15px;border:1px dashed #dce3ec;border-radius:13px;
+  background:#fafbfd;text-align:center;
+}
+.operations-grid .empty-state i{color:#a0acbd;font-size:1.5rem}
+.section-header{
+  display:flex;justify-content:space-between;align-items:center;gap:18px;
+  margin:30px 0 16px;padding:0 2px;
+}
+.section-header h2{font-size:1.3rem;color:#172033}
+.section-header p{font-size:.88rem;color:#778397;margin-top:4px}
+.live-clock{padding:9px 14px;border-radius:12px;background:#f8fafc;border:1px solid #edf0f5}
+.live-clock h3{font-size:1.1rem}
+.admin-profile{padding:6px 10px;border:1px solid #edf0f5;border-radius:13px;background:#fff}
+.admin-profile img{border-radius:50%;object-fit:cover}
+#logoutBtn{min-width:40px;min-height:40px}
+@media(max-width:1100px){
+  .admin-main{margin-left:0}
+  .operations-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .admin-main{padding:14px}
+  .dashboard-header{padding:17px;border-radius:14px;align-items:flex-start}
+  .header-right{width:100%;flex-wrap:wrap;justify-content:flex-start}
+  .dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .dashboard-kpis .kpi-card{padding:14px;gap:10px}
+  .dashboard-kpis .kpi-icon{width:40px;height:40px}
+  .dashboard-kpis .kpi-content h2{font-size:1.45rem}
+  .dashboard-kpis .kpi-content p{font-size:.78rem}
+  .dashboard-kpis .kpi-content small{display:none}
+  .operations-grid .dashboard-panel{padding:17px}
+  .section-header{align-items:flex-start;flex-direction:column}
+}

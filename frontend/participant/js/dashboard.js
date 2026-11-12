@@ -8,9 +8,7 @@ if (user) {
   wireLogoutButton();
   renderProfile(user);
   await loadAnnouncementPreview();
-  await loadAttendanceSummary();
   await loadSportsSummary();
-  await loadGalleryPreview();
   wireDownloadButtons();
   startCountdown(CONFIG.EVENT.startDate, { days: "days", hours: "hours", minutes: "minutes", seconds: "seconds" });
   tickClock();
@@ -26,13 +24,6 @@ function renderProfile(user) {
   const reg = user.registration;
   setText("registrationStatus", reg?.status?.replace("_", " ") ?? "—");
   setText("registrationDate", formatDate(reg?.createdAt));
-  setText("paymentStatus", reg?.paidAt ? "Paid" : "Pending");
-  // Payment is confirmed in person at the admission desk (amountPaid), with
-  // any older online payments still counted for earlier registrations.
-  setText("amountPaid", formatKes(
-    reg?.amountPaid ?? (reg?.payments?.filter((p) => p.status === "SUCCESS").reduce((sum, p) => sum + p.amount, 0) || 0)
-  ));
-
   setText("admissionStatus", "Name-based check-in");
   setText("admissionCode", "Show your full name at the entrance");
 }
@@ -48,15 +39,6 @@ async function loadAnnouncementPreview() {
     }
   } catch (err) {
     console.error("Failed to load announcements:", err);
-  }
-}
-
-async function loadAttendanceSummary() {
-  try {
-    const { attendances } = await apiFetch("/attendance/me");
-    setText("certificateCount", attendances.filter((a) => a.type === "SESSION").length);
-  } catch (err) {
-    console.error("Failed to load attendance:", err);
   }
 }
 
@@ -87,21 +69,6 @@ async function loadSportsSummary() {
   } catch (err) {
     console.error("Failed to load sports summary:", err);
   }
-}
-
-async function loadGalleryPreview() {
-  try {
-    const { items } = await apiFetch("/gallery");
-    const photos = items.filter((i) => i.mediaType === "photo").slice(0, 4);
-    photos.forEach((photo, i) => {
-      const img = $(`galleryImage${i + 1}`);
-      if (img) img.src = photo.url;
-    });
-  } catch (err) {
-    console.error("Failed to load gallery preview:", err);
-  }
-
-  return null;
 }
 
 function tickClock() {

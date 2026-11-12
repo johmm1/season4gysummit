@@ -1,14 +1,54 @@
 // Y-Summit Season 4 2026 — gallery
 const { Router } = require("express");
 const { z } = require("zod");
-const { GalleryItem, User } = require("../models");
+const { GalleryItem, User, SystemSetting } = require("../models");
 const { createUploadSignature, destroyAsset } = require("../services/cloudinaryService");
 const { requireAuth, requireRole, ADMIN_ROLES } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
 const { logAction } = require("../services/auditService");
-const { getForm } = require("../services/settingsService");
+const { getForm, invalidateSettingsCache } = require("../services/settingsService");
 
 const router = Router();
+
+// Restricted settings endpoint for gallery admins: only livestream and public media links.
+router.get(
+  "/public-content-settings",
+  requireAuth,
+  requireRole("SUPER_ADMIN", "ADMIN", "GALLERY_ADMIN"),
+  asyncHandler(async (_req, res) => {
+    const [livestream, media] = await Promise.all([
+      SystemSetting.findByPk("livestreamSettingsForm"),
+      SystemSetting.findByPk("mediaLinksForm"),
+    ]);
+    res.json({ livestreamSettingsForm: livestream?.value || {}, mediaLinksForm: media?.value || { links: [] } });
+  })
+);
+
+router.put(
+  "/public-content-settings",
+  requireAuth,
+  requireRole("SUPER_ADMIN", "ADMIN", "GALLERY_ADMIN"),
+  asyncHandler(async (req, res) => {
+    const body = z.object({
+      livestreamSettingsForm: z.object({
+        enabled: z.boolean().optional(), url: z.string().max(500).optional(),
+        title: z.string().max(150).optional(), notice: z.string().max(300).optional(),
+        startTime: z.string().max(80).optional(), status: z.enum(["scheduled", "live", "ended"]).optional(),
+      }).optional(),
+      mediaLinksForm: z.object({
+        links: z.array(z.object({
+          id: z.string().max(80), title: z.string().min(1).max(150),
+          url: z.string().url().max(500), description: z.string().max(500).optional(),
+          createdAt: z.string().max(40).optional(),
+        })).max(100),
+      }).optional(),
+    }).parse(req.body);
+    if (body.livestreamSettingsForm) await SystemSetting.upsert({ key: "livestreamSettingsForm", value: body.livestreamSettingsForm });
+    if (body.mediaLinksForm) await SystemSetting.upsert({ key: "mediaLinksForm", value: body.mediaLinksForm });
+    invalidateSettingsCache();
+    res.json({ ok: true });
+  })
+);
 
 router.get(
   "/upload-signature",

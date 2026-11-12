@@ -1,0 +1,171 @@
+/* ==========================================================
+   Participant portal — compact, mobile-first page density
+   Keeps all existing content and interactions; reduces wasted
+   vertical spacing so participants need fewer scrolls.
+========================================================== */
+
+.dashboard-layout { min-height: 100vh; }
+.dashboard-content {
+  gap: 16px;
+  padding: 22px;
+}
+.page-container { gap: 16px; }
+.page-title { gap: 10px; }
+.page-title h2 { font-size: clamp(1.25rem, 2.8vw, 1.7rem); line-height: 1.2; }
+.page-title p { margin-top: 2px; line-height: 1.45; }
+
+.card, .profile-card, .settings-card, .announcement-card,
+.gallery-section, .performer-card, .match-card, .result-card {
+  padding: 16px;
+  border-radius: 14px;
+}
+.card:hover, .stat-card:hover, .performer-card:hover,
+.match-card:hover, .result-card:hover { transform: none; }
+
+.card-header {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  gap: 10px;
+}
+.card-header h3 { font-size: 1.05rem; line-height: 1.25; }
+.form-grid { gap: 14px; }
+.form-group label { margin-bottom: 5px; font-size: .86rem; }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: .9rem;
+}
+.form-group textarea { min-height: 76px; }
+.table th, .table td { padding: 9px 10px; }
+.stats-grid { gap: 10px; }
+.stat-card { padding: 13px; gap: 12px; border-radius: 12px; }
+.stat-icon { width: 44px; height: 44px; border-radius: 12px; font-size: 19px; }
+.stat-content h2 { font-size: 1.35rem; }
+.stat-content h5 { margin-bottom: 3px; }
+.empty-state { padding: 30px 14px; }
+.empty-state i { font-size: 2.5rem; margin-bottom: 10px; }
+.dashboard-footer, .app-footer { padding: 14px 8px 4px; }
+.dashboard-footer { margin-top: 16px; }
+
+.dashboard-hero, .greeting-card, .profile-header,
+.profile-cover, .settings-hero, .gallery-hero, .sports-hero,
+.pg-hero {
+  margin-bottom: 14px;
+  padding: 20px;
+  border-radius: 16px;
+}
+.dashboard-hero { gap: 18px; }
+.hero-content h1 { font-size: clamp(1.45rem, 4vw, 2rem); margin-bottom: 6px; }
+.hero-content p { line-height: 1.5; }
+.hero-actions { gap: 8px; margin-top: 14px; }
+.greeting-card { gap: 12px; padding: 14px; }
+.greeting-avatar { width: 48px; height: 48px; }
+.greeting-text h3 { font-size: 1.15rem; margin-bottom: 2px; }
+
+.profile-card { margin-bottom: 12px; }
+.profile-actions { margin-top: 16px; gap: 10px; }
+.profile-header { padding: 18px; }
+.profile-avatar { width: 92px; height: 92px; }
+
+.settings-grid { gap: 12px; }
+.settings-card { margin-bottom: 0; }
+.settings-menu { gap: 6px; margin-bottom: 12px; }
+.setting-item, .device-item, .connected-service { padding: 10px 0; }
+.settings-hero { gap: 12px; }
+
+.announcement-card { margin-bottom: 10px; }
+.announcement-header, .announcement-footer { gap: 8px; }
+.announcement-title { font-size: 1.05rem; line-height: 1.3; }
+.announcement-content, .announcement-body { line-height: 1.5; }
+.announcement-counter { margin: 8px 0; }
+
+.gallery-grid, .video-grid, .downloads-grid { gap: 10px; }
+.gallery-card, .video-card, .download-card { border-radius: 12px; }
+.doc-row { padding: 10px 12px; margin-bottom: 8px; }
+
+.pg-hero { padding: 16px; }
+.pg-tabs { gap: 5px; margin-bottom: 12px; }
+.pg-tab { padding: 8px 10px; }
+.pg-item { margin-bottom: 8px; }
+.pg-card { padding: 12px; }
+
+.sports-tabs, .timetable-tabs, .media-tabs, .settings-menu {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  scrollbar-width: thin;
+}
+.sport-tab, .timetable-tab { flex: 0 0 auto; min-width: max-content; }
+.match-card, .result-card, .performer-card { margin-bottom: 10px; }
+.results-list { gap: 10px; }
+.performer-row { padding: 10px 0; }
+.timetable-sub { margin: 14px 0 8px; }
+
+.pass-header { padding: 18px; }
+.instruction { padding: 12px; }
+.instruction p { line-height: 1.5; }
+.carry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.carry-item { padding: 12px 8px; border-radius: 12px; }
+.carry-item i { font-size: 1.35rem; margin-bottom: 6px; }
+.carry-item p { font-size: .84rem; line-height: 1.35; }
+.download-buttons { gap: 10px; }
+.download-buttons .btn { min-width: 0; }
+
+@media (max-width: 768px) {
+  .dashboard-content { padding: 12px; gap: 12px; }
+  .page-container { gap: 12px; }
+  .topbar { padding: 12px 14px; gap: 10px; border-radius: 12px; }
+  .topbar h1 { font-size: 1.25rem; margin-bottom: 2px; }
+  .topbar p { font-size: .82rem; }
+  .topbar-right { gap: 10px; }
+  .participant-profile { gap: 9px; }
+  .participant-profile img, .topbar-right .avatar { width: 38px; height: 38px; }
+  .sidebar-header { padding: 18px 14px; }
+  .sidebar-header img { width: 58px; height: 58px; margin-bottom: 7px; }
+  .sidebar-header h2 { font-size: 1.1rem; }
+  .sidebar-nav { padding: 8px 0; }
+  .sidebar-nav a { padding: 11px 18px; gap: 12px; }
+  .sidebar-footer { padding: 12px; }
+  .logout-btn { padding: 10px; }
+  .card, .profile-card, .settings-card, .announcement-card,
+  .gallery-section, .performer-card, .match-card, .result-card { padding: 13px; }
+  .dashboard-hero, .greeting-card, .profile-header,
+  .profile-cover, .settings-hero, .gallery-hero, .sports-hero,
+  .pg-hero { padding: 15px; margin-bottom: 10px; }
+  .dashboard-hero { flex-direction: column; align-items: flex-start; }
+  .hero-image img { width: 110px; }
+  .hero-actions { width: 100%; }
+  .hero-actions .btn { width: auto; flex: 1; padding: 9px 12px; }
+  .profile-avatar { width: 78px; height: 78px; }
+  .profile-summary h2 { font-size: 1.25rem; }
+  .profile-actions { flex-direction: row; flex-wrap: wrap; }
+  .profile-actions .btn { width: auto; flex: 1; }
+  .settings-grid { grid-template-columns: 1fr; }
+  .settings-card { padding: 13px; }
+  .setting-item { flex-direction: row; align-items: center; }
+  .device-item { flex-direction: row; align-items: center; gap: 10px; }
+  .settings-actions { flex-direction: row; flex-wrap: wrap; }
+  .settings-actions .btn { width: auto; flex: 1; }
+  .gallery-grid, .video-grid, .downloads-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .announcement-card { padding: 13px; }
+  .modal-header, .modal-meta, .modal-body,
+  .attachment-section, .modal-footer { padding-left: 14px; padding-right: 14px; }
+  .modal-body { line-height: 1.55; }
+  .empty-state { padding: 24px 12px; }
+}
+
+@media (max-width: 380px) {
+  .gallery-grid, .video-grid, .downloads-grid { grid-template-columns: 1fr; }
+  .carry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topbar { align-items: flex-start; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn { width: 100%; }
+}
+
+/* Keep admission-pass print layout unchanged. */
+@media print {
+  .dashboard-content { padding: 0 !important; }
+  .card, .profile-card, .settings-card { box-shadow: none !important; }
+}

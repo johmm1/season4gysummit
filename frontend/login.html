@@ -74,15 +74,10 @@ required>
 
 <label>Password</label>
 
-<input
-
-type="password"
-
-id="password"
-
-placeholder="Enter your password"
-
-required>
+<div class="password-field" style="position:relative;display:flex;align-items:center;">
+<input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required style="width:100%;padding-right:88px;">
+<button type="button" class="toggle-password" data-password-target="password" aria-label="Show password" aria-pressed="false" style="position:absolute;right:8px;border:0;background:transparent;color:#315b4c;font-weight:600;cursor:pointer;padding:8px;">Show</button>
+</div>
 
 </div>
 
@@ -150,6 +145,20 @@ Register Here
 </div>
 
 </section>
+
+<script>
+document.querySelectorAll("[data-password-target]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const field = document.getElementById(button.dataset.passwordTarget);
+    if (!field) return;
+    const reveal = field.type === "password";
+    field.type = reveal ? "text" : "password";
+    button.textContent = reveal ? "Hide" : "Show";
+    button.setAttribute("aria-label", reveal ? "Hide password" : "Show password");
+    button.setAttribute("aria-pressed", String(reveal));
+  });
+});
+</script>
 
 <!-- =========================
 JWT AUTH

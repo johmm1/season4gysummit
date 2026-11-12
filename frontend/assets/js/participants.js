@@ -81,6 +81,8 @@ async function loadParticipants(page = 1) {
     const search = $("participantSearch")?.value.trim();
     const status = $("filterRegistration")?.value;
     const gender = $("filterGender")?.value;
+    const age = $("filterAge")?.value;
+    const attendance = $("filterAttendance")?.value;
     const parishId = $("filterParish")?.value;
     const admission = $("filterAdmission")?.value;
     const medical = $("filterMedical")?.value;
@@ -89,6 +91,8 @@ async function loadParticipants(page = 1) {
     if (search) params.set("search", search);
     if (status) params.set("status", status);
     if (gender) params.set("gender", gender);
+    if (age) params.set("age", age);
+    if (attendance) params.set("attendance", attendance);
     if (parishId) params.set("parishId", parishId);
     if (admission) params.set("admission", admission);
     if (medical) params.set("medical", medical);
@@ -228,8 +232,14 @@ function wireFilters() {
   $("filterCreatedFrom")?.addEventListener("change", () => loadParticipants(1));
   $("filterCreatedTo")?.addEventListener("change", () => loadParticipants(1));
   $("filterGender")?.addEventListener("change", () => loadParticipants(1));
+  $("filterAge")?.addEventListener("change", () => loadParticipants(1));
+  $("filterAttendance")?.addEventListener("change", () => loadParticipants(1));
   $("filterParish")?.addEventListener("change", () => loadParticipants(1));
   $("filterAdmission")?.addEventListener("change", () => loadParticipants(1));
+  $("clearParticipantFilters")?.addEventListener("click", () => {
+    ["participantSearch", "filterParish", "filterGender", "filterAge", "filterAdmission", "filterRegistration", "filterAttendance", "filterMedical", "filterCreatedFrom", "filterCreatedTo"].forEach((id) => { const el = $(id); if (el) el.value = ""; });
+    loadParticipants(1);
+  });
 }
 
 

@@ -29,6 +29,8 @@ const PUBLIC_FIELDS = {
   ],
   leadershipForm: ["chairman", "patron", "moderator", "secretary", "treasurer", "ictAdmin"],
   socialMediaForm: ["facebook", "instagram", "youtube", "tiktok", "twitter", "whatsappChannel"],
+  livestreamSettingsForm: ["enabled", "url", "title", "notice", "startTime", "status"],
+  mediaLinksForm: ["links"],
 };
 
 function pick(obj, keys) {

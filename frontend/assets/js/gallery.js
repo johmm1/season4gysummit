@@ -603,9 +603,9 @@ function renderPublicMediaLinksAdmin() {
   host.innerHTML = publicMediaLinks.length ? publicMediaLinks.map((link) => `
     <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid #eee">
       <div><strong>${escapeHtml(link.title)}</strong><div style="font-size:.85rem;color:#777">${escapeHtml(link.url)}</div><small>${escapeHtml(link.description || "")}</small></div>
-      <button type="button" class="btn btn-outline btn-sm" data-remove-public-link="${escapeHtml(link.id)}">Delete</button>
+      <button type="button" class="btn btn-outline btn-sm" data-edit-public-link="${escapeHtml(link.id)}">Edit</button><button type="button" class="btn btn-outline btn-sm" data-remove-public-link="${escapeHtml(link.id)}">Delete</button>
     </div>`).join("") : "<p>No public media links have been added.</p>";
-  host.querySelectorAll("[data-remove-public-link]").forEach((button) => button.addEventListener("click", async () => {
+  host.querySelectorAll("[data-edit-public-link]").forEach((button) => button.addEventListener("click", async () => {\n    const item = publicMediaLinks.find((link) => link.id === button.dataset.editPublicLink);\n    if (!item) return;\n    const title = prompt("Media title:", item.title); if (title === null) return;\n    const url = prompt("Media URL:", item.url); if (url === null) return;\n    const description = prompt("Description:", item.description || ""); if (description === null) return;\n    if (!/^https?:\\/\\//i.test(url.trim())) { showError("Enter a valid web link."); return; }\n    item.title = title.trim(); item.url = url.trim(); item.description = description.trim();\n    await savePublicMediaLinks();\n  }));\n  host.querySelectorAll("[data-remove-public-link]").forEach((button) => button.addEventListener("click", async () => {
     publicMediaLinks = publicMediaLinks.filter((link) => link.id !== button.dataset.removePublicLink);
     await savePublicMediaLinks();
   }));

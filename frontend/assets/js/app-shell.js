@@ -239,4 +239,19 @@ function applySuperAdminProfileIcon() {
     avatar.replaceChildren(img);
     avatar.classList.add("super-admin-avatar");
   });
+
+  // A few utility pages (for example Admissions and Reports) have no
+  // profile slot at all. Add the same icon beside their logout control.
+  const hasProfileSlot = document.querySelector(".admin-profile img, .admin-user .avatar");
+  const header = document.querySelector(".admin-header");
+  if (!hasProfileSlot && header) {
+    const img = document.createElement("img");
+    img.src = iconPath;
+    img.alt = "Super Admin";
+    img.className = "super-admin-header-avatar";
+    img.style.cssText = "width:42px;height:42px;object-fit:cover;border-radius:50%;flex:0 0 auto;margin-left:auto;margin-right:10px;";
+    const logout = header.querySelector("#logoutBtn");
+    if (logout) header.insertBefore(img, logout);
+    else header.appendChild(img);
+  }
 }

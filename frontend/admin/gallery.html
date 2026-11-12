@@ -441,7 +441,33 @@ Media Stats
 
 </div>
 
-</section><!-- ==========================================================
+</section><!-- LIVESTREAM AND PUBLIC MEDIA LINK SETTINGS -->
+<section class="dashboard-panel" id="livestreamControls">
+  <div class="panel-header"><h2><i class="fa-solid fa-tower-broadcast"></i> Public Livestream & Media Links</h2></div>
+  <form id="livestreamSettingsForm">
+    <div class="form-grid">
+      <div class="form-group"><label for="liveTitle">Livestream title</label><input id="liveTitle" maxlength="150" placeholder="GY Summit Live"></div>
+      <div class="form-group"><label for="liveUrl">YouTube or TikTok URL</label><input id="liveUrl" type="url" placeholder="https://www.youtube.com/watch?v=..."></div>
+      <div class="form-group"><label for="liveStartTime">Scheduled start time</label><input id="liveStartTime" placeholder="e.g. 10:00 AM" maxlength="80"></div>
+      <div class="form-group"><label for="liveStatus">Broadcast status</label><select id="liveStatus"><option value="scheduled">Scheduled</option><option value="live">Live now</option><option value="ended">Ended</option></select></div>
+      <div class="form-group full-width"><label for="liveNotice">Message shown when not live</label><textarea id="liveNotice" rows="2" maxlength="300" placeholder="Livestream starts at 10:00 AM. Please check back."></textarea></div>
+    </div>
+    <label class="switch-row"><span><strong>Show livestream on public website</strong><p>Turn this off when no stream is planned.</p></span><input id="liveEnabled" type="checkbox"></label>
+    <div class="form-save-row"><button type="submit" class="btn btn-primary btn-sm">Save Livestream Settings</button></div>
+  </form>
+  <hr style="margin:24px 0"><h3>Add a public media link</h3>
+  <form id="publicMediaLinkForm">
+    <div class="form-grid">
+      <div class="form-group"><label for="publicMediaTitle">Title</label><input id="publicMediaTitle" required maxlength="150" placeholder="Opening ceremony highlights"></div>
+      <div class="form-group"><label for="publicMediaUrl">Video or media URL</label><input id="publicMediaUrl" type="url" required placeholder="https://..."></div>
+      <div class="form-group full-width"><label for="publicMediaDescription">Description</label><textarea id="publicMediaDescription" rows="2" maxlength="500" placeholder="Short description for visitors"></textarea></div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-sm">Add Public Link</button>
+  </form>
+  <div id="publicMediaLinksAdmin" style="margin-top:16px"></div>
+</section>
+
+<!-- ==========================================================
 MEDIA UPLOAD CENTRE
 ========================================================== -->
 

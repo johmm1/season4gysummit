@@ -109,17 +109,32 @@ router.get(
         if (range[1] !== null) where.dateOfBirth[Op.gt] = dateAtAge(range[1] + 1);
       }
     }
-    if (req.query.attendance === "checked_in") {
-      where["$attendances.id$"] = { [Op.ne]: null };
-    } else if (req.query.attendance === "not_checked_in") {
-      where["$attendances.id$"] = { [Op.is]: null };
+    if (req.query.attendance === "checked_in" || req.query.attendance === "not_checked_in") {
+      const checkedInRows = await Attendance.findAll({
+        where: { type: "CHECK_IN" },
+        attributes: ["userId"],
+        group: ["userId"],
+        raw: true,
+      });
+      const checkedInIds = checkedInRows.map((row) => row.userId);
+      where.id = req.query.attendance === "checked_in"
+        ? { [Op.in]: checkedInIds.length ? checkedInIds : ["00000000-0000-0000-0000-000000000000"] }
+        : { [Op.notIn]: checkedInIds };
     }
-    if (req.query.admission === "issued") {
-      where["$admissionCard.id$"] = { [Op.ne]: null };
-    } else if (req.query.admission === "not_issued") {
-      where["$admissionCard.id$"] = { [Op.is]: null };
-    } else if (req.query.admission === "revoked") {
-      where["$admissionCard.isRevoked$"] = true;
+    if (["issued", "not_issued", "revoked"].includes(req.query.admission)) {
+      const cardWhere = req.query.admission === "revoked" ? { isRevoked: true }
+        : req.query.admission === "issued" ? { isRevoked: false } : undefined;
+      const cards = await AdmissionCard.findAll({
+        where: cardWhere,
+        attributes: ["userId"],
+        raw: true,
+      });
+      const cardUserIds = cards.map((card) => card.userId);
+      if (req.query.admission === "not_issued") {
+        where.id = { ...(where.id || {}), [Op.notIn]: cardUserIds };
+      } else {
+        where.id = { ...(where.id || {}), [Op.in]: cardUserIds.length ? cardUserIds : ["00000000-0000-0000-0000-000000000000"] };
+      }
     }
     if (req.query.medical === "yes") where.hasMedicalCondition = true;
     if (req.query.medical === "no") where.hasMedicalCondition = false;

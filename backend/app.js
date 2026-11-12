@@ -33,7 +33,7 @@ app.use(helmet());
 // Keep the production website origins allowed even if FRONTEND_URL is
 // missing or contains only a preview URL in the hosting environment.
 const allowedFrontendOrigins = [
-  "https://githunguripresbytaryouthsummit.co.ke",
+  "https://githunguripresbytaryyouthsummit.co.ke",
   "https://www.githunguripresbytaryouthsummit.co.ke",
   ...(process.env.FRONTEND_URL || "").split(",").map((s) => s.trim()).filter(Boolean),
 ];

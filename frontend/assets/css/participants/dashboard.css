@@ -1818,3 +1818,42 @@ grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
 gap:14px;
 
 }
+
+
+/* Compact participant dashboard — production finish */
+.compact-status{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:0 0 20px;
+}
+.compact-status .stat-card{
+  min-width:0;
+  padding:16px;
+  gap:12px;
+  border-radius:14px;
+}
+.compact-status .stat-icon{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  border-radius:12px;
+  font-size:18px;
+}
+.compact-status .stat-content h5{font-size:.78rem;margin-bottom:4px}
+.compact-status .stat-content h2{font-size:1.05rem;overflow-wrap:anywhere}
+.compact-status .stat-content p{font-size:.75rem;overflow-wrap:anywhere}
+.welcome-card{padding:22px 24px;margin-bottom:18px}
+.welcome-card p{margin-bottom:12px;font-size:.9rem}
+.dashboard-columns{gap:16px;margin-bottom:16px}
+.dashboard-panel{padding:20px}
+.panel-header{margin-bottom:12px}
+.download-actions{margin-top:10px;gap:8px}
+.download-actions .btn{padding:10px 14px;font-size:.85rem;width:auto}
+@media(max-width:560px){
+  .compact-status{grid-template-columns:1fr;gap:10px}
+  .compact-status .stat-card{padding:13px}
+  .welcome-card{padding:18px;margin-bottom:14px}
+  .dashboard-panel{padding:16px}
+  .download-actions{display:grid;grid-template-columns:1fr}
+  .download-actions .btn{width:100%}
+}

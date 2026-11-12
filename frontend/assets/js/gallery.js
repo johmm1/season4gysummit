@@ -551,7 +551,7 @@ let publicMediaLinks = [];
 let livestreamSettings = {};
 async function loadPublicMediaSettings() {
   try {
-    const { settings = {} } = await apiFetch("/admin/settings");
+    const { settings = {} } = await apiFetch("/gallery/public-content-settings");
     livestreamSettings = settings.livestreamSettingsForm || {};
     publicMediaLinks = Array.isArray(settings.mediaLinksForm?.links) ? settings.mediaLinksForm.links : [];
     $("liveTitle").value = livestreamSettings.title || "";
@@ -576,7 +576,7 @@ function wirePublicMediaSettings() {
     };
     if (next.url && !/^https?:\/\//i.test(next.url)) { showError("Enter a valid YouTube or TikTok URL."); return; }
     try {
-      await apiFetch("/admin/settings", { method: "PUT", body: { livestreamSettingsForm: next } });
+      await apiFetch("/gallery/public-content-settings", { method: "PUT", body: { livestreamSettingsForm: next } });
       livestreamSettings = next;
       showSuccess("Livestream settings saved. The public page will update.");
     } catch (err) { showError(err.message || "Could not save livestream settings."); }
@@ -592,7 +592,7 @@ function wirePublicMediaSettings() {
 }
 async function savePublicMediaLinks() {
   try {
-    await apiFetch("/admin/settings", { method: "PUT", body: { mediaLinksForm: { links: publicMediaLinks } } });
+    await apiFetch("/gallery/public-content-settings", { method: "PUT", body: { mediaLinksForm: { links: publicMediaLinks } } });
     renderPublicMediaLinksAdmin();
     showSuccess("Public media links updated.");
   } catch (err) { showError(err.message || "Could not save media links."); }

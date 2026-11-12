@@ -36,6 +36,8 @@ if (admin) {
   wireUploadForm();
   wireFilters();
   wireModal();
+  await loadPublicMediaSettings();
+  wirePublicMediaSettings();
   await loadPageSettings(GALLERY_FORMS);
   wireSettingsForms();
   wireSettingsFileUploads();

@@ -1,0 +1,56 @@
+/* Consistent readable typography across admin and participant pages. */
+body,
+button,
+input,
+select,
+textarea,
+table {
+  font-family: 'Inter', Arial, sans-serif;
+}
+h1,h2,h3,h4,h5,h6,
+.dashboard-header h1,
+.panel-header h2,
+.section-header h2,
+.sidebar-logo h1,
+.sidebar-logo h2 {
+  font-family: 'Inter', Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: clamp(1.45rem, 2.2vw, 1.9rem); line-height: 1.2; }
+h2 { font-size: clamp(1.2rem, 1.8vw, 1.5rem); line-height: 1.25; }
+h3 { font-size: 1.05rem; line-height: 1.3; }
+h4,h5,h6 { line-height: 1.35; }
+body { font-size: 14px; line-height: 1.5; }
+button,input,select,textarea { font-size: 14px; }
+table { font-size: 13px; }
+th { font-weight: 600; }
+td { line-height: 1.45; }
+label,.form-label { font-size: 13px; font-weight: 600; }
+small,.text-muted,.helper-text { font-size: 12px; }
+
+/* Participants: keep stats, filter controls and dense data tables compact. */
+.participants-page h1,
+.participants-page .page-title { font-size: 1.5rem; }
+.participants-page .section-title h2,
+.participants-page .section-title { font-size: 1.2rem; }
+.participants-page .stat-card h2,
+.participants-page .kpi-card h2 { font-size: 1.45rem; }
+.participants-page .search-box,
+.participants-page .search-box input,
+.participants-page .filter-group label,
+.participants-page .filter-group select { font-size: 13px; }
+.participants-page .dashboard-panel { padding: 20px; border-radius: 14px; }
+.participants-page table th,
+.participants-page table td { font-size: 12px; padding: 9px 10px; }
+
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+  h1 { font-size: 1.35rem; }
+  h2 { font-size: 1.12rem; }
+  h3 { font-size: 1rem; }
+  button,input,select,textarea { font-size: 14px; }
+  table { font-size: 12px; }
+  .participants-page .dashboard-panel { padding: 14px; }
+  .participants-page .stat-card h2,
+  .participants-page .kpi-card h2 { font-size: 1.25rem; }
+}

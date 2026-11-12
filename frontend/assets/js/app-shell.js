@@ -15,6 +15,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   initSidebarToggle();
+  applySuperAdminProfileIcon();
   injectFooter();
   initThemeSwitcher();
   trackPageView();
@@ -198,5 +199,44 @@ function trackPageView() {
     keepalive: true,
   }).catch(() => {
     // Activity tracking must never interrupt normal navigation.
+  });
+}
+
+
+/**
+ * Apply the dedicated Super Admin image consistently across every admin
+ * page that has a profile/avatar slot. Other roles keep their existing icon.
+ */
+function applySuperAdminProfileIcon() {
+  if (!document.querySelector(".admin-main, .sidebar")) return;
+
+  let role = "";
+  try {
+    const token = localStorage.getItem("gySummitToken");
+    const payload = token?.split(".")[1];
+    if (payload) {
+      const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+      const claims = JSON.parse(atob(normalized));
+      role = String(claims.role || claims.user?.role || "").toUpperCase();
+    }
+  } catch {
+    return;
+  }
+
+  if (role !== "SUPER_ADMIN") return;
+
+  const iconPath = "../assets/images/super-admin-icon.jpg";
+  document.querySelectorAll(".admin-profile img").forEach((img) => {
+    img.src = iconPath;
+    img.alt = "Super Admin";
+  });
+
+  document.querySelectorAll(".admin-user .avatar").forEach((avatar) => {
+    const img = document.createElement("img");
+    img.src = iconPath;
+    img.alt = "Super Admin";
+    img.className = "super-admin-avatar-image";
+    avatar.replaceChildren(img);
+    avatar.classList.add("super-admin-avatar");
   });
 }

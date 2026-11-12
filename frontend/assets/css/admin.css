@@ -962,3 +962,17 @@ FOOTER
 
     font-weight:600;
 }
+
+
+/* Dedicated Super Admin avatar, shared across admin pages. */
+.admin-user .avatar.super-admin-avatar {
+  overflow: hidden;
+  padding: 0;
+}
+.admin-user .avatar.super-admin-avatar .super-admin-avatar-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}

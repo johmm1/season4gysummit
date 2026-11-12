@@ -8,11 +8,6 @@ const DASHBOARD_FORMS = ["generalSettingsForm", "organisationSettingsForm", "lea
 
 const admin = await requireAdminSession();
 if (admin) {
-  const adminProfileImage = document.querySelector(".admin-profile img");
-  if (adminProfileImage && admin.role === "SUPER_ADMIN") {
-    adminProfileImage.src = "../assets/images/super-admin-icon.jpg";
-    adminProfileImage.alt = "Super Admin";
-  }
   wireLogoutButton();
   setText("eventVenue", CONFIG.EVENT.venue);
   setText("eventDate", formatDate(CONFIG.EVENT.startDate));

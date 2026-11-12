@@ -542,3 +542,71 @@ async function remove(id) {
     showError(err.message || "Could not delete this item.");
   }
 }
+
+
+/* ==========================================================
+   PUBLIC LIVESTREAM + EXTERNAL MEDIA LINKS
+   ========================================================== */
+let publicMediaLinks = [];
+let livestreamSettings = {};
+async function loadPublicMediaSettings() {
+  try {
+    const { settings = {} } = await apiFetch("/admin/settings");
+    livestreamSettings = settings.livestreamSettingsForm || {};
+    publicMediaLinks = Array.isArray(settings.mediaLinksForm?.links) ? settings.mediaLinksForm.links : [];
+    $("liveTitle").value = livestreamSettings.title || "";
+    $("liveUrl").value = livestreamSettings.url || "";
+    $("liveStartTime").value = livestreamSettings.startTime || "";
+    $("liveStatus").value = livestreamSettings.status || "scheduled";
+    $("liveNotice").value = livestreamSettings.notice || "";
+    $("liveEnabled").checked = livestreamSettings.enabled === true;
+    renderPublicMediaLinksAdmin();
+  } catch (err) { showError(err.message || "Could not load livestream settings."); }
+}
+function wirePublicMediaSettings() {
+  $("livestreamSettingsForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const next = {
+      enabled: $("liveEnabled").checked,
+      title: $("liveTitle").value.trim(),
+      url: $("liveUrl").value.trim(),
+      startTime: $("liveStartTime").value.trim(),
+      status: $("liveStatus").value,
+      notice: $("liveNotice").value.trim(),
+    };
+    if (next.url && !/^https?:\/\//i.test(next.url)) { showError("Enter a valid YouTube or TikTok URL."); return; }
+    try {
+      await apiFetch("/admin/settings", { method: "PUT", body: { livestreamSettingsForm: next } });
+      livestreamSettings = next;
+      showSuccess("Livestream settings saved. The public page will update.");
+    } catch (err) { showError(err.message || "Could not save livestream settings."); }
+  });
+  $("publicMediaLinkForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const url = $("publicMediaUrl").value.trim();
+    if (!/^https?:\/\//i.test(url)) { showError("Enter a valid web link."); return; }
+    publicMediaLinks.push({ id: crypto.randomUUID(), title: $("publicMediaTitle").value.trim(), url, description: $("publicMediaDescription").value.trim(), createdAt: new Date().toISOString() });
+    await savePublicMediaLinks();
+    e.target.reset();
+  });
+}
+async function savePublicMediaLinks() {
+  try {
+    await apiFetch("/admin/settings", { method: "PUT", body: { mediaLinksForm: { links: publicMediaLinks } } });
+    renderPublicMediaLinksAdmin();
+    showSuccess("Public media links updated.");
+  } catch (err) { showError(err.message || "Could not save media links."); }
+}
+function renderPublicMediaLinksAdmin() {
+  const host = $("publicMediaLinksAdmin");
+  if (!host) return;
+  host.innerHTML = publicMediaLinks.length ? publicMediaLinks.map((link) => `
+    <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid #eee">
+      <div><strong>${escapeHtml(link.title)}</strong><div style="font-size:.85rem;color:#777">${escapeHtml(link.url)}</div><small>${escapeHtml(link.description || "")}</small></div>
+      <button type="button" class="btn btn-outline btn-sm" data-remove-public-link="${escapeHtml(link.id)}">Delete</button>
+    </div>`).join("") : "<p>No public media links have been added.</p>";
+  host.querySelectorAll("[data-remove-public-link]").forEach((button) => button.addEventListener("click", async () => {
+    publicMediaLinks = publicMediaLinks.filter((link) => link.id !== button.dataset.removePublicLink);
+    await savePublicMediaLinks();
+  }));
+}

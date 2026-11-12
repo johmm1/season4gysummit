@@ -117,9 +117,12 @@ router.get(
         raw: true,
       });
       const checkedInIds = checkedInRows.map((row) => row.userId);
-      where.id = req.query.attendance === "checked_in"
-        ? { [Op.in]: checkedInIds.length ? checkedInIds : ["00000000-0000-0000-0000-000000000000"] }
-        : { [Op.notIn]: checkedInIds };
+      where[Op.and] = where[Op.and] || [];
+      where[Op.and].push({
+        id: req.query.attendance === "checked_in"
+          ? { [Op.in]: checkedInIds.length ? checkedInIds : ["00000000-0000-0000-0000-000000000000"] }
+          : { [Op.notIn]: checkedInIds },
+      });
     }
     if (["issued", "not_issued", "revoked"].includes(req.query.admission)) {
       const cardWhere = req.query.admission === "revoked" ? { isRevoked: true }
@@ -130,11 +133,12 @@ router.get(
         raw: true,
       });
       const cardUserIds = cards.map((card) => card.userId);
-      if (req.query.admission === "not_issued") {
-        where.id = { ...(where.id || {}), [Op.notIn]: cardUserIds };
-      } else {
-        where.id = { ...(where.id || {}), [Op.in]: cardUserIds.length ? cardUserIds : ["00000000-0000-0000-0000-000000000000"] };
-      }
+      where[Op.and] = where[Op.and] || [];
+      where[Op.and].push({
+        id: req.query.admission === "not_issued"
+          ? { [Op.notIn]: cardUserIds }
+          : { [Op.in]: cardUserIds.length ? cardUserIds : ["00000000-0000-0000-0000-000000000000"] },
+      });
     }
     if (req.query.medical === "yes") where.hasMedicalCondition = true;
     if (req.query.medical === "no") where.hasMedicalCondition = false;

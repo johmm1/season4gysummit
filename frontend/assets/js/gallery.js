@@ -551,7 +551,7 @@ let publicMediaLinks = [];
 let livestreamSettings = {};
 async function loadPublicMediaSettings() {
   try {
-    const { settings = {} } = await apiFetch("/gallery/public-content-settings");
+    const settings = await apiFetch("/gallery/public-content-settings");
     livestreamSettings = settings.livestreamSettingsForm || {};
     publicMediaLinks = Array.isArray(settings.mediaLinksForm?.links) ? settings.mediaLinksForm.links : [];
     $("liveTitle").value = livestreamSettings.title || "";

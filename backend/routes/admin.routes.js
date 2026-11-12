@@ -6,7 +6,7 @@ const { z } = require("zod");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const {
-  User, Registration, Attendance, SystemSetting, Presbytery, Parish, Church, AuditLog,
+  User, Registration, Attendance, AdmissionCard, SystemSetting, Presbytery, Parish, Church, AuditLog,
 } = require("../models");
 const { requireAuth, requireRole, ADMIN_ROLES } = require("../middleware/auth");
 const { asyncHandler, ApiError } = require("../middleware/errorHandler");
@@ -89,6 +89,38 @@ router.get(
     if (req.query.presbyteryId) where.presbyteryId = req.query.presbyteryId;
     if (req.query.churchId) where.churchId = req.query.churchId;
     if (req.query.gender) where.gender = req.query.gender;
+    if (req.query.age) {
+      const ageRanges = {
+        under18: [0, 17],
+        "18-24": [18, 24],
+        "25-30": [25, 30],
+        "31plus": [31, null],
+      };
+      const range = ageRanges[String(req.query.age)];
+      if (range) {
+        const today = new Date();
+        const dateAtAge = (years) => {
+          const d = new Date(today);
+          d.setHours(0, 0, 0, 0);
+          d.setFullYear(d.getFullYear() - years);
+          return d;
+        };
+        where.dateOfBirth = { [Op.lte]: dateAtAge(range[0]) };
+        if (range[1] !== null) where.dateOfBirth[Op.gt] = dateAtAge(range[1] + 1);
+      }
+    }
+    if (req.query.attendance === "checked_in") {
+      where["$attendances.id$"] = { [Op.ne]: null };
+    } else if (req.query.attendance === "not_checked_in") {
+      where["$attendances.id$"] = { [Op.is]: null };
+    }
+    if (req.query.admission === "issued") {
+      where["$admissionCard.id$"] = { [Op.ne]: null };
+    } else if (req.query.admission === "not_issued") {
+      where["$admissionCard.id$"] = { [Op.is]: null };
+    } else if (req.query.admission === "revoked") {
+      where["$admissionCard.isRevoked$"] = true;
+    }
     if (req.query.medical === "yes") where.hasMedicalCondition = true;
     if (req.query.medical === "no") where.hasMedicalCondition = false;
     if (req.query.createdFrom || req.query.createdTo) {
@@ -107,7 +139,8 @@ router.get(
 
     const include = [
       { model: Registration, as: "registration", where: req.query.status ? { status: req.query.status } : undefined, required: Boolean(req.query.status) },
-      { model: Attendance, as: "attendances", required: false },
+      { model: Attendance, as: "attendances", where: { type: "CHECK_IN" }, required: false },
+      { model: AdmissionCard, as: "admissionCard", required: false },
       { model: Presbytery },
       { model: Parish },
       { model: Church },

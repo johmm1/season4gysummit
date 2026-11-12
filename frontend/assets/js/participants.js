@@ -261,6 +261,59 @@ function exportParticipantsCsv() {
 }
 
 $("exportParticipantsCsv")?.addEventListener("click", exportParticipantsCsv);
-$("exportParticipantsExcel")?.addEventListener("click", exportParticipantsCsv);
+
+async function exportAllFilteredParticipantsCsv() {
+  try {
+    const params = new URLSearchParams({ page: "1", pageSize: "100" });
+    const search = $("participantSearch")?.value.trim();
+    const values = {
+      status: $("filterRegistration")?.value,
+      gender: $("filterGender")?.value,
+      parishId: $("filterParish")?.value,
+      admission: $("filterAdmission")?.value,
+      medical: $("filterMedical")?.value,
+      createdFrom: $("filterCreatedFrom")?.value,
+      createdTo: $("filterCreatedTo")?.value,
+      age: $("filterAge")?.value,
+      attendance: $("filterAttendance")?.value,
+    };
+    if (search) params.set("search", search);
+    Object.entries(values).forEach(([key, value]) => { if (value) params.set(key, value); });
+
+    const first = await apiFetch(`/admin/participants?${params}`);
+    const items = [...(first.items || [])];
+    for (let page = 2; page <= (first.totalPages || 1); page++) {
+      params.set("page", String(page));
+      const next = await apiFetch(`/admin/participants?${params}`);
+      items.push(...(next.items || []));
+    }
+    if (!items.length) return showError("No participants match the selected filters.");
+
+    const rows = [["Admission Pass", "Full Name", "Parish", "Gender", "Age", "Phone", "Medical Information", "Registration Status", "Pass Status", "Attendance"]];
+    items.forEach((u) => rows.push([
+      u.admissionCard?.cardNumber || "",
+      u.fullName || "",
+      u.Parish?.name || u.Church?.name || "",
+      u.gender || "",
+      u.dateOfBirth ? ageFromDob(u.dateOfBirth) : "",
+      u.phone || "",
+      u.medicalCondition || "None",
+      u.registration?.status || "—",
+      u.admissionCard?.isRevoked ? "Revoked" : u.admissionCard ? "Issued" : "Not issued",
+      u.attendances?.some((a) => a.type === "CHECK_IN") ? "Checked in" : "Not checked in",
+    ]));
+    const csv = rows.map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\\r\\n");
+    const url = URL.createObjectURL(new Blob(["\\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "y-summit-filtered-participants.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    showError(err.message || "Could not export the filtered participant list.");
+  }
+}
+
+$("exportParticipantsExcel")?.addEventListener("click", exportAllFilteredParticipantsCsv);
 $("printParticipantsList")?.addEventListener("click", () => window.print());
 

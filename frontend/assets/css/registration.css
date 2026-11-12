@@ -1,0 +1,139 @@
+/* Registration-only layout refinements. Desktop styles remain unchanged. */
+@media (max-width: 768px) {
+  .registration-section {
+    min-height: auto;
+    align-items: flex-start;
+    padding: 88px 12px 28px;
+  }
+
+  .registration-container {
+    width: 100%;
+    max-width: 560px;
+    padding: 18px 14px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .07);
+  }
+
+  .registration-container .form-title {
+    margin-bottom: 16px;
+  }
+
+  .registration-container .form-title img {
+    width: 58px;
+    height: auto;
+  }
+
+  .registration-container .form-title h1 {
+    font-size: clamp(19px, 5vw, 23px);
+    line-height: 1.2;
+    margin: 8px 0;
+  }
+
+  .registration-container .form-title p {
+    font-size: 12px;
+    line-height: 1.45;
+    margin: 6px 0;
+  }
+
+  .registration-container .stepper {
+    margin: 12px 0 18px;
+    gap: 6px;
+  }
+
+  .registration-container .step p {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .registration-container .step-circle {
+    width: 27px;
+    height: 27px;
+    font-size: 12px;
+  }
+
+  .registration-container .form-step h2 {
+    font-size: 17px;
+    line-height: 1.25;
+    margin: 0 0 14px;
+  }
+
+  .registration-container .form-grid {
+    gap: 9px 12px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .registration-container .form-group {
+    margin-bottom: 7px;
+    min-width: 0;
+  }
+
+  .registration-container .form-group label {
+    font-size: 13px;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .registration-container .form-group input,
+  .registration-container .form-group select,
+  .registration-container .form-group textarea {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px 11px;
+    border-radius: 9px;
+    font-size: 16px;
+  }
+
+  .registration-container .form-group textarea {
+    min-height: 76px;
+  }
+
+  .registration-container .form-group small {
+    font-size: 11px !important;
+    line-height: 1.35;
+    margin-top: 3px !important;
+  }
+
+  .registration-container .form-navigation {
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .registration-container .form-navigation .btn {
+    min-height: 42px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .registration-container .alert,
+  .registration-container .alert li {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .registration-container > p {
+    font-size: 12px !important;
+    line-height: 1.4;
+    margin-top: 12px !important;
+  }
+
+  .registration-container .password-field .toggle-password {
+    font-size: 12px;
+    padding: 6px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .registration-section {
+    padding: 82px 8px 20px;
+  }
+
+  .registration-container {
+    padding: 15px 11px;
+  }
+
+  .registration-container .form-title h1 {
+    font-size: 19px;
+  }
+}

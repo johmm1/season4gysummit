@@ -215,7 +215,7 @@ type="text"
 
 id="participantSearch"
 
-placeholder="Search name, email, phone, ID number or admission code">
+placeholder="Search participant name, email or phone">
 
 </div>
 
@@ -403,6 +403,14 @@ Female
 
 </select>
 
+<select id="filterAge" aria-label="Filter by age">
+<option value="">All Ages</option>
+<option value="under18">Under 18</option>
+<option value="18-24">18–24 years</option>
+<option value="25-30">25–30 years</option>
+<option value="31plus">Above 30</option>
+</select>
+
 <select id="filterAdmission">
 
 <option value="">
@@ -425,9 +433,18 @@ No Pass
 
 </select>
 
-<select id="filterRegistration">
+<select id="filterRegistration" aria-label="Filter by registration status">
 <option value="">All Registration Status</option>
-<option value="CONFIRMED">Registered</option>
+<option value="CONFIRMED">Confirmed</option>
+<option value="PENDING_PAYMENT">Pending</option>
+<option value="CANCELLED">Cancelled</option>
+<option value="REFUNDED">Refunded</option>
+</select>
+
+<select id="filterAttendance" aria-label="Filter by attendance">
+<option value="">All Attendance</option>
+<option value="checked_in">Checked in</option>
+<option value="not_checked_in">Not checked in</option>
 </select>
 
 <select id="filterMedical">
@@ -438,6 +455,7 @@ No Pass
 
 <input type="date" id="filterCreatedFrom" aria-label="Registered from">
 <input type="date" id="filterCreatedTo" aria-label="Registered to">
+<button type="button" class="secondary-btn" id="clearParticipantFilters"><i class="fa-solid fa-rotate-left"></i> Clear filters</button>
 
 </div>
 

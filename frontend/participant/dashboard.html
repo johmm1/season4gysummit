@@ -284,11 +284,31 @@ View Admission Pass
 </section>
 
 <!-- =======================================
-STATUS CARDS
-Next Section
+QUICK STATUS
 ======================================= -->
 
+<section class="stats-grid compact-status">
 
+<div class="stat-card">
+  <div class="stat-icon registration"><i class="fa-solid fa-user-check"></i></div>
+  <div class="stat-content">
+    <h5>Registration</h5>
+    <h2 id="registrationStatus">Loading...</h2>
+    <p id="registrationDate">—</p>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-icon admission"><i class="fa-solid fa-id-card"></i></div>
+  <div class="stat-content">
+    <h5>Admission</h5>
+    <h2 id="admissionStatus">Loading...</h2>
+    <p id="admissionCode">Show your name at the entrance</p>
+  </div>
+  <a class="mini-btn" href="admission-pass.html">View pass</a>
+</div>
+
+</section>
 
 <!-- =======================================
 DASHBOARD MIDDLE
@@ -404,6 +424,12 @@ View All
 
 </div>
 
+<div class="announcement-preview">
+  <h3 id="announcementTitle">No announcements yet</h3>
+  <p id="announcementMessage">New summit updates will appear here.</p>
+  <small id="announcementDate">—</small>
+</div>
+
 
 
 </div>
@@ -445,6 +471,12 @@ Downloads
 
 </h2>
 
+</div>
+
+<div class="download-actions">
+  <a class="btn btn-primary" href="admission-pass.html"><i class="fa-solid fa-id-card"></i> Admission Pass</a>
+  <button class="btn btn-outline" id="downloadCertificateBtn"><i class="fa-solid fa-award"></i> Certificate</button>
+  <button class="btn btn-outline" id="downloadProgramBtn"><i class="fa-solid fa-file-pdf"></i> Event Programme</button>
 </div>
 
 

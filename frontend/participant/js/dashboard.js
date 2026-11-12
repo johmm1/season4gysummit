@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — participant dashboard
 import { requireSession, wireLogoutButton } from "../../assets/js/auth.js";
-import { apiFetch, apiDownload, showError, showSuccess, formatKes, formatDate, setText, $, startCountdown } from "../../assets/js/utils.js";
+import { apiFetch, apiDownload, showError, formatDate, setText, $, startCountdown } from "../../assets/js/utils.js";
 import { CONFIG } from "../../assets/js/config.js";
 
 const user = await requireSession();
@@ -8,10 +8,8 @@ if (user) {
   wireLogoutButton();
   renderProfile(user);
   await loadAnnouncementPreview();
-  await loadSportsSummary();
   wireDownloadButtons();
   startCountdown(CONFIG.EVENT.startDate, { days: "days", hours: "hours", minutes: "minutes", seconds: "seconds" });
-  tickClock();
 }
 
 function renderProfile(user) {
@@ -40,43 +38,6 @@ async function loadAnnouncementPreview() {
   } catch (err) {
     console.error("Failed to load announcements:", err);
   }
-}
-
-async function loadSportsSummary() {
-  try {
-    const [{ memberships }, { events }] = await Promise.all([
-      apiFetch("/sports/me"),
-      apiFetch("/sports"),
-    ]);
-
-    const byCategory = {
-      Football: { statusId: "footballStatus", fixtureId: "footballFixture" },
-      Volleyball: { statusId: "volleyballStatus" },
-      Dance: { statusId: "danceStatus", fixtureId: "dancePerformance" },
-    };
-
-    for (const [category, ids] of Object.entries(byCategory)) {
-      const isRegistered = memberships.some((m) => m.SportsTeam?.category === category);
-      setText(ids.statusId, isRegistered ? "Registered" : "Not Registered");
-
-      if (ids.fixtureId) {
-        const next = events
-          .filter((e) => e.category === category && e.status !== "COMPLETED" && e.status !== "CANCELLED")
-          .sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt))[0];
-        setText(ids.fixtureId, next ? `Next: ${formatDate(next.startsAt)} — ${next.venue}` : "No fixture scheduled yet");
-      }
-    }
-  } catch (err) {
-    console.error("Failed to load sports summary:", err);
-  }
-}
-
-function tickClock() {
-  const el = $("currentTime");
-  if (!el) return;
-  setInterval(() => {
-    el.textContent = new Date().toLocaleTimeString("en-KE");
-  }, 1000);
 }
 
 function wireDownloadButtons() {

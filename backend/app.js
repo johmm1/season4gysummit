@@ -34,7 +34,7 @@ app.use(helmet());
 // missing or contains only a preview URL in the hosting environment.
 const allowedFrontendOrigins = [
   "https://githunguripresbytaryyouthsummit.co.ke",
-  "https://www.githunguripresbytaryouthsummit.co.ke",
+  "https://www.githunguripresbytaryyouthsummit.co.ke",
   ...(process.env.FRONTEND_URL || "").split(",").map((s) => s.trim()).filter(Boolean),
 ];
 app.use(

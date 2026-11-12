@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>View Live | GY Summit 2026</title><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><link rel="stylesheet" href="assets/css/mobile.css"><style>body{padding:24px;background:#f7f7f7}.live-wrap{max-width:900px;margin:35px auto;background:#fff;padding:24px;border-radius:18px;box-shadow:0 8px 28px #0001}.player{position:relative;width:100%;aspect-ratio:16/9;background:#111;border-radius:12px;overflow:hidden}.player iframe{width:100%;height:100%;border:0}.notice{padding:18px;background:#fff4e8;border-radius:10px;margin-top:18px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}</style></head><body><main class="live-wrap"><a href="index.html">← Back to summit website</a><h1 id="liveHeading">GY Summit Livestream</h1><div id="livePlayer"></div><div id="liveNotice" class="notice">Livestream details will be announced here.</div><div class="actions" id="liveActions"></div></main><script type="module">
+import { apiUrl } from "./assets/js/config.js";
+const esc = (s) => String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function embedUrl(raw) {
+ try {
+  const u=new URL(raw); const host=u.hostname.replace(/^www\./,"");
+  if(host==="youtu.be") return "https://www.youtube-nocookie.com/embed/"+u.pathname.slice(1);
+  if(host==="youtube.com"||host==="m.youtube.com"||host==="youtube-nocookie.com") {
+   const id=u.searchParams.get("v") || u.pathname.match(/\/embed\/([^/]+)/)?.[1] || u.pathname.match(/\/live\/([^/]+)/)?.[1];
+   return id ? "https://www.youtube-nocookie.com/embed/"+id : "";
+  }
+  if(host==="tiktok.com"||host.endsWith(".tiktok.com")) {
+   const id=u.pathname.match(/\/video\/(\d+)/)?.[1];
+   return id ? "https://www.tiktok.com/player/v1/"+id : "";
+  }
+ } catch {}
+ return "";
+}
+try {
+ const response=await fetch(apiUrl("/public/settings")); const {settings={}}=await response.json();
+ const live=settings.livestreamSettingsForm||{};
+ document.getElementById("liveHeading").textContent=live.title||"GY Summit Livestream";
+ const active=live.enabled && live.status==="live" && live.url;
+ const notice=live.notice || (live.startTime ? "Livestream starts at "+live.startTime+". Please check back." : "The livestream has not started yet. Please check back.");
+ if(active) {
+  const embed=embedUrl(live.url);
+  document.getElementById("livePlayer").innerHTML=embed?'<div class="player"><iframe src="'+esc(embed)+'" title="GY Summit livestream" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'<div class="notice">This link cannot be embedded here. Use the button below to watch on the original platform.</div>';
+  document.getElementById("liveNotice").textContent="We are live now.";
+  document.getElementById("liveActions").innerHTML='<a href="'+esc(live.url)+'" target="_blank" rel="noopener noreferrer">Open original livestream</a>';
+ } else {
+  document.getElementById("liveNotice").textContent=notice;
+  document.getElementById("liveActions").innerHTML=live.url?'<a href="'+esc(live.url)+'" target="_blank" rel="noopener noreferrer">Open livestream link</a>':"";
+ }
+} catch { document.getElementById("liveNotice").textContent="Livestream details are temporarily unavailable. Please check back later."; }
+</script></body></html>

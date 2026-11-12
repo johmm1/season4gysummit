@@ -240,7 +240,7 @@ alt="GY Summit – Githunguri Presbytery Youth Summit logo">
 
 <a href="#contact">Contact</a>
 
-<a href="login.html">Login</a>
+<a href="live.html">View Live</a>\n\n<a href="login.html">Login</a>
 
 <a href="register.html"
 class="register-btn">
@@ -1271,7 +1271,7 @@ function formatDateRange(startIso, endIso) {
 }
 
 applyPublicSettings().then((settings) => {
-  const general = settings?.generalSettingsForm || {};
+  const general = settings?.generalSettingsForm || {};\n  const mediaLinks = settings?.mediaLinksForm?.links || [];\n  const mediaGrid = document.getElementById("publicMediaLinksGrid");\n  if (mediaGrid) mediaGrid.innerHTML = mediaLinks.length ? mediaLinks.map((item) => `<article class="event-card"><h3>${String(item.title || "Summit media").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",\\"":"&quot;"}[c]))}</h3><p>${String(item.description || "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",\\"":"&quot;"}[c]))}</p><a href="${String(item.url || "#").replace(/[\"<>]/g, "")}" target="_blank" rel="noopener noreferrer">Open media link</a></article>`).join("") : "<p>New media links will appear here when published.</p>";
 
   // Show the per-person fee with thousands separators (e.g. 2,200),
   // whether it came from admin settings or the built-in default.

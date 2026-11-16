@@ -86,8 +86,11 @@ export function initFixturePlanner({ onSaved } = {}) {
   }
 }
 
-function post({ category, groupCount, preview, replace = false, poolA, poolB }) {
-  return apiFetch("/sports/plan-fixtures", { method: "POST", body: { category, groupCount, preview, replace, poolA, poolB } });
+function post({ category, groupCount, preview, replace = false, poolA, poolB, poolAMatches, poolBMatches }) {
+  return apiFetch("/sports/plan-fixtures", {
+    method: "POST",
+    body: { category, groupCount, preview, replace, poolA, poolB, poolAMatches, poolBMatches },
+  });
 }
 
 let availableFootballTeams = [];

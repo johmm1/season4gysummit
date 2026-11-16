@@ -90,6 +90,9 @@ function post({ category, groupCount, preview, replace = false, poolA, poolB }) 
   return apiFetch("/sports/plan-fixtures", { method: "POST", body: { category, groupCount, preview, replace, poolA, poolB } });
 }
 
+let availableFootballTeams = [];
+let poolSelections = { A: [], B: [] };
+
 async function loadPoolAssignments() {
   const panel = $("plannerPoolAssignment");
   if (!panel) return;
@@ -98,25 +101,84 @@ async function loadPoolAssignments() {
   if (!isFootball) return;
   try {
     const data = await apiFetch("/sports/teams?category=Football");
-    const teams = (data.teams || []).map((t) => t.name).filter(Boolean).sort((a,b) => a.localeCompare(b));
-    const a = $("plannerPoolA"), b = $("plannerPoolB");
-    if (!a || !b || a.options.length) return;
-    const fill = (select, chosen) => {
-      select.innerHTML = teams.map((name) => "<option value=\"" + escapeHtml(name) + "\" " + (chosen.includes(name) ? "selected" : "") + ">" + escapeHtml(name.replace(/\\s+Football$/i, "")) + "</option>").join("");
-    };
-    fill(a, teams.slice(0, 6));
-    fill(b, teams.slice(6, 11));
+    availableFootballTeams = (data.teams || []).map((t) => t.name).filter(Boolean).sort((a,b) => a.localeCompare(b));
+    poolSelections = { A: [], B: [] };
+    renderPoolChooser();
   } catch (err) {
-    setStatus("Could not load football teams for pool assignment: " + (err.message || "try again"), "error");
+    setStatus("Could not load football teams: " + (err.message || "try again"), "error");
   }
 }
 
+function renderPoolChooser() {
+  const panel = $("plannerPoolAssignment");
+  if (!panel) return;
+  const label = (name) => name.replace(/\\s+Football$/i, "");
+  panel.innerHTML = `
+    <div class="planner-pool-chooser">
+      <h3>1. Assign parishes to pools</h3>
+      <p class="planner-help">Tap a parish, then choose Pool A or Pool B. Each parish can belong to one pool only.</p>
+      <div class="planner-team-picker">${availableFootballTeams.map((name, i) => `
+        <label class="planner-team-option"><input type="checkbox" data-team-index="${i}"><span>${escapeHtml(label(name))}</span></label>`).join("")}</div>
+      <div class="planner-assign-actions">
+        <button type="button" class="btn btn-outline" id="assignPoolA">Add selected to Pool A</button>
+        <button type="button" class="btn btn-outline" id="assignPoolB">Add selected to Pool B</button>
+      </div>
+      <div class="planner-pool-columns">
+        <section><h4>Pool A <small>(${poolSelections.A.length}/6)</small></h4><ol>${poolSelections.A.map(n => `<li>${escapeHtml(label(n))}</li>`).join("") || "<li>No parishes assigned</li>"}</ol></section>
+        <section><h4>Pool B <small>(${poolSelections.B.length}/5)</small></h4><ol>${poolSelections.B.map(n => `<li>${escapeHtml(label(n))}</li>`).join("") || "<li>No parishes assigned</li>"}</ol></section>
+      </div>
+      <div id="plannerPairings"></div>
+    </div>`;
+  panel.querySelector("#assignPoolA").addEventListener("click", () => assignSelected("A"));
+  panel.querySelector("#assignPoolB").addEventListener("click", () => assignSelected("B"));
+  renderPairings();
+}
+
+function assignSelected(pool) {
+  const selected = [...$("plannerPoolAssignment").querySelectorAll("input[data-team-index]:checked")]
+    .map(el => availableFootballTeams[Number(el.dataset.teamIndex)]);
+  for (const team of selected) {
+    poolSelections.A = poolSelections.A.filter(x => x !== team);
+    poolSelections.B = poolSelections.B.filter(x => x !== team);
+    if (poolSelections[pool].length < (pool === "A" ? 6 : 5)) poolSelections[pool].push(team);
+  }
+  renderPoolChooser();
+}
+
+function renderPairings() {
+  const host = $("plannerPairings");
+  if (!host) return;
+  const ready = poolSelections.A.length === 6 && poolSelections.B.length === 5;
+  if (!ready) {
+    host.innerHTML = '<p class="planner-help">Assign 6 parishes to Pool A and 5 to Pool B to unlock opening matchups.</p>';
+    return;
+  }
+  const makeRows = (pool, count) => Array.from({length: count}, (_, i) => {
+    const options = poolSelections[pool].map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n.replace(/\\s+Football$/i, ""))}</option>`).join("");
+    return `<div class="planner-pair-row"><strong>Match ${i+1}</strong><select data-pair-pool="${pool}" data-pair-index="${i}" data-side="home"><option value="">Choose parish</option>${options}</select><span>vs</span><select data-pair-pool="${pool}" data-pair-index="${i}" data-side="away"><option value="">Choose opponent</option>${options}</select></div>`;
+  }).join("");
+  host.innerHTML = `
+    <h3>2. Choose opening matchups</h3>
+    <h4>Pool A — three matches</h4>${makeRows("A",3)}
+    <h4>Pool B — two matches</h4>${makeRows("B",2)}
+    <p class="planner-help">The remaining fifth Pool B parish receives the existing best-loser playoff slot. The system will arrange later cross-pool and knockout rounds automatically.</p>`;
+}
+
 function selectedPools() {
-  const a = [...($("plannerPoolA")?.selectedOptions || [])].map((o) => o.value);
-  const b = [...($("plannerPoolB")?.selectedOptions || [])].map((o) => o.value);
-  if (a.length !== 6 || b.length !== 5) return { error: "Select exactly 6 churches in Pool A and 5 in Pool B before generating fixtures." };
-  if (new Set([...a, ...b]).size !== 11) return { error: "A church cannot appear in both pools." };
-  return { poolA: a, poolB: b };
+  const a = poolSelections.A, b = poolSelections.B;
+  if (a.length !== 6 || b.length !== 5) return { error: "Assign exactly 6 parishes to Pool A and 5 to Pool B." };
+  if (new Set([...a, ...b]).size !== 11) return { error: "A parish can appear in one pool only." };
+  const getPairs = (pool, count) => Array.from({length: count}, (_, i) => {
+    const home = document.querySelector(`[data-pair-pool="${pool}"][data-pair-index="${i}"][data-side="home"]`)?.value;
+    const away = document.querySelector(`[data-pair-pool="${pool}"][data-pair-index="${i}"][data-side="away"]`)?.value;
+    return home && away ? [home, away] : null;
+  });
+  const poolAMatches = getPairs("A",3), poolBMatches = getPairs("B",2);
+  if ([...poolAMatches,...poolBMatches].some(p => !p || p[0] === p[1])) return { error: "Choose two different parishes for every opening match." };
+  const allPaired = [...poolAMatches,...poolBMatches].flat();
+  if (new Set(allPaired).size !== 10) return { error: "Each parish must appear in only one opening matchup. Check for duplicate selections." };
+  if (poolAMatches.some(p => p.some(n => !a.includes(n))) || poolBMatches.some(p => p.some(n => !b.includes(n)))) return { error: "Each matchup must use parishes from its own pool." };
+  return { poolA: a, poolB: b, poolAMatches, poolBMatches };
 }
 
 function openPlanner(category) {

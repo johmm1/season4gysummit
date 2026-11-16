@@ -1863,3 +1863,19 @@ gap:10px;
 .planner-pools option{padding:5px}
 .planner-pools .planner-help{grid-column:1/-1;margin:0}
 @media(max-width:650px){.planner-pools{grid-template-columns:1fr}}
+
+
+/* Mobile-friendly parish pool and opening-match selection */
+.planner-pool-chooser{display:grid;gap:12px}
+.planner-pool-chooser h3{margin:10px 0 0;font-size:1rem}
+.planner-team-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.planner-team-option{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-size:.9rem;min-width:0}
+.planner-team-option input{width:18px;height:18px;flex:0 0 auto}
+.planner-assign-actions{display:flex;flex-wrap:wrap;gap:8px}
+.planner-pool-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.planner-pool-columns section{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-alt,#f8fafc);min-width:0}
+.planner-pool-columns h4{margin:0 0 8px}
+.planner-pool-columns ol{padding-left:20px;margin:0}
+.planner-pair-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;margin:8px 0}
+.planner-pair-row select{min-height:42px;padding:8px;min-width:0}
+@media(max-width:650px){.planner-team-picker,.planner-pool-columns{grid-template-columns:1fr}.planner-pair-row{grid-template-columns:1fr auto 1fr}.planner-pair-row strong{grid-column:1/-1}}

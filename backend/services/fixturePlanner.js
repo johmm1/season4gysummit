@@ -302,6 +302,14 @@ function planElevenChurchCup(options) {
   if (poolA.length !== 6 || poolB.length !== 5 || new Set([...poolA, ...poolB]).size !== 11 || [...poolA, ...poolB].some((team) => !teams.includes(team))) {
     throw new Error("Assign six different churches to Pool A and five different churches to Pool B. Every football team must appear exactly once.");
   }
+  const poolAMatches = options.poolAMatches || [[poolA[0],poolA[1]],[poolA[2],poolA[3]],[poolA[4],poolA[5]]];
+  const poolBMatches = options.poolBMatches || [[poolB[0],poolB[1]],[poolB[2],poolB[3]]];
+  const pairedA = poolAMatches.flat(), pairedB = poolBMatches.flat();
+  if (poolAMatches.length !== 3 || poolBMatches.length !== 2 ||
+      new Set(pairedA).size !== 6 || new Set(pairedB).size !== 4 ||
+      pairedA.some(t => !poolA.includes(t)) || pairedB.some(t => !poolB.includes(t))) {
+    throw new Error("Opening matchups must pair all six Pool A parishes once and four Pool B parishes once. The fifth Pool B parish is reserved for the best-loser play-off.");
+  }
   const venue = (options.venues && options.venues[0]) || "Main Pitch";
   const duration = options.durationMin || FB_MIN;
   const gender = options.gender || "MIXED";
@@ -311,10 +319,10 @@ function planElevenChurchCup(options) {
     group: group || null, bracketSlot: slot, teamHome: home || null, teamAway: away || null,
     venue, startsAt: eatDate(date, time), matchday: null,
   });
-  poolA.forEach((team, i) => { if (i % 2 === 0) add(`PA${i/2+1}`, "GROUP", tue, ["14:00","14:45","15:30"][i/2], team, poolA[i+1], "A", `Pool A — ${team} vs ${poolA[i+1]}`); });
-  add("PB1","GROUP",tue,"16:15",poolB[0],poolB[1],"B",`Pool B — ${poolB[0]} vs ${poolB[1]}`);
-  add("PB2","GROUP",tue,"17:00",poolB[2],poolB[3],"B",`Pool B — ${poolB[2]} vs ${poolB[3]}`);
-  add("PB3","GROUP",wed,"15:30",poolB[4],"Best Loser","B",`Pool B — ${poolB[4]} vs Best Loser`);
+  poolAMatches.forEach(([home,away], i) => add(`PA${i+1}`, "GROUP", tue, ["14:00","14:45","15:30"][i], home, away, "A", `Pool A — ${home} vs ${away}`));
+  poolBMatches.forEach(([home,away], i) => add(`PB${i+1}`, "GROUP", tue, ["16:15","17:00"][i], home, away, "B", `Pool B — ${home} vs ${away}`));
+  const poolBBye = poolB.find(team => !pairedB.includes(team));
+  add("PB3","GROUP",wed,"15:30",poolBBye,"Best Loser","B",`Pool B — ${poolBBye} vs Best Loser`);
   for(let i=1;i<=3;i++) add(`CP${i}`,"QUARTER",wed,["16:10","16:50","17:25"][i-1],`Pool A Winner ${i}`,`Pool B Winner ${i}`,null,`Cross-Pool Match ${i}`);
   add("SF1","SEMI",thu,"15:30","Winner Cross Match 1","Winner Cross Match 2",null,"Semi-Final I");
   add("SF2","SEMI",thu,"16:30","Winner Cross Match 3","Best Loser",null,"Semi-Final II");

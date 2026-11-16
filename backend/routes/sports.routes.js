@@ -574,6 +574,8 @@ router.post(
       groupCount: judging.isJudged(body.category) ? body.groupCount : undefined,
       poolA: body.poolA,
       poolB: body.poolB,
+      poolAMatches: body.poolAMatches,
+      poolBMatches: body.poolBMatches,
       venues: body.venues,
       existing,
       teams: teams.map((t) => t.name),

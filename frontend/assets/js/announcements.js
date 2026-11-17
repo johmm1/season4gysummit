@@ -151,7 +151,7 @@ function render(items) {
         <td>
           <button class="btn btn-sm btn-outline" data-action="view" data-id="${a.id}">View</button>
           <button class="btn btn-sm btn-outline" data-action="edit" data-id="${a.id}">Edit</button>
-          ${a.isPublished && !(a.publishAt && new Date(a.publishAt) > new Date()) ? `<button class="btn btn-sm btn-outline" data-action="whatsapp" data-id="${a.id}"><i class="fa-brands fa-whatsapp"></i> Share</button>` : ""}
+          ${a.isPublished && !a.parishId && !a.sportsOnly && !(a.publishAt && new Date(a.publishAt) > new Date()) ? `<button class="btn btn-sm btn-outline" data-action="whatsapp" data-id="${a.id}"><i class="fa-brands fa-whatsapp"></i> Share</button>` : ""}
           <button class="btn btn-sm btn-danger" data-action="delete" data-id="${a.id}">Delete</button>
         </td>
       </tr>`

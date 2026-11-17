@@ -84,7 +84,12 @@ function wireCertificateGeneration() {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating…';
     try {
       const result = await apiFetch("/certificates/generate", { method: "POST", body: { type: "PARTICIPATION" } });
-      showSuccess(`${result.issued} new participation certificate(s) issued (${result.eligible} confirmed participants total).`);
+      if (!result.eligible) {
+        showError("No confirmed participants were found. Check that registrations are marked CONFIRMED.");
+        return;
+      }
+      await apiDownload("/certificates/download-all?type=PARTICIPATION", "gys-summit-2026-participation-certificates.pdf");
+      showSuccess(result.issued + " new certificate(s) issued; PDF prepared for " + result.eligible + " confirmed participants.");
     } catch (err) {
       showError(err.message || "Could not generate certificates.");
     } finally {

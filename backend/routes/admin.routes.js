@@ -204,11 +204,17 @@ router.patch(
         fullName: z.string().min(2).max(120).optional(),
         isActive: z.boolean().optional(),
         role: z.enum(["SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN", "ADMISSIONS_ADMIN", "SPORTS_ADMIN", "GALLERY_ADMIN", "PARTICIPANT"]).optional(),
+        whatsappStatus: z.enum(["UNKNOWN", "HAS_WHATSAPP", "NO_WHATSAPP"]).optional(),
+        whatsappChannelJoined: z.boolean().optional(),
       })
       .parse(req.body);
     const user = await User.findByPk(req.params.id);
     if (!user) throw new ApiError(404, "Participant not found");
-    await user.update(body);
+    const update = { ...body };
+    if (typeof body.whatsappChannelJoined === "boolean") {
+      update.whatsappJoinedAt = body.whatsappChannelJoined ? new Date() : null;
+    }
+    await user.update(update);
     res.json({ user });
   })
 );

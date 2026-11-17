@@ -103,7 +103,7 @@ function openModal(id) {
   if (!a) return;
   setText("modalTitle", a.title);
   const modalContent = $("modalContent");
-  if (modalContent) modalContent.innerHTML = sanitizeRichText(a.body);
+  if (modalContent) {\n    let richBody = String(a.body || "");\n    const parsed = new DOMParser().parseFromString(richBody, "text/html");\n    if (!parsed.body.querySelector("*") && /&lt;\\s*(p|div|br|strong|b|em|ul|ol|li)\\b/i.test(richBody)) richBody = parsed.body.textContent || richBody;\n    modalContent.innerHTML = sanitizeRichText(richBody);\n  }
   setText("modalDate", formatDate(a.createdAt));
   setText("modalCategory", a.isPinned ? "Pinned" : "General");
   const attachments = $("attachmentSection");

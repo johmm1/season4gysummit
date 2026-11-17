@@ -16,6 +16,7 @@
     ["reports.html", "fa-file-pdf", "Reports"],
     ["gallery.html", "fa-images", "Gallery"],
     ["announcements.html", "fa-bullhorn", "Announcements"],
+    ["communications.html", "fa-comments", "Communications"],
     ["structure.html", "fa-church", "Structure"],
     ["settings.html", "fa-gear", "Settings"]
   ];

@@ -38,7 +38,7 @@ async function load() {
     if (pinnedAnnouncement) {
       if (pinnedSection) pinnedSection.style.display = "";
       setText("pinnedTitle", pinnedAnnouncement.title);
-      setText("pinnedPreview", pinnedAnnouncement.body.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim().slice(0, 160));
+      setText("pinnedPreview", announcementPlainText(pinnedAnnouncement.body).slice(0, 160));
       setText("pinnedDate", formatDate(pinnedAnnouncement.createdAt));
     } else if (pinnedSection) {
       pinnedSection.style.display = "none";

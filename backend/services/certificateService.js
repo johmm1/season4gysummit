@@ -131,8 +131,8 @@ async function loadCertificateAssets(type) {
     fetchImageBuffer(backgroundUrl),
     fetchImageBuffer(signatures["chaplainSignature__url"] || signatures["secretarySignature__url"]),
     fetchImageBuffer(signatures["chairSignature__url"]),
-    fetchImageBuffer(general.churchLogoUrl),
-    fetchImageBuffer(general.fellowshipLogoUrl),
+    Promise.resolve(fs.readFileSync(path.join(__dirname, "../../frontend/assets/images/pcea-church-crest.jpg"))),
+    Promise.resolve(fs.readFileSync(path.join(__dirname, "../../frontend/assets/images/pcea-youth-fellowship-crest.jpg")),
   ]);
 
   return {

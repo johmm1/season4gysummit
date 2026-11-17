@@ -297,14 +297,29 @@ async function runCertificateGeneration(type, buttonId) {
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating…'; }
   try {
     const result = await apiFetch("/certificates/generate", { method: "POST", body: { type } });
+    const issuedCount = Number(result.issued || 0);
+    const eligibleCount = Number(result.eligible || 0);
+    const teamsAwarded = Number(result.teamsAwarded || 0);
+
+    if (type === "SPORTS_WINNER" && teamsAwarded === 0) {
+      showError("No completed winning results were found. Complete and save the final match results first.");
+      return;
+    }
+    if (type === "PARTICIPATION" && eligibleCount === 0) {
+      showError("No confirmed participants were found. Check that registrations are marked CONFIRMED.");
+      return;
+    }
+
+    // Generate the actual multi-page PDF after issuing the certificate records.
+    const filename = type === "PARTICIPATION"
+      ? "gys-summit-2026-participation-certificates.pdf"
+      : "gys-summit-2026-sports-winner-certificates.pdf";
+    await apiDownload("/certificates/download-all?type=" + encodeURIComponent(type), filename);
+
     if (type === "PARTICIPATION") {
-      showSuccess(`${result.issued} new participation certificate(s) issued (${result.eligible} confirmed participants total).`);
+      showSuccess(issuedCount + " new certificate(s) issued; PDF prepared for " + eligibleCount + " confirmed participants.");
     } else {
-      showSuccess(
-        result.teamsAwarded
-          ? `${result.issued} new sports certificate(s) issued across ${result.teamsAwarded} winning team(s).`
-          : "No completed fixtures yet — nothing to award."
-      );
+      showSuccess(issuedCount + " new sports certificate(s) issued; PDF prepared for " + teamsAwarded + " winning teams.");
     }
   } catch (err) {
     showError(err.message || "Could not generate certificates.");

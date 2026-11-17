@@ -247,7 +247,7 @@ function openForView(id) {
   if (!a) return;
   const modal = $("announcementModal");
   const content = $("announcementContent");
-  if (content) content.innerHTML = `<h3>${escapeHtml(a.title)}</h3><div class="announcement-rich-content">${sanitizeRichText(a.body)}</div>`;
+  if (content) {\n    let richBody = String(a.body || "");\n    const parsed = new DOMParser().parseFromString(richBody, "text/html");\n    if (!parsed.body.querySelector("*") && /&lt;\\s*(p|div|br|strong|b|em|ul|ol|li)\\b/i.test(richBody)) richBody = parsed.body.textContent || richBody;\n    content.innerHTML = `<h3>${escapeHtml(a.title)}</h3><div class="announcement-rich-content">${sanitizeRichText(richBody)}</div>`;\n  }
   if (modal) modal.style.display = "flex";
 }
 

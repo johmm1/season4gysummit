@@ -33,6 +33,9 @@ const User = sequelize.define("User", {
   // under one address. The phone number is the unique identity.
   email: { type: DataTypes.STRING(160), allowNull: false, validate: { isEmail: true } },
   phone: { type: DataTypes.STRING(20), allowNull: false, unique: true },
+  whatsappStatus: { type: DataTypes.STRING(20), allowNull: false, defaultValue: "UNKNOWN" },
+  whatsappChannelJoined: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+  whatsappJoinedAt: { type: DataTypes.DATE, allowNull: true },
   passwordHash: { type: DataTypes.STRING(100), allowNull: false },
   // Legacy flag from the removed OTP flow. Nothing reads it any more; it stays
   // only so the existing database column keeps its default.

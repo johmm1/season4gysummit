@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Communications | Y-Summit Season 4 2026</title>
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<link rel="stylesheet" href="../assets/css/dashboard-refined.css">
+<link rel="stylesheet" href="../assets/css/mobile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+.comm-wrap{max-width:1180px;margin:auto}.comm-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}.comm-stat,.comm-panel{background:var(--card,#fff);border:1px solid var(--border,#e5e7eb);border-radius:14px;padding:16px}.comm-stat strong{display:block;font-size:1.55rem}.comm-panel{margin:14px 0}.comm-panel h2{font-size:1.05rem;margin:0 0 12px}.comm-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.comm-row input,.comm-row select{min-width:0;padding:10px;border:1px solid var(--border,#ddd);border-radius:8px}.comm-row input[type=url]{flex:1;min-width:220px}.comm-table-wrap{overflow:auto}.comm-table{width:100%;border-collapse:collapse;min-width:680px}.comm-table th,.comm-table td{text-align:left;padding:10px;border-bottom:1px solid var(--border,#eee);font-size:13px}.comm-table select{padding:7px;border:1px solid #ddd;border-radius:7px}.comm-muted{color:var(--muted,#667085);font-size:13px}.comm-pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#eef2f7;font-size:12px}.comm-actions{display:flex;gap:8px;flex-wrap:wrap}.comm-actions .btn{white-space:nowrap}@media(max-width:760px){.comm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.comm-panel{padding:12px}.comm-row>*{width:100%}.comm-row .btn{width:auto}}
+</style>
+</head>
+<body>
+<div class="admin-layout">
+<aside class="sidebar"><div class="sidebar-logo"><img src="../assets/images/logo.png" alt="Y-Summit"><h2>Y-Summit</h2><p>Administration</p></div><nav></nav></aside>
+<main class="admin-main">
+<header class="admin-header">
+<button class="mobile-menu" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+<div><h1>Communications Centre</h1><p>Reach every registered participant, including those without WhatsApp.</p></div>
+<div class="admin-user"><strong id="adminName">Administrator</strong><small id="adminRole"></small></div>
+<button id="logoutBtn" class="btn btn-outline btn-sm" type="button" title="Log out"><i class="fa-solid fa-right-from-bracket"></i></button>
+</header>
+<div class="comm-wrap">
+<section class="comm-panel">
+<h2><i class="fa-brands fa-whatsapp"></i> Official WhatsApp Channel</h2>
+<p class="comm-muted">Add the invitation link after creating the GYS Summit Channel. Participants must choose to follow it; the system cannot silently add them.</p>
+<div class="comm-row"><input type="url" id="channelUrl" placeholder="Paste the WhatsApp Channel invitation link when ready"><button class="btn btn-primary" id="saveChannel" type="button">Save channel link</button><a class="btn btn-outline" id="openChannel" href="#" target="_blank" rel="noopener" hidden>Open channel</a></div>
+<p id="channelStatus" class="comm-muted" aria-live="polite">Channel link not added yet.</p>
+</section>
+<section class="comm-grid">
+<div class="comm-stat"><span class="comm-muted">Registered participants</span><strong id="countAll">—</strong></div>
+<div class="comm-stat"><span class="comm-muted">Have WhatsApp</span><strong id="countHas">—</strong></div>
+<div class="comm-stat"><span class="comm-muted">No WhatsApp</span><strong id="countNone">—</strong></div>
+<div class="comm-stat"><span class="comm-muted">Joined channel (confirmed)</span><strong id="countJoined">—</strong></div>
+</section>
+<section class="comm-panel">
+<h2>Participant communication status</h2>
+<p class="comm-muted">Statuses are recorded from participant confirmation or administrator verification. “Unknown” does not mean the number is not on WhatsApp. Channel membership is never inferred from the phone number.</p>
+<div class="comm-row" style="margin-bottom:12px">
+<input type="search" id="participantSearch" placeholder="Search participant name, phone or email" aria-label="Search participants">
+<select id="statusFilter" aria-label="Filter WhatsApp status"><option value="">All WhatsApp statuses</option><option value="UNKNOWN">Not confirmed</option><option value="HAS_WHATSAPP">Has WhatsApp</option><option value="NO_WHATSAPP">No WhatsApp</option></select>
+<select id="joinedFilter" aria-label="Filter channel membership"><option value="">All channel statuses</option><option value="yes">Joined (confirmed)</option><option value="no">Not confirmed joined</option></select>
+<button class="btn btn-outline" id="refreshParticipants" type="button"><i class="fa-solid fa-rotate"></i> Refresh</button>
+</div>
+<div class="comm-table-wrap"><table class="comm-table"><thead><tr><th>Participant</th><th>Phone</th><th>Email</th><th>WhatsApp</th><th>Channel</th></tr></thead><tbody id="participantsBody"><tr><td colspan="5">Loading participants…</td></tr></tbody></table></div>
+<p id="listStatus" class="comm-muted" aria-live="polite"></p>
+</section>
+<section class="comm-panel">
+<h2>Communication coverage</h2>
+<p>Participants without WhatsApp should receive important updates by email. Where an email address is unavailable or unusable, follow up through their parish youth leader.</p>
+<p class="comm-muted">This first version records channel participation and prepares the audience list. It does not send free bulk WhatsApp messages or claim delivery. Publishing to a WhatsApp Channel still requires an administrator to post there.</p>
+</section>
+</div>
+</main></div>
+<script type="module" src="../assets/js/communications.js"></script>
+<script src="../assets/js/admin-nav.js"></script>
+<script src="../assets/js/app-shell.js"></script>
+</body></html>

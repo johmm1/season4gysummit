@@ -32,6 +32,9 @@ router.get(
     if (!cert) throw new ApiError(404, "Certificate not found");
     const user = await User.findByPk(req.auth.userId);
 
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename="gy-summit-2026-${cert.type.toLowerCase()}.pdf"`);
     await generateCertificatePdf({ userFullName: user.fullName, type: cert.type, category: cert.category, serial: cert.serial }, res);

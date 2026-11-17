@@ -6,13 +6,17 @@
 // are used instead/in addition.
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
+const fs = require("fs");
+const path = require("path");
 const { SystemSetting } = require("../models");
 
-const GOLD = "#C8A24A";
-const GOLD_DARK = "#A8842F";
-const NAVY = "#0B1B33";
-const INK = "#1B1B1B";
-const MUTED = "#666666";
+const GOLD = "#F4A900";
+const GOLD_DARK = "#9A5700";
+const TURQUOISE = "#08B8C8";
+const TURQUOISE_DARK = "#087F91";
+const BROWN = "#603813";
+const INK = "#38230F";
+const MUTED = "#705E4C";
 
 async function getForm(formId) {
   const row = await SystemSetting.findOne({ where: { key: formId } });
@@ -117,133 +121,109 @@ async function loadCertificateAssets(type) {
   ]);
 
   const summitName = general.summitName || "Y-Summit Season 4 2026";
-  const theme = general.theme || "Rise · Connect · Transform";
-  const themeVerse = general.themeVerse || "";
-  const venue = general.venue || "TBD";
-  const dates = formatEventDates(general.eventStart, general.eventEnd);
+  const theme = general.theme || "P² – Pursuit of Purpose";
+  const themeVerse = general.themeVerse || "Genesis 39:21";
+  const venue = general.venue || "Kambui Girls’ Senior School";
+  const dates = formatEventDates(general.eventStart, general.eventEnd) || "15–19 December 2026";
 
   const backgroundUrl = type === "SPORTS_WINNER" ? templates["winnerTemplate__url"] : templates["participationTemplate__url"];
-  const [background, chairSig, secretarySig] = await Promise.all([
+  const [background, chaplainSig, chairSig, churchLogo, fellowshipLogo] = await Promise.all([
     fetchImageBuffer(backgroundUrl),
+    fetchImageBuffer(signatures["chaplainSignature__url"] || signatures["secretarySignature__url"]),
     fetchImageBuffer(signatures["chairSignature__url"]),
-    fetchImageBuffer(signatures["secretarySignature__url"]),
+    fetchImageBuffer(general.churchLogoUrl),
+    fetchImageBuffer(general.fellowshipLogoUrl),
   ]);
 
   return {
     config, textSettings, summitName, theme, themeVerse, venue, dates,
-    background, chairSig, secretarySig,
+    background, chaplainSig, chairSig, churchLogo, fellowshipLogo,
+    chaplainName: leadership.chaplain || "Chaplain",
     chairName: leadership.chairman || "Chairperson",
-    secretaryName: leadership.secretary || "Secretary",
   };
 }
 
 async function drawCertificatePage(doc, assets, { userFullName, type, category, serial }) {
-  const { config, textSettings, summitName, theme, themeVerse, venue, dates, background, chairSig, secretarySig, chairName, secretaryName } = assets;
+  const { config, textSettings, summitName, theme, themeVerse, venue, dates, background, chaplainSig, chairSig, churchLogo, fellowshipLogo, chaplainName, chairName } = assets;
   const { width: W, height: H } = doc.page;
-
   const certId = `GYS${new Date().getFullYear()}-${String(serial).padStart(6, "0")}`;
-  const qrBuffer = await QRCode.toBuffer(`${certId} | ${type} | ${userFullName}`, {
-    errorCorrectionLevel: "M",
-    margin: 0,
-    width: 240,
-  });
+  const qrBuffer = await QRCode.toBuffer(`${certId} | ${type} | ${userFullName}`, { errorCorrectionLevel: "M", margin: 0, width: 220 });
 
-  // ---------- Background ----------
-  if (background) {
-    doc.image(background, 0, 0, { width: W, height: H });
-  } else {
-    drawDefaultBackground(doc, W, H);
-  }
+  // Warm cream base with the poster's turquoise, orange and deep-brown palette.
+  doc.rect(0, 0, W, H).fill("#FFFCF4");
+  if (background) doc.save().opacity(0.12).image(background, 0, 0, { width: W, height: H }).restore();
+  doc.lineWidth(5).strokeColor(TURQUOISE).rect(16, 16, W - 32, H - 32).stroke();
+  doc.lineWidth(1.5).strokeColor(GOLD).rect(24, 24, W - 48, H - 48).stroke();
+  doc.rect(30, 30, W - 60, 5).fill(TURQUOISE);
+  doc.rect(30, H - 35, W - 60, 5).fill(GOLD);
 
-  // ---------- Gold border frame ----------
-  doc.lineWidth(2).strokeColor(GOLD).rect(18, 18, W - 36, H - 36).stroke();
-  doc.lineWidth(0.75).strokeColor(GOLD).rect(24, 24, W - 48, H - 48).stroke();
+  // The two supplied institutional crests occupy balanced positions in the header.
+  if (churchLogo) doc.image(churchLogo, 48, 46, { fit: [76, 94], align: "center", valign: "center" });
+  if (fellowshipLogo) doc.image(fellowshipLogo, W - 124, 46, { fit: [76, 94], align: "center", valign: "center" });
 
-  // ---------- Header ----------
-  doc.fillColor(INK).font("Times-Bold").fontSize(24)
-    .text(summitName.toUpperCase(), 0, 52, { align: "center", width: W });
+  doc.fillColor(BROWN).font("Helvetica-Bold").fontSize(10)
+    .text("PCEA GITHUNGURI PRESBYTERY", 145, 47, { width: W - 290, align: "center", characterSpacing: 1.2 });
+  doc.fillColor(BROWN).font("Times-Bold").fontSize(20)
+    .text(summitName.toUpperCase(), 135, 65, { width: W - 270, align: "center" });
 
-  const tagY = 84;
-  const tagText = theme.toUpperCase();
+  const themeLabel = theme.toUpperCase();
   doc.font("Helvetica-Bold").fontSize(10);
-  const tagWidth = doc.widthOfString(tagText) + 40;
-  doc.fillColor(GOLD).rect((W - tagWidth) / 2, tagY, tagWidth, 18).fill();
-  doc.fillColor("#fff").text(tagText, 0, tagY + 5, { align: "center", width: W });
+  const themeWidth = Math.min(doc.widthOfString(themeLabel) + 34, W - 250);
+  doc.roundedRect((W - themeWidth) / 2, 98, themeWidth, 23, 10).fill(TURQUOISE);
+  doc.fillColor("#FFFFFF").font("Helvetica-Bold").fontSize(10)
+    .text(themeLabel, (W - themeWidth) / 2, 105, { width: themeWidth, align: "center" });
+  doc.fillColor(TURQUOISE_DARK).font("Helvetica-Bold").fontSize(9)
+    .text(themeVerse, 0, 126, { width: W, align: "center" });
 
-  if (themeVerse) {
-    doc.fillColor(MUTED).font("Times-Italic").fontSize(9)
-      .text(themeVerse, W * 0.22, tagY + 26, { align: "center", width: W * 0.56 });
-  }
+  doc.fillColor(BROWN).font("Times-Bold").fontSize(34)
+    .text(config.heading, 0, 151, { width: W, align: "center" });
+  doc.fillColor(TURQUOISE_DARK).font("Helvetica-Bold").fontSize(13)
+    .text(config.subheading, 0, 190, { width: W, align: "center", characterSpacing: 3 });
 
-  // ---------- CERTIFICATE title ----------
-  doc.fillColor(INK).font("Times-Bold").fontSize(40)
-    .text(config.heading, 0, 148, { align: "center", width: W });
-  doc.fillColor(GOLD_DARK).font("Helvetica-Bold").fontSize(15).text(config.subheading, 0, 195, {
-    align: "center",
-    width: W,
-    characterSpacing: 3,
-  });
+  doc.fillColor(MUTED).font("Helvetica").fontSize(9)
+    .text("THIS CERTIFICATE IS PROUDLY PRESENTED TO", 0, 222, { width: W, align: "center", characterSpacing: 1.6 });
+  doc.fillColor(BROWN).font("Times-BoldItalic").fontSize(31)
+    .text(userFullName, W * 0.13, 242, { width: W * 0.74, align: "center" });
+  const lineY = 282;
+  doc.lineWidth(1.2).strokeColor(GOLD).moveTo(W * 0.28, lineY).lineTo(W * 0.72, lineY).stroke();
 
-  // ---------- "This is to certify that" + Name ----------
-  doc.fillColor(MUTED).font("Helvetica").fontSize(10)
-    .text("THIS IS TO CERTIFY THAT", 0, 232, { align: "center", width: W, characterSpacing: 2 });
-
-  doc.fillColor(GOLD_DARK).font("Times-BoldItalic").fontSize(34)
-    .text(userFullName, W * 0.15, 254, { align: "center", width: W * 0.7 });
-  const nameLineY = 254 + 44;
-  doc.lineWidth(0.75).strokeColor(GOLD).moveTo(W * 0.32, nameLineY).lineTo(W * 0.68, nameLineY).stroke();
-
-  // ---------- Body message ----------
   const rawMessage = textSettings[config.messageField] || config.defaultMessage;
-  const message = rawMessage
-    .replace("{name}", userFullName)
-    .replace("{summitName}", summitName)
-    .replace("{dates}", dates)
-    .replace("{venue}", venue)
-    .replace("{category}", category || "their competition");
+  const message = rawMessage.replace("{name}", userFullName).replace("{summitName}", summitName)
+    .replace("{dates}", dates).replace("{venue}", venue).replace("{category}", category || "their competition");
+  doc.fillColor(INK).font("Helvetica").fontSize(10.5)
+    .text(message, W * 0.18, 296, { align: "center", width: W * 0.64, lineGap: 3 });
 
-  doc.fillColor(INK).font("Helvetica").fontSize(11.5)
-    .text(message, W * 0.2, nameLineY + 14, { align: "center", width: W * 0.6, lineGap: 3 });
+  // Event facts are separated into a clear, high-contrast strip.
+  const infoY = 382;
+  doc.roundedRect(W * 0.17, infoY, W * 0.66, 37, 8).fill("#E5F8F8");
+  doc.fillColor(TURQUOISE_DARK).font("Helvetica-Bold").fontSize(9)
+    .text(`DATES  ${dates}`, W * 0.19, infoY + 6, { width: W * 0.30, align: "center" });
+  doc.fillColor(BROWN).font("Helvetica-Bold").fontSize(9)
+    .text(`VENUE  ${venue}`, W * 0.50, infoY + 6, { width: W * 0.31, align: "center" });
+  doc.fillColor(BROWN).font("Helvetica").fontSize(8)
+    .text("Githunguri Presbyterian Youth Ministry", 0, infoY + 22, { width: W, align: "center" });
 
-  // ---------- Badge (top-right ribbon medallion) ----------
-  drawBadge(doc, W - 100, 70, config.badgeLines);
-
-  // ---------- Crest corner (top-left) ----------
-  drawCrestCorner(doc, W, H);
-
-  // ---------- Footer ----------
-  const footerY = H - 120;
-
-  // QR + certificate ID (left)
-  doc.image(qrBuffer, 48, footerY, { width: 64 });
-  doc.fillColor(MUTED).font("Helvetica").fontSize(7).text(`ID: ${certId}`, 40, footerY + 68, { width: 80, align: "center" });
-
-  // Signature 1 — Chairperson (center-left)
-  drawSignature(doc, chairSig, W * 0.36, footerY, chairName, "Chairperson");
-
-  // Seal (center)
-  drawSeal(doc, W / 2, footerY + 20);
-
-  // Signature 2 — Secretary (center-right)
-  drawSignature(doc, secretarySig, W * 0.64, footerY, secretaryName, "Secretary");
-
-  // Date (bottom-right)
-  doc.fillColor(MUTED).font("Helvetica").fontSize(8)
-    .text(dates || new Date().toLocaleDateString("en-KE"), W - 160, footerY + 55, { width: 112, align: "center" });
-  doc.fontSize(6).text("DATE", W - 160, footerY + 68, { width: 112, align: "center", characterSpacing: 1 });
+  const footerY = H - 112;
+  doc.image(qrBuffer, 42, footerY - 2, { width: 55 });
+  doc.fillColor(MUTED).font("Helvetica").fontSize(6.5)
+    .text(`ID: ${certId}`, 32, footerY + 55, { width: 75, align: "center" });
+  drawSignature(doc, chaplainSig, W * 0.31, footerY + 5, chaplainName, "CHAPLAIN");
+  drawSignature(doc, chairSig, W * 0.70, footerY + 5, chairName, "CHAIRPERSON");
+  doc.fillColor(MUTED).font("Helvetica").fontSize(7)
+    .text(dates || "15–19 December 2026", W - 132, footerY + 61, { width: 100, align: "center" });
 }
 
 function drawDefaultBackground(doc, W, H) {
-  doc.rect(0, 0, W, H).fill("#FFFDF8");
+  doc.rect(0, 0, W, H).fill("#FFFCF4");
   doc.save();
-  doc.polygon([W, H], [W, H * 0.45], [W * 0.7, H]).fill(NAVY);
+  doc.polygon([W, H], [W, H * 0.45], [W * 0.7, H]).fill(TURQUOISE);
   doc.polygon([W, H * 0.5], [W * 0.68, H], [W * 0.6, H], [W, H * 0.42]).fill(GOLD);
   doc.restore();
 }
 
 function drawCrestCorner(doc, W, H) {
   doc.save();
-  doc.polygon([0, 0], [190, 0], [0, 150]).fill(NAVY);
+  doc.polygon([0, 0], [190, 0], [0, 150]).fill(TURQUOISE);
   doc.fillColor(GOLD);
   doc.rect(38, 24, 6, 34).fill(GOLD);
   doc.rect(26, 34, 30, 6).fill(GOLD);

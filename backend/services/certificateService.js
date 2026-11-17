@@ -130,9 +130,9 @@ async function loadCertificateAssets(type) {
   const venue = general.venue || "Kambui Girls’ Senior School";
   const dates = formatEventDates(general.eventStart, general.eventEnd) || "15–19 December 2026";
 
-  const backgroundUrl = type === "SPORTS_WINNER" ? templates["winnerTemplate__url"] : templates["participationTemplate__url"];
-  const [background, chaplainSig, chairSig, churchLogo, fellowshipLogo] = await Promise.all([
-    fetchImageBuffer(backgroundUrl),
+  // Always render the current approved vector certificate design. Previously uploaded
+  // legacy background templates can otherwise make newly generated PDFs look old.
+  const [chaplainSig, chairSig, churchLogo, fellowshipLogo] = await Promise.all([
     fetchImageBuffer(signatures["chaplainSignature__url"] || signatures["secretarySignature__url"]),
     fetchImageBuffer(signatures["chairSignature__url"]),
     Promise.resolve(readLocalImageBuffer(path.join(__dirname, "../../frontend/assets/images/pcea-church-crest.jpg"))),
@@ -141,7 +141,7 @@ async function loadCertificateAssets(type) {
 
   return {
     config, textSettings, summitName, theme, themeVerse, venue, dates,
-    background, chaplainSig, chairSig, churchLogo, fellowshipLogo,
+    background: null, chaplainSig, chairSig, churchLogo, fellowshipLogo,
     chaplainName: leadership.chaplain || "Chaplain",
     chairName: leadership.chairman || "Chairperson",
   };
@@ -155,7 +155,7 @@ async function drawCertificatePage(doc, assets, { userFullName, type, category, 
 
   // Warm cream base with the poster's turquoise, orange and deep-brown palette.
   doc.rect(0, 0, W, H).fill("#FFFCF4");
-  if (background) doc.save().opacity(0.12).image(background, 0, 0, { width: W, height: H }).restore();
+  // Legacy uploaded backgrounds are intentionally not composited over the new design.
   doc.lineWidth(5).strokeColor(TURQUOISE).rect(16, 16, W - 32, H - 32).stroke();
   doc.lineWidth(1.5).strokeColor(GOLD).rect(24, 24, W - 48, H - 48).stroke();
   doc.rect(30, 30, W - 60, 5).fill(TURQUOISE);

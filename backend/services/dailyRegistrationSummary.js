@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 const { User, Parish, AuditLog } = require("../models");
 const { sendTransactionalEmail } = require("./notificationService");
 
-const RECIPIENT = process.env.DAILY_REGISTRATION_REPORT_EMAIL || "ndungugathua252@gmail.com";
+const RECIPIENT = process.env.DAILY_REGISTRATION_REPORT_EMAIL || "gysummitadmin@gmail.com";
 const TIME_ZONE = "Africa/Nairobi";
 const SEND_HOUR = 20; // 8:00 p.m. EAT
 let interval = null;

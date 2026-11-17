@@ -197,7 +197,7 @@ router.get(
 
 router.patch(
   "/participants/:id",
-  requireRole("SUPER_ADMIN", "ADMIN"),
+  requireRole(...ADMIN_ROLES),
   asyncHandler(async (req, res) => {
     const body = z
       .object({

@@ -14,7 +14,7 @@ function announcementPlainText(value = "") {
     node.innerHTML = html;
     html = node.textContent || node.innerText || "";
   }
-  return html.replace(/\\s+/g, " ").trim();
+  return html.replace(/\s+/g, " ").trim();
 }
 
 if (user) {

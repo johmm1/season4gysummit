@@ -16,9 +16,9 @@ function announcementPlainText(value = "") {
   let text = String(value);
   for (let i = 0; i < 2; i++) {
     text = text
-      .replace(/<\\s*br\\s*\\/?\\s*>/gi, "\\n")
-      .replace(/<\\/(p|div|h[1-6]|li|blockquote)\\s*>/gi, "\\n")
-      .replace(/<li\\b[^>]*>/gi, "• ")
+      .replace(/<\s*br\s*\/?\s*>/gi, "\n")
+      .replace(/<\/(p|div|h[1-6]|li|blockquote)\s*>/gi, "\n")
+      .replace(/<li\b[^>]*>/gi, "• ")
       .replace(/<[^>]*>/g, " ")
       .replace(/&nbsp;|&#160;|&#xA0;/gi, " ")
       .replace(/&amp;/gi, "&")
@@ -27,7 +27,7 @@ function announcementPlainText(value = "") {
       .replace(/&quot;/gi, '"')
       .replace(/&#39;|&apos;/gi, "'");
   }
-  return text.replace(/[ \\t]+/g, " ").replace(/ *\\n */g, "\\n").replace(/\\n{3,}/g, "\\n\\n").trim();
+  return text.replace(/[ \t]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 router.get(

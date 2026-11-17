@@ -6,6 +6,17 @@ const user = await requireSession();
 let allAnnouncements = [];
 let pinnedAnnouncement = null;
 
+function announcementPlainText(value = "") {
+  let html = String(value);
+  // Handle both normal rich text and HTML that has been escaped one or more times.
+  for (let i = 0; i < 2; i++) {
+    const node = document.createElement("div");
+    node.innerHTML = html;
+    html = node.textContent || node.innerText || "";
+  }
+  return html.replace(/\\s+/g, " ").trim();
+}
+
 if (user) {
   wireLogoutButton();
   setText("participantName", user.fullName);
@@ -76,7 +87,7 @@ function render(items) {
       (a) => `
       <article class="announcement-card" data-id="${a.id}" style="cursor:pointer;">
         <h3>${escapeHtml(a.title)} ${a.isPinned ? "📌" : ""}</h3>
-        <p>${escapeHtml(a.body.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim().slice(0, 140))}${a.body.replace(/<[^>]*>/g, " ").trim().length > 140 ? "…" : ""}</p>
+        <p>${escapeHtml(a.body.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim().slice(0, 140))}${announcementPlainText(a.body).length > 140 ? "…" : ""}</p>
         <span class="date">${formatDate(a.createdAt)} — ${escapeHtml(a.author?.fullName || "Organising Team")}</span>
       </article>`
     )

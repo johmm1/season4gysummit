@@ -2,6 +2,7 @@
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
 import { apiFetch, showError, showSuccess, formatDate, escapeHtml, setText, $ } from "./utils.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
+import { shareGysContent } from "./whatsappShare.js";
 
 const NOTIFICATION_FORMS = ["notificationChannelsForm", "emailConfigForm", "whatsappConfigForm", "autoMessagesForm", "notificationTemplatesForm"];
 
@@ -150,6 +151,7 @@ function render(items) {
         <td>
           <button class="btn btn-sm btn-outline" data-action="view" data-id="${a.id}">View</button>
           <button class="btn btn-sm btn-outline" data-action="edit" data-id="${a.id}">Edit</button>
+          ${a.isPublished && !(a.publishAt && new Date(a.publishAt) > new Date()) ? `<button class="btn btn-sm btn-outline" data-action="whatsapp" data-id="${a.id}"><i class="fa-brands fa-whatsapp"></i> Share</button>` : ""}
           <button class="btn btn-sm btn-danger" data-action="delete" data-id="${a.id}">Delete</button>
         </td>
       </tr>`
@@ -164,6 +166,21 @@ function render(items) {
   );
   tbody.querySelectorAll('[data-action="delete"]').forEach((btn) =>
     btn.addEventListener("click", () => remove(btn.dataset.id))
+  );
+  tbody.querySelectorAll('[data-action="whatsapp"]').forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      const announcement = allAnnouncements.find((item) => item.id === btn.dataset.id);
+      if (!announcement) return;
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing';
+      try {
+        const plainText = announcement.body.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\\s+/g, " ").trim();
+        await shareGysContent({ title: announcement.title, text: plainText });
+        showSuccess("Announcement opened in your phone share screen. Select the GYS Summit Channel and press Send.");
+      } catch (err) { if (err.name !== "AbortError") showError(err.message || "Could not share announcement."); }
+      finally { btn.disabled = false; btn.innerHTML = original; }
+    })
   );
 }
 

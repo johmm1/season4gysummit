@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — participant announcements
 import { requireSession, wireLogoutButton } from "../../assets/js/auth.js";
-import { apiFetch, showError, formatDate, escapeHtml, setText, $ } from "../../assets/js/utils.js";
+import { apiFetch, showError, formatDate, escapeHtml, setText, $, sanitizeRichText } from "../../assets/js/utils.js";
 
 const user = await requireSession();
 let allAnnouncements = [];
@@ -27,7 +27,7 @@ async function load() {
     if (pinnedAnnouncement) {
       if (pinnedSection) pinnedSection.style.display = "";
       setText("pinnedTitle", pinnedAnnouncement.title);
-      setText("pinnedPreview", pinnedAnnouncement.body.slice(0, 160));
+      setText("pinnedPreview", pinnedAnnouncement.body.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim().slice(0, 160));
       setText("pinnedDate", formatDate(pinnedAnnouncement.createdAt));
     } else if (pinnedSection) {
       pinnedSection.style.display = "none";
@@ -76,7 +76,7 @@ function render(items) {
       (a) => `
       <article class="announcement-card" data-id="${a.id}" style="cursor:pointer;">
         <h3>${escapeHtml(a.title)} ${a.isPinned ? "📌" : ""}</h3>
-        <p>${escapeHtml(a.body.slice(0, 140))}${a.body.length > 140 ? "…" : ""}</p>
+        <p>${escapeHtml(a.body.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim().slice(0, 140))}${a.body.replace(/<[^>]*>/g, " ").trim().length > 140 ? "…" : ""}</p>
         <span class="date">${formatDate(a.createdAt)} — ${escapeHtml(a.author?.fullName || "Organising Team")}</span>
       </article>`
     )
@@ -91,7 +91,8 @@ function openModal(id) {
   const a = allAnnouncements.find((x) => x.id === id);
   if (!a) return;
   setText("modalTitle", a.title);
-  setText("modalContent", a.body);
+  const modalContent = $("modalContent");
+  if (modalContent) modalContent.innerHTML = sanitizeRichText(a.body);
   setText("modalDate", formatDate(a.createdAt));
   setText("modalCategory", a.isPinned ? "Pinned" : "General");
   const attachments = $("attachmentSection");

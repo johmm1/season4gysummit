@@ -201,7 +201,7 @@ function renderAlbumShareActions() {
     button.disabled = true;
     button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing album…';
     try {
-      await shareGysContent({ title: `GYS Summit 2026 — ${albumName}`, text: `${albumName} | GYS Summit Season 4 2026\\nSee more on the official GYS Summit website.`, urls: photos.map((photo) => photo.url) });
+      await shareGysContent({ title: `GYS Summit 2026 — ${albumName}`, text: `${albumName} | GYS Summit Season 4 2026\nSee more on the official GYS Summit website.`, urls: photos.map((photo) => photo.url) });
       showSuccess("Album passed to your phone share screen. Select the GYS Summit Channel and press Send.");
     } catch (err) { if (err.name !== "AbortError") showError(err.message || "Could not share this album."); }
     finally { button.disabled = false; button.innerHTML = original; }

@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — registration and admission management
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, showSuccess, escapeHtml, debounce, setText, $ } from "./utils.js";
+import { apiFetch, apiDownload, showError, showSuccess, escapeHtml, debounce, setText, $ } from "./utils.js";
 
 // Maps parish name -> the id prefix used in finance.html's per-parish counters,
 // e.g. "Githunguri" -> githunguriRegistered/githunguriPaid/githunguriAdmitted.

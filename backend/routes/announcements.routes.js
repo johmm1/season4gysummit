@@ -153,7 +153,7 @@ router.post(
           }
           const users = await User.findAll(queryOptions);
           const subject = `Y-Summit Season 4 2026 — ${body.title}`;
-          const plainBody = body.body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+          const plainBody = announcementPlainText(body.body);
 
           // Email is still per-recipient (personalized "Hi {{name}}" via
           // templates); SMS goes out with bounded concurrency across the

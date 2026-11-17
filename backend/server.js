@@ -4,6 +4,7 @@ const app = require("./app");
 const { sequelize } = require("./models");
 const { checkEnv } = require("./config/validateEnv");
 const { ensureSchema } = require("./database/ensureSchema");
+const { startDailyRegistrationSummary } = require("./services/dailyRegistrationSummary");
 
 checkEnv();
 
@@ -20,6 +21,7 @@ async function start() {
   }
 
   await ensureSchema();
+  startDailyRegistrationSummary();
 
   app.listen(PORT, () => {
     console.log(`Y-Summit Season 4 2026 API listening on port ${PORT} [${process.env.NODE_ENV || "development"}]`);

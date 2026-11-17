@@ -187,6 +187,31 @@ export function escapeHtml(str) {
   }[c]));
 }
 
+/** Safely render Quill announcement HTML while retaining basic formatting. */
+export function sanitizeRichText(value) {
+  const parsed = new DOMParser().parseFromString(String(value ?? ""), "text/html");
+  const allowed = new Set(["P", "BR", "STRONG", "B", "EM", "I", "U", "UL", "OL", "LI", "BLOCKQUOTE", "H1", "H2", "H3", "A"]);
+  const clean = (node) => {
+    [...node.childNodes].forEach((child) => {
+      if (child.nodeType !== Node.ELEMENT_NODE) return;
+      if (!allowed.has(child.tagName)) {
+        child.replaceWith(...child.childNodes);
+        return;
+      }
+      const href = child.tagName === "A" ? child.getAttribute("href") : null;
+      [...child.attributes].forEach((attr) => child.removeAttribute(attr.name));
+      if (child.tagName === "A" && href && /^(https?:|mailto:)/i.test(href)) {
+        child.setAttribute("href", href);
+        child.setAttribute("target", "_blank");
+        child.setAttribute("rel", "noopener noreferrer");
+      }
+      clean(child);
+    });
+  };
+  clean(parsed.body);
+  return parsed.body.innerHTML;
+}
+
 /**
  * Small, fast version of a Cloudinary photo for grids and thumbnails
  * (cropped square, auto format + quality). Anything that isn't a Cloudinary

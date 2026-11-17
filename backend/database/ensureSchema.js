@@ -95,6 +95,9 @@ async function ensureSchema() {
       references: { model: Dormitory.getTableName(), key: "id" },
       onDelete: "SET NULL",
     });
+    await addColumnIfMissing(User, "whatsappStatus", { type: DataTypes.STRING(20), allowNull: false, defaultValue: "UNKNOWN" });
+    await addColumnIfMissing(User, "whatsappChannelJoined", { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false });
+    await addColumnIfMissing(User, "whatsappJoinedAt", { type: DataTypes.DATE, allowNull: true });
     await addColumnIfMissing(GalleryItem, "publicId", { type: DataTypes.STRING(255), allowNull: true });
     await addColumnIfMissing(GalleryItem, "resourceType", { type: DataTypes.STRING(20), allowNull: true });
     await dropEmailUniqueness();

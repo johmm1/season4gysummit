@@ -23,6 +23,10 @@ async function getForm(formId) {
   return row?.value || {};
 }
 
+function readLocalImageBuffer(filePath) {
+  try { return fs.readFileSync(filePath); } catch { return null; }
+}
+
 async function fetchImageBuffer(url) {
   if (!url) return null;
   try {
@@ -55,8 +59,8 @@ const TYPE_CONFIG = {
     badgeLines: ["FAITH", "LEADERSHIP", "PURPOSE"],
     messageField: "participationMessage",
     defaultMessage:
-      "has participated in the {summitName} held from {dates} at {venue}. " +
-      "Thank you for being part of this transformational journey.",
+      "is recognised for participating in {summitName}, held from {dates} at {venue}, under the theme P² – Pursuit of Purpose (Genesis 39:21). " +
+      "May this experience strengthen their faith, deepen fellowship and inspire them to pursue God’s purpose with courage and commitment.",
   },
   SPORTS_WINNER: {
     heading: "CERTIFICATE",
@@ -131,8 +135,8 @@ async function loadCertificateAssets(type) {
     fetchImageBuffer(backgroundUrl),
     fetchImageBuffer(signatures["chaplainSignature__url"] || signatures["secretarySignature__url"]),
     fetchImageBuffer(signatures["chairSignature__url"]),
-    Promise.resolve(fs.readFileSync(path.join(__dirname, "../../frontend/assets/images/pcea-church-crest.jpg"))),
-    Promise.resolve(fs.readFileSync(path.join(__dirname, "../../frontend/assets/images/pcea-youth-fellowship-crest.jpg"))),
+    Promise.resolve(readLocalImageBuffer(path.join(__dirname, "../../frontend/assets/images/pcea-church-crest.jpg"))),
+    Promise.resolve(readLocalImageBuffer(path.join(__dirname, "../../frontend/assets/images/pcea-youth-fellowship-crest.jpg"))),
   ]);
 
   return {

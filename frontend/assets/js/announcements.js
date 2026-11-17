@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — admin announcements
 import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, showError, showSuccess, formatDate, escapeHtml, setText, $ } from "./utils.js";
+import { apiFetch, showError, showSuccess, formatDate, escapeHtml, setText, $, sanitizeRichText } from "./utils.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
 import { shareGysContent } from "./whatsappShare.js";
 
@@ -239,7 +239,7 @@ function openForView(id) {
   if (!a) return;
   const modal = $("announcementModal");
   const content = $("announcementContent");
-  if (content) content.innerHTML = `<h3>${escapeHtml(a.title)}</h3><div>${a.body}</div>`;
+  if (content) content.innerHTML = `<h3>${escapeHtml(a.title)}</h3><div class="announcement-rich-content">${sanitizeRichText(a.body)}</div>`;
   if (modal) modal.style.display = "flex";
 }
 
@@ -282,7 +282,7 @@ $("previewAnnouncement")?.addEventListener("click", () => {
   }
   const modal = $("announcementModal");
   const content = $("announcementContent");
-  if (content) content.innerHTML = `<h3>${escapeHtml(title || "(untitled)")}</h3><div>${body}</div>`;
+  if (content) content.innerHTML = `<h3>${escapeHtml(title || "(untitled)")}</h3><div class="announcement-rich-content">${sanitizeRichText(body)}</div>`;
   if (modal) modal.style.display = "flex";
 });
 

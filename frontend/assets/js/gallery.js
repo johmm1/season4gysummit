@@ -7,6 +7,7 @@ import { requireAdminSession, wireLogoutButton } from "./auth.js";
 import { apiFetch, apiDownload, showError, showSuccess, escapeHtml, formatBytes, $, on, debounce, cloudThumb, cloudVideoPoster } from "./utils.js";
 import { uploadFile } from "./fileUpload.js";
 import { loadPageSettings, wireSettingsForms, wireSettingsFileUploads } from "./settingsHelpers.js";
+import { shareGysContent } from "./whatsappShare.js";
 
 const GALLERY_FORMS = [
   "certificateSettingsForm", "certificateTemplatesForm", "digitalSignaturesForm", "certAutoGenerationForm", "certificateTextForm",
@@ -157,6 +158,7 @@ function render() {
   }
 
   grid.innerHTML = filtered.map(cardHtml).join("");
+  renderAlbumShareActions();
 
   grid.querySelectorAll("[data-open]").forEach((el) =>
     el.addEventListener("click", () => openPreview(el.dataset.open))
@@ -167,6 +169,43 @@ function render() {
   grid.querySelectorAll("[data-delete]").forEach((btn) =>
     btn.addEventListener("click", (e) => { e.stopPropagation(); remove(btn.dataset.delete); })
   );
+}
+
+function renderAlbumShareActions() {
+  let host = $("whatsappAlbumShares");
+  if (!host) {
+    host = document.createElement("div");
+    host.id = "whatsappAlbumShares";
+    host.className = "dashboard-panel";
+    $("galleryGrid")?.parentElement?.insertBefore(host, $("galleryGrid"));
+  }
+  const albums = new Map();
+  items.filter((item) => item.isApproved && item.visibility === "public" && item.mediaType === "photo").forEach((item) => {
+    const name = item.albumName || "General";
+    if (!albums.has(name)) albums.set(name, []);
+    albums.get(name).push(item);
+  });
+  const entries = [...albums.entries()].filter(([, photos]) => photos.length);
+  host.innerHTML = entries.length ? [
+    '<div class="panel-header"><h2><i class="fa-brands fa-whatsapp"></i> Share Gallery Albums</h2></div>',
+    '<p>Share all approved public photos in an album together. Choose your GYS Summit Channel in WhatsApp and press Send.</p>',
+    '<div class="quick-actions-grid">',
+    ...entries.map(([name, photos]) => `<button type="button" class="btn btn-outline" data-share-album="${escapeHtml(name)}"><i class="fa-brands fa-whatsapp"></i> Share ${escapeHtml(name)} (${photos.length})</button>`),
+    '</div>'
+  ].join("") : "";
+  host.querySelectorAll("[data-share-album]").forEach((button) => button.addEventListener("click", async () => {
+    const albumName = button.dataset.shareAlbum;
+    const photos = albums.get(albumName) || [];
+    if (!photos.length) return;
+    const original = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing album…';
+    try {
+      await shareGysContent({ title: `GYS Summit 2026 — ${albumName}`, text: `${albumName} | GYS Summit Season 4 2026\\nSee more on the official GYS Summit website.`, urls: photos.map((photo) => photo.url) });
+      showSuccess("Album passed to your phone share screen. Select the GYS Summit Channel and press Send.");
+    } catch (err) { if (err.name !== "AbortError") showError(err.message || "Could not share this album."); }
+    finally { button.disabled = false; button.innerHTML = original; }
+  }));
 }
 
 function cardHtml(item) {

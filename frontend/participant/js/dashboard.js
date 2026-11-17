@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — participant dashboard
 import { requireSession, wireLogoutButton } from "../../assets/js/auth.js";
-import { apiFetch, apiDownload, showError, formatDate, setText, $, startCountdown } from "../../assets/js/utils.js";
+import { apiFetch, apiDownload, showError, formatDate, setText, $, startCountdown, sanitizeRichText } from "../../assets/js/utils.js";
 import { CONFIG } from "../../assets/js/config.js";
 
 const user = await requireSession();
@@ -32,7 +32,9 @@ async function loadAnnouncementPreview() {
     const latest = announcements[0];
     if (latest) {
       setText("announcementTitle", latest.title);
-      setText("announcementMessage", latest.body);
+      const message = $("announcementMessage");
+      if (message) message.innerHTML = sanitizeRichText(latest.body);
+      if (message) message.style.whiteSpace = "pre-line";
       setText("announcementDate", formatDate(latest.createdAt));
     }
   } catch (err) {

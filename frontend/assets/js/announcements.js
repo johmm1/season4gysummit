@@ -175,7 +175,15 @@ function render(items) {
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing';
       try {
-        const plainText = announcement.body.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+        const plainText = (() => {
+          let html = String(announcement.body || "");
+          for (let i = 0; i < 2; i++) {
+            const node = document.createElement("div");
+            node.innerHTML = html;
+            html = node.textContent || node.innerText || "";
+          }
+          return html.replace(/\s+/g, " ").trim();
+        })();
         await shareGysContent({ title: announcement.title, text: plainText });
         showSuccess("Announcement opened in your phone share screen. Select the GYS Summit Channel and press Send.");
       } catch (err) { if (err.name !== "AbortError") showError(err.message || "Could not share announcement."); }

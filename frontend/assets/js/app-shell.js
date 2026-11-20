@@ -177,10 +177,6 @@ function setTheme(theme) {
  * Only pathname + page title are sent; query strings are deliberately omitted.
  */
 function trackPageView() {
-  let token = null;
-  try { token = localStorage.getItem("gySummitToken"); } catch { return; }
-  if (!token) return;
-
   const host = window.location.hostname;
   const apiBase = ["localhost", "127.0.0.1"].includes(host)
     ? "http://localhost:4000/api"
@@ -189,17 +185,14 @@ function trackPageView() {
   fetch(`${apiBase}/activity/page-view`, {
     method: "POST",
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       path: window.location.pathname,
       title: document.title || "",
     }),
     keepalive: true,
   }).catch(() => {
-    // Activity tracking must never interrupt normal navigation.
+    // Anonymous visits are rejected by the API; tracking never interrupts navigation.
   });
 }
 
@@ -208,51 +201,40 @@ function trackPageView() {
  * Apply the dedicated Super Admin image consistently across every admin
  * page that has a profile/avatar slot. Other roles keep their existing icon.
  */
-function applySuperAdminProfileIcon() {
+async function applySuperAdminProfileIcon() {
   if (!document.querySelector(".admin-main, .sidebar")) return;
-
-  let role = "";
   try {
-    const token = localStorage.getItem("gySummitToken");
-    const payload = token?.split(".")[1];
-    if (payload) {
-      const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
-      const claims = JSON.parse(atob(normalized));
-      role = String(claims.role || claims.user?.role || "").toUpperCase();
+    const response = await fetch("/api/auth/me", { credentials: "include", cache: "no-store" });
+    if (!response.ok) return;
+    const { user } = await response.json();
+    if (String(user?.role || "").toUpperCase() !== "SUPER_ADMIN") return;
+
+    const iconPath = "../assets/images/super-admin-icon.jpg";
+    document.querySelectorAll(".admin-profile img").forEach((img) => {
+      img.src = iconPath;
+      img.alt = "Super Admin";
+    });
+    document.querySelectorAll(".admin-user .avatar").forEach((avatar) => {
+      const img = document.createElement("img");
+      img.src = iconPath;
+      img.alt = "Super Admin";
+      img.className = "super-admin-avatar-image";
+      avatar.replaceChildren(img);
+      avatar.classList.add("super-admin-avatar");
+    });
+    const hasProfileSlot = document.querySelector(".admin-profile img, .admin-user .avatar");
+    const header = document.querySelector(".admin-header");
+    if (!hasProfileSlot && header) {
+      const img = document.createElement("img");
+      img.src = iconPath;
+      img.alt = "Super Admin";
+      img.className = "super-admin-header-avatar";
+      img.style.cssText = "width:42px;height:42px;object-fit:cover;border-radius:50%;flex:0 0 auto;margin-left:auto;margin-right:10px;";
+      const logout = header.querySelector("#logoutBtn");
+      if (logout) header.insertBefore(img, logout);
+      else header.appendChild(img);
     }
-  } catch {
-    return;
-  }
-
-  if (role !== "SUPER_ADMIN") return;
-
-  const iconPath = "../assets/images/super-admin-icon.jpg";
-  document.querySelectorAll(".admin-profile img").forEach((img) => {
-    img.src = iconPath;
-    img.alt = "Super Admin";
-  });
-
-  document.querySelectorAll(".admin-user .avatar").forEach((avatar) => {
-    const img = document.createElement("img");
-    img.src = iconPath;
-    img.alt = "Super Admin";
-    img.className = "super-admin-avatar-image";
-    avatar.replaceChildren(img);
-    avatar.classList.add("super-admin-avatar");
-  });
-
-  // A few utility pages (for example Admissions and Reports) have no
-  // profile slot at all. Add the same icon beside their logout control.
-  const hasProfileSlot = document.querySelector(".admin-profile img, .admin-user .avatar");
-  const header = document.querySelector(".admin-header");
-  if (!hasProfileSlot && header) {
-    const img = document.createElement("img");
-    img.src = iconPath;
-    img.alt = "Super Admin";
-    img.className = "super-admin-header-avatar";
-    img.style.cssText = "width:42px;height:42px;object-fit:cover;border-radius:50%;flex:0 0 auto;margin-left:auto;margin-right:10px;";
-    const logout = header.querySelector("#logoutBtn");
-    if (logout) header.insertBefore(img, logout);
-    else header.appendChild(img);
+  } catch (err) {
+    console.warn("Could not load admin profile icon:", err);
   }
 }

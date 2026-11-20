@@ -23,6 +23,14 @@ const FALLBACK_TICKET_PRICE = parseInt(process.env.TICKET_PRICE || "2200", 10);
 
 const router = Router();
 
+const SESSION_COOKIE = "gys_session";
+const SESSION_COOKIE_OPTIONS = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 12 * 60 * 60 * 1000 };
+function issueSessionCookie(res, user) {
+  const token = issueSessionCookie(res, user);
+  res.cookie(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
+  return token;
+}
+
 // Login/register are the highest-value brute-force targets in the app, so
 // they get a much tighter limit than the 300-req/min global default —
 // 20 attempts per 15 minutes per IP, enough for a genuine user who
@@ -113,7 +121,7 @@ router.post(
     try {
       await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
     } catch (err) { console.error("[register] audit log failed:", err.message); }
-    return res.status(201).json({ success: true, message: "Account successfully created.", token: signToken(user), user, registration });
+    return res.status(201).json({ success: true, message: "Account successfully created.", token: issueSessionCookie(res, user), user, registration });
   })
 );
 

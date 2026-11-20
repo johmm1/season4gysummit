@@ -77,6 +77,42 @@ router.get(
   })
 );
 
+
+// Live medical alerts for the admin dashboard. Include records with any
+// declared medical detail, even if an older registration did not set the
+// hasMedicalCondition flag consistently.
+router.get(
+  "/medical-alerts",
+  asyncHandler(async (_req, res) => {
+    const alerts = await User.findAll({
+      where: {
+        role: "PARTICIPANT",
+        [Op.or]: [
+          { hasMedicalCondition: true },
+          { medicalCondition: { [Op.ne]: null } },
+          { medication: { [Op.ne]: null } },
+          { allergies: { [Op.ne]: null } },
+          { medicalNotes: { [Op.ne]: null } },
+          { disability: { [Op.ne]: null } },
+        ],
+      },
+      attributes: [
+        "id", "fullName", "phone", "emergencyContactName",
+        "emergencyContactPhone", "hasMedicalCondition", "medicalCondition",
+        "medication", "allergies", "medicalNotes", "disability", "createdAt",
+      ],
+      order: [["updatedAt", "DESC"]],
+      limit: 100,
+    });
+    const relevantAlerts = alerts.filter((user) =>
+      user.hasMedicalCondition ||
+      [user.medicalCondition, user.medication, user.allergies, user.medicalNotes, user.disability]
+        .some((value) => String(value || "").trim().length > 0)
+    );
+    res.json({ alerts: relevantAlerts });
+  })
+);
+
 router.get(
   "/participants",
   asyncHandler(async (req, res) => {

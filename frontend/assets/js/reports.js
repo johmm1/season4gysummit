@@ -34,6 +34,7 @@ $("sendReport").addEventListener("click", async () => {
     if (summary) params.set("summary", summary);
     const res = await fetch(`${CONFIG.API_BASE_URL}/reports?${params}`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/pdf",
         Authorization: `Bearer ${localStorage.getItem("gySummitToken")}`,

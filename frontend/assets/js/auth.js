@@ -12,6 +12,9 @@ export function clearToken() {
   try { localStorage.removeItem("gySummitToken"); } catch { /* storage may be disabled */ }
 }
 
+// Remove any JWT left by the previous localStorage-based session implementation.
+clearToken();
+
 /**
  * Checks the saved session. A freshly issued token is checked twice because
  * a just-restarted API/database connection can briefly reject the first

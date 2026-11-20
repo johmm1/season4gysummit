@@ -28,7 +28,6 @@ const SESSION_COOKIE_OPTIONS = { httpOnly: true, secure: process.env.NODE_ENV ==
 function issueSessionCookie(res, user) {
   const token = signToken(user);
   res.cookie(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
-  return token;
 }
 
 // Login/register are the highest-value brute-force targets in the app, so
@@ -121,7 +120,8 @@ router.post(
     try {
       await logAction(user.id, "REGISTER", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
     } catch (err) { console.error("[register] audit log failed:", err.message); }
-    return res.status(201).json({ success: true, message: "Account successfully created.", token: issueSessionCookie(res, user), user, registration });
+    issueSessionCookie(res, user);
+    return res.status(201).json({ success: true, message: "Account successfully created.", user, registration });
   })
 );
 
@@ -163,8 +163,8 @@ router.post(
     await user.save();
     await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
 
-    const token = issueSessionCookie(res, user);
-    res.json({ token, user });
+    issueSessionCookie(res, user);
+    res.json({ user });
   })
 );
 
@@ -223,8 +223,8 @@ router.post(
     await user.save();
     await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, via: "google", ip: req.ip, userAgent: req.get("user-agent") });
 
-    const token = issueSessionCookie(res, user);
-    res.json({ token, user });
+    issueSessionCookie(res, user);
+    res.json({ user });
   })
 );
 

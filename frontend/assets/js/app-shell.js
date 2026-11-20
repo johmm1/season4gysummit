@@ -184,10 +184,11 @@ function trackPageView() {
   const host = window.location.hostname;
   const apiBase = ["localhost", "127.0.0.1"].includes(host)
     ? "http://localhost:4000/api"
-    : "https://gy-summit-2026-api.onrender.com/api";
+    : "/api";
 
   fetch(`${apiBase}/activity/page-view`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

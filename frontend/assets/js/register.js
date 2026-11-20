@@ -3,7 +3,7 @@
 // are already wired by the inline <script> in register.html. This module
 // handles: dynamic parish->church loading, optional profile photo reminder,
 // and final participant account creation.
-import { apiFetch, showError, showSuccess, $ } from "./utils.js";
+import { apiFetch, showError, showSuccess, escapeHtml, $ } from "./utils.js";
 import { setToken } from "./auth.js";
 import { uploadFile } from "./fileUpload.js";
 
@@ -18,7 +18,7 @@ async function loadPresbyteries() {
     const { items } = await apiFetch("/structure/presbyteries");
     presbyterySelect.innerHTML =
       `<option value="">Select Presbytery</option>` +
-      items.map((p) => `<option value="${p.id}">${p.name}</option>`).join("");
+      items.map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
 
     // Only one presbytery today — select it automatically and load its parishes.
     if (items.length === 1) {
@@ -73,7 +73,7 @@ $("parish")?.addEventListener("change", async (e) => {
     const { items } = await apiFetch(`/structure/churches?parishId=${selectedParishId}`);
     churchSelect.innerHTML =
       `<option value="">Select Church</option>` +
-      items.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+      items.map((c) => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
   } catch (err) {
     churchSelect.innerHTML = `<option value="">Could not load churches</option>`;
     showError(err.message || "Could not load churches for that parish.");

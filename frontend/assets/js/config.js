@@ -9,9 +9,8 @@ export const CONFIG = {
     const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
     if (isLocal) return "http://localhost:4000/api";
 
-    // ---> Set this to your deployed Railway backend's URL once you have it <---
-       const PRODUCTION_API_URL = "https://gy-summit-2026-api.onrender.com/api";
-    return PRODUCTION_API_URL;
+    // Production API is proxied through this site so session cookies are first-party.
+    return "/api";
   })(),
   APP_NAME: "Y-Summit Season 4 2026",
   VERSION: "1.0.0",

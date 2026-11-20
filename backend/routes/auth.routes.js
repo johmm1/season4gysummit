@@ -163,7 +163,7 @@ router.post(
     await user.save();
     await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
 
-    const token = signToken(user);
+    const token = issueSessionCookie(res, user);
     res.json({ token, user });
   })
 );
@@ -223,7 +223,7 @@ router.post(
     await user.save();
     await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, via: "google", ip: req.ip, userAgent: req.get("user-agent") });
 
-    const token = signToken(user);
+    const token = issueSessionCookie(res, user);
     res.json({ token, user });
   })
 );
@@ -320,6 +320,11 @@ router.post(
     res.json({ message: "Password updated. You can now log in." });
   })
 );
+
+router.post("/logout", requireAuth, asyncHandler(async (_req, res) => {
+  res.clearCookie(SESSION_COOKIE, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/" });
+  res.json({ ok: true });
+}));
 
 router.get(
   "/me",

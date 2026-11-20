@@ -1,6 +1,6 @@
 // Y-Summit Season 4 2026 — login page (JWT-based)
 import { apiFetch, showError, $ } from "./utils.js";
-import { getToken, setToken, clearToken, requireSession } from "./auth.js";
+import { requireSession } from "./auth.js";
 import { CONFIG } from "./config.js";
 
 const ADMIN_ROLES = new Set([
@@ -16,10 +16,8 @@ if (loginParams.get("reason") === "session") {
 }
 
 // If already logged in, skip straight to the right dashboard.
-if (getToken()) {
-  const user = await requireSession().catch(() => null);
-  if (user) redirectForRole(user);
-}
+const existingUser = await requireSession().catch(() => null);
+if (existingUser) redirectForRole(existingUser);
 
 initGoogleSignIn();
 
@@ -73,11 +71,9 @@ async function completeLogin(loginRequest) {
 
   try {
     const result = await loginRequest();
-    if (!result?.token || !result?.user?.id || !result?.user?.role) {
+    if (!result?.user?.id || !result?.user?.role) {
       throw new Error("The server did not return a complete login session. Please try again.");
     }
-
-    setToken(result.token);
 
     // Verify the newly issued token before navigating. This prevents the
     // dashboard from flashing briefly and then bouncing back to login.
@@ -87,7 +83,6 @@ async function completeLogin(loginRequest) {
     }
     redirectForRole(verified.user);
   } catch (err) {
-    clearToken();
     console.error("Login/session verification failed:", err);
     showError(err.message || "Login failed. Check your email/phone and password, then try again.");
     if (submitBtn) {

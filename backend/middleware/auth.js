@@ -24,17 +24,25 @@ function readCookie(req, name) {
 
 async function requireAuth(req, res, next) {
   try {
-    const header = req.headers.authorization;
-    if (!header || !header.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "Missing or malformed Authorization header" });
+    const header = req.headers.authorization || "";
+    const cookieToken = readCookie(req, SESSION_COOKIE);
+    const token = header.startsWith("Bearer ") ? header.slice("Bearer ".length) : cookieToken;
+    if (!token) return res.status(401).json({ error: "Missing or malformed session" });
+
+    // Cookie-authenticated writes require a trusted browser Origin. SameSite=Lax
+    // is an additional CSRF barrier; legacy Bearer clients remain compatible.
+    if (cookieToken && !SAFE_METHODS.has(req.method)) {
+      const origin = req.get("origin");
+      if (!origin || !ALLOWED_ORIGINS.has(origin)) {
+        return res.status(403).json({ error: "Untrusted request origin" });
+      }
     }
 
-    const token = header.slice("Bearer ".length);
     let payload;
     try {
       payload = verifyToken(token);
     } catch {
-      return res.status(401).json({ error: "Invalid or expired token" });
+      return res.status(401).json({ error: "Invalid or expired session" });
     }
 
     const user = await User.findByPk(payload.sub);

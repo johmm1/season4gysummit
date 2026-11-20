@@ -83,6 +83,7 @@ router.get(
 // hasMedicalCondition flag consistently.
 router.get(
   "/medical-alerts",
+  requireRole("SUPER_ADMIN", "ADMIN", "ADMISSIONS_ADMIN"),
   asyncHandler(async (_req, res) => {
     const alerts = await User.findAll({
       where: {

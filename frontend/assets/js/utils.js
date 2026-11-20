@@ -1,19 +1,13 @@
 // Y-Summit Season 4 2026 — shared frontend utilities
 import { CONFIG } from "./config.js";
 
-const TOKEN_KEY = "gySummitToken";
-
 /**
- * Calls the backend API, automatically attaching the current JWT (if any)
- * as a Bearer header. Throws an Error with a useful message on non-2xx
+ * Calls the backend API using the HttpOnly session cookie. Throws an Error with a useful message on non-2xx
  * responses.
  */
 export async function apiFetch(path, options = {}) {
-  const token = localStorage.getItem(TOKEN_KEY);
-
   const headers = {
     ...(options.body && !(options.body instanceof FormData) ? { "Content-Type": "application/json" } : {}),
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {}),
   };
 
@@ -44,10 +38,9 @@ export async function apiFetch(path, options = {}) {
 
 /** Downloads a file response (PDF/xlsx) from the API, triggering a browser save. */
 export async function apiDownload(path, filename) {
-  const token = localStorage.getItem(TOKEN_KEY);
   const res = await fetch(`${CONFIG.API_BASE_URL}${path}`, {
     credentials: "include",
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    headers: {},
   });
   if (!res.ok) {
     const payload = await res.json().catch(() => ({}));

@@ -67,6 +67,16 @@ const User = sequelize.define("User", {
   indexes: [{ fields: ["role"] }, { fields: ["presbyteryId"] }],
 });
 
+// Never serialize credential material into API responses. User instances are
+// returned by several auth/admin endpoints, so redact secrets centrally.
+User.prototype.toJSON = function toJSON() {
+  const values = { ...this.get() };
+  delete values.passwordHash;
+  delete values.resetTokenHash;
+  delete values.resetTokenExpiresAt;
+  return values;
+};
+
 const GroupBankReference = sequelize.define("GroupBankReference", {
   id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
   code: { type: DataTypes.STRING(40), allowNull: false, unique: true },

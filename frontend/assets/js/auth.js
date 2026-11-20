@@ -1,22 +1,14 @@
 // Y-Summit Season 4 2026 — auth guards and session helpers (JWT-based)
 import { apiFetch } from "./utils.js";
 
-const TOKEN_KEY = "gySummitToken";
 const ADMIN_ROLES = new Set([
   "SUPER_ADMIN", "ADMIN", "FINANCE_ADMIN", "ADMISSIONS_ADMIN", "SPORTS_ADMIN", "GALLERY_ADMIN",
 ]);
 
-export function getToken() {
-  return localStorage.getItem(TOKEN_KEY);
-}
-
-export function setToken(token) {
-  localStorage.setItem(TOKEN_KEY, token);
-}
-
-export function clearToken() {
-  localStorage.removeItem(TOKEN_KEY);
-}
+// Compatibility exports for older page modules. Session credentials are now HttpOnly cookies.
+export function getToken() { return null; }
+export function setToken(_token) { /* intentionally never persist credentials in browser storage */ }
+export function clearToken() { /* the server clears the HttpOnly cookie on logout */ }
 
 /**
  * Checks the saved session. A freshly issued token is checked twice because
@@ -24,12 +16,6 @@ export function clearToken() {
  * profile request. Only confirmed authentication failures clear the token.
  */
 export async function requireSession() {
-  const token = getToken();
-  if (!token) {
-    redirectToLogin();
-    return null;
-  }
-
   let lastError;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
@@ -100,8 +86,8 @@ export async function requireAdminSession() {
   return user;
 }
 
-export function logout() {
-  clearToken();
+export async function logout() {
+  try { await apiFetch("/auth/logout", { method: "POST" }); } catch (err) { console.warn("Session logout request failed:", err); }
   window.location.href = resolvePath("login.html");
 }
 

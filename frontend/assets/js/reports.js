@@ -37,7 +37,6 @@ $("sendReport").addEventListener("click", async () => {
       credentials: "include",
       headers: {
         "Content-Type": "application/pdf",
-        Authorization: `Bearer ${localStorage.getItem("gySummitToken")}`,
       },
       body: file,
     });

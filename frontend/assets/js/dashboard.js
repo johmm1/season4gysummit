@@ -16,10 +16,12 @@ if (admin) {
   await loadStats();
   await loadFinanceSummary();
   await loadAnnouncements();
+  await loadMedicalAlerts();
   await loadPageSettings(DASHBOARD_FORMS);
   wireSettingsForms();
   wireSettingsFileUploads();
   setInterval(loadStats, 60_000);
+  setInterval(loadMedicalAlerts, 30_000);
 }
 
 async function loadStats() {
@@ -44,6 +46,52 @@ async function loadStats() {
     }
   } catch (err) {
     showError(err.message || "Could not load dashboard stats.");
+  }
+}
+
+
+async function loadMedicalAlerts() {
+  const board = $("medicalAlerts");
+  if (!board) return;
+
+  try {
+    const { alerts = [] } = await apiFetch("/admin/medical-alerts");
+    if (!alerts.length) {
+      board.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-heart-pulse"></i>
+          <h3>No medical alerts</h3>
+          <p>Participants with declared medical conditions will appear here.</p>
+        </div>`;
+      return;
+    }
+
+    board.innerHTML = alerts.map((person) => {
+      const details = [
+        person.medicalCondition ? `<div><strong>Condition:</strong> ${escapeHtml(person.medicalCondition)}</div>` : "",
+        person.allergies ? `<div><strong>Allergies:</strong> ${escapeHtml(person.allergies)}</div>` : "",
+        person.medication ? `<div><strong>Medication:</strong> ${escapeHtml(person.medication)}</div>` : "",
+        person.medicalNotes ? `<div><strong>Medical notes:</strong> ${escapeHtml(person.medicalNotes)}</div>` : "",
+        person.disability ? `<div><strong>Additional needs:</strong> ${escapeHtml(person.disability)}</div>` : "",
+      ].filter(Boolean).join("");
+
+      return `
+        <article class="medical-alert" style="padding:14px;margin:10px 0;border:1px solid #f0c6c6;border-left:4px solid #c0392b;border-radius:8px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <strong>${escapeHtml(person.fullName || "Participant")}</strong>
+            <span>${escapeHtml(person.phone || "No phone recorded")}</span>
+          </div>
+          <div style="display:grid;gap:5px;margin-top:9px;">${details || "<span>Medical attention requested; details not supplied.</span>"}</div>
+          ${person.emergencyContactName || person.emergencyContactPhone ? `<div style="margin-top:9px;"><strong>Emergency contact:</strong> ${escapeHtml(person.emergencyContactName || "Not named")} ${person.emergencyContactPhone ? `· ${escapeHtml(person.emergencyContactPhone)}` : ""}</div>` : ""}
+        </article>`;
+    }).join("");
+  } catch (err) {
+    console.error("Could not load medical alerts:", err);
+    board.innerHTML = `
+      <div class="empty-state" role="alert">
+        <h3>Medical alerts unavailable</h3>
+        <p>${escapeHtml(err.message || "Could not retrieve medical alerts. Please try again.")}</p>
+      </div>`;
   }
 }
 

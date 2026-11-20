@@ -2,6 +2,26 @@
 const { verifyToken } = require("../services/jwtService");
 const { User, ADMIN_ROLES } = require("../models");
 
+const SESSION_COOKIE = "gys_session";
+const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+const ALLOWED_ORIGINS = new Set([
+  "https://githunguripresbytaryouthsummit.co.ke",
+  "https://www.githunguripresbytaryouthsummit.co.ke",
+  ...(process.env.FRONTEND_URL || "").split(",").map((value) => value.trim()).filter(Boolean),
+]);
+
+function readCookie(req, name) {
+  const cookieHeader = req.headers.cookie || "";
+  for (const part of cookieHeader.split(";")) {
+    const separator = part.indexOf("=");
+    if (separator < 0) continue;
+    if (part.slice(0, separator).trim() === name) {
+      try { return decodeURIComponent(part.slice(separator + 1).trim()); } catch { return null; }
+    }
+  }
+  return null;
+}
+
 async function requireAuth(req, res, next) {
   try {
     const header = req.headers.authorization;

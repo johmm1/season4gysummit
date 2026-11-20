@@ -8,7 +8,9 @@ const ADMIN_ROLES = new Set([
 // Compatibility exports for older page modules. Session credentials are now HttpOnly cookies.
 export function getToken() { return null; }
 export function setToken(_token) { /* intentionally never persist credentials in browser storage */ }
-export function clearToken() { /* the server clears the HttpOnly cookie on logout */ }
+export function clearToken() {
+  try { localStorage.removeItem("gySummitToken"); } catch { /* storage may be disabled */ }
+}
 
 /**
  * Checks the saved session. A freshly issued token is checked twice because

@@ -19,6 +19,7 @@ export async function apiFetch(path, options = {}) {
 
   const res = await fetch(`${CONFIG.API_BASE_URL}${path}`, {
     cache: options.method && options.method.toUpperCase() !== "GET" ? undefined : "no-store",
+    credentials: "include",
     ...options,
     headers,
     body:
@@ -45,6 +46,7 @@ export async function apiFetch(path, options = {}) {
 export async function apiDownload(path, filename) {
   const token = localStorage.getItem(TOKEN_KEY);
   const res = await fetch(`${CONFIG.API_BASE_URL}${path}`, {
+    credentials: "include",
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
   if (!res.ok) {

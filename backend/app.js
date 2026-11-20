@@ -5,6 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
+const { sequelize } = require("./models");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandler");
 const { requestCounter } = require("./middleware/requestCounter");
 
@@ -51,7 +52,16 @@ const globalLimiter = rateLimit({ windowMs: 60_000, limit: 300, standardHeaders:
 app.use(globalLimiter);
 app.use(requestCounter);
 
-app.get("/health", (_req, res) => res.json({ ok: true, service: "gy-summit-2026-api" }));
+// Readiness check: report healthy only when the API can reach its database.
+// Do not expose connection details or credentials in the response.
+app.get("/health", async (_req, res) => {
+  try {
+    await sequelize.authenticate();
+    return res.status(200).json({ ok: true, service: "gy-summit-2026-api", database: "connected" });
+  } catch (_err) {
+    return res.status(503).json({ ok: false, service: "gy-summit-2026-api", database: "unavailable" });
+  }
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/activity", activityRoutes);

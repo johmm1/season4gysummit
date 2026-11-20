@@ -1317,8 +1317,43 @@ applyPublicSettings().then((settings) => {
   const general = settings?.generalSettingsForm || {};
   const mediaLinks = settings?.mediaLinksForm?.links || [];
   const mediaGrid = document.getElementById("publicMediaLinksGrid");
-  const escapePublicText = (value) => String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  if (mediaGrid) mediaGrid.innerHTML = mediaLinks.length ? mediaLinks.map((item) => `<article class="event-card"><h3>${escapePublicText(item.title || "Summit media")}</h3><p>${escapePublicText(item.description)}</p><a href="${escapePublicText(item.url || "#")}" target="_blank" rel="noopener noreferrer">Open media link</a></article>`).join("") : "<p>New media links will appear here when published.</p>";
+  const safeMediaUrl = (value) => {
+    try {
+      const url = new URL(String(value || ""), window.location.origin);
+      return ["http:", "https:"].includes(url.protocol) ? url.href : null;
+    } catch {
+      return null;
+    }
+  };
+  if (mediaGrid) {
+    mediaGrid.replaceChildren();
+    if (mediaLinks.length) {
+      mediaLinks.forEach((item) => {
+        const article = document.createElement("article");
+        article.className = "event-card";
+        const heading = document.createElement("h3");
+        heading.textContent = String(item.title || "Summit media");
+        const description = document.createElement("p");
+        description.textContent = String(item.description || "");
+        const link = document.createElement("a");
+        link.textContent = "Open media link";
+        link.href = safeMediaUrl(item.url) || "#";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        if (!safeMediaUrl(item.url)) {
+          link.removeAttribute("target");
+          link.setAttribute("aria-disabled", "true");
+          link.addEventListener("click", (event) => event.preventDefault());
+        }
+        article.append(heading, description, link);
+        mediaGrid.append(article);
+      });
+    } else {
+      const empty = document.createElement("p");
+      empty.textContent = "New media links will appear here when published.";
+      mediaGrid.append(empty);
+    }
+  }
 
   // Show the per-person fee with thousands separators (e.g. 2,200),
   // whether it came from admin settings or the built-in default.

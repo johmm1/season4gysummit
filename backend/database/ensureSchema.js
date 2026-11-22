@@ -100,6 +100,19 @@ async function ensureSchema() {
     await addColumnIfMissing(User, "whatsappJoinedAt", { type: DataTypes.DATE, allowNull: true });
     await addColumnIfMissing(GalleryItem, "publicId", { type: DataTypes.STRING(255), allowNull: true });
     await addColumnIfMissing(GalleryItem, "resourceType", { type: DataTypes.STRING(20), allowNull: true });
+    // Cover parish dashboard aggregates and dropdown filtering without
+    // changing participant records or rebuilding existing tables.
+    const userTable = User.getTableName();
+    const userTableName = typeof userTable === "string" ? userTable : userTable.tableName;
+    const Attendance = require("../models").Attendance;
+    const Parish = require("../models").Parish;
+    const attendanceTable = Attendance.getTableName();
+    const attendanceTableName = typeof attendanceTable === "string" ? attendanceTable : attendanceTable.tableName;
+    const parishTable = Parish.getTableName();
+    const parishTableName = typeof parishTable === "string" ? parishTable : parishTable.tableName;
+    await sequelize.query('CREATE INDEX IF NOT EXISTS "users_role_parish_lookup" ON "' + userTableName + '" ("role", "parishId")');
+    await sequelize.query('CREATE INDEX IF NOT EXISTS "attendance_type_user_lookup" ON "' + attendanceTableName + '" ("type", "userId")');
+    await sequelize.query('CREATE INDEX IF NOT EXISTS "parishes_presbytery_name_lookup" ON "' + parishTableName + '" ("presbyteryId", "name")');
     await dropEmailUniqueness();
     console.log("✅ Schema is up to date.");
   } catch (err) {

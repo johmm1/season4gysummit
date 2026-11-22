@@ -107,7 +107,7 @@ function slotMeter(slots, parishName) {
   }
   const pct = slots.total ? Math.min(100, Math.round((slots.used / slots.total) * 100)) : 100;
   const codeLines = slots.codes.map((c) =>
-    `<span class="code-chip ${c.remaining === 0 ? "is-empty" : ""}">${escapeHtml(c.code)} · ${c.remaining} left</span>`).join("");
+    `<span class="code-chip ${c.remaining === 0 ? "is-empty" : ""}">${escapeHtml(c.code.startsWith("SYS-PARISH-SLOT-") ? "Parish allocation" : c.code)} · ${c.remaining} left</span>`).join("");
   return `<div class="slot-meter ${slots.remaining === 0 ? "is-full" : ""}">
     <div class="line"><span><b>${escapeHtml(parishName)}</b></span>
     <span><b>${slots.remaining}</b> slot${slots.remaining === 1 ? "" : "s"} left · ${slots.used} of ${slots.total} used</span></div>
@@ -125,14 +125,7 @@ function renderPerson(p) {
     m.diet ? `Diet: ${m.diet}` : null,
   ].filter(Boolean);
 
-  const openCodes = p.slots.codes.filter((c) => c.remaining > 0);
-  const blocked = !p.paid && openCodes.length === 0;
-  const canOverride = ["SUPER_ADMIN", "ADMIN"].includes(admin.role);
-  const preferred = openCodes.find((c) => p.registeredWithCode && c.code.toLowerCase() === p.registeredWithCode.toLowerCase()) || openCodes[0];
-  const codeSelect = openCodes.length > 1
-    ? `<select id="codeSelect" aria-label="Bank reference code">${openCodes.map((c) =>
-        `<option value="${c.id}" ${c.id === preferred.id ? "selected" : ""}>${escapeHtml(c.code)} (${c.remaining} left)</option>`).join("")}</select>`
-    : "";
+  // Capacity is checked at check-in, not when payment is recorded.
   const dormOptions = dormitories.map((d) => {
     const wrongGender = d.gender !== "MIXED" && p.gender && d.gender !== p.gender;
     const full = d.available === 0 && p.dormitory?.id !== d.id;
@@ -157,13 +150,10 @@ function renderPerson(p) {
       <div>
         <h3>Payment</h3>
         ${p.paid
-          ? `<p>Paid ${formatKes(p.amountPaid ?? p.amountDue)}${p.paidAt ? " on " + new Date(p.paidAt).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" }) : ""}${p.paidWithCode ? " · code " + escapeHtml(p.paidWithCode) : ""}.</p>
+          ? `<p>Paid ${formatKes(p.amountPaid ?? p.amountDue)}${p.paidAt ? " on " + new Date(p.paidAt).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" }) : ""}.</p>
              ${p.admitted ? "" : '<div class="step-actions"><button class="desk-btn ghost small" id="undoPaid" type="button">Undo payment</button></div>'}`
-          : blocked
-            ? `<p>${p.slots.configured ? "All of this parish’s bank reference slots are used." : "This parish has no bank reference code with slots."} Add or increase slots in the <b>Parish slots</b> tab.</p>
-               ${canOverride ? '<div class="step-actions"><button class="desk-btn ghost small" id="markPaidOverride" type="button">Take payment without a slot (admin)</button></div>' : ""}`
-            : `<p>Confirm the participant has paid ${formatKes(p.amountDue || 2200)} at the desk. One slot is used from the parish’s bank reference code.</p>
-               <div class="step-actions">${codeSelect}<button class="desk-btn success" id="markPaid" type="button"><i class="fa-solid fa-circle-check"></i> Mark as paid</button></div>`}
+          : `<p>Confirm the participant has paid ${formatKes(p.amountDue || 2200)} at the desk. Parish capacity will be checked when admitting them.</p>
+             <div class="step-actions"><button class="desk-btn success" id="markPaid" type="button"><i class="fa-solid fa-circle-check"></i> Mark as paid</button></div>`}
       </div>
     </div>
 
@@ -193,8 +183,7 @@ function renderPerson(p) {
     </div>`;
 
   $("markPaid")?.addEventListener("click", () => {
-    const codeId = $("codeSelect")?.value;
-    act(`/admission/${p.id}/mark-paid`, codeId ? { codeId } : {}, "Marked as paid.");
+    act(`/admission/${p.id}/mark-paid`, {}, "Marked as paid.");
   });
   $("markPaidOverride")?.addEventListener("click", () => {
     if (confirm(`Take payment for ${p.fullName} without using a bank reference slot? This is recorded.`)) {

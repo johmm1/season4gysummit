@@ -106,13 +106,11 @@ function slotMeter(slots, parishName) {
       <span>No admission slots have been allocated to this parish yet</span></div></div>`;
   }
   const pct = slots.total ? Math.min(100, Math.round((slots.used / slots.total) * 100)) : 100;
-  const codeLines = slots.codes.map((c) =>
-    `<span class="code-chip ${c.remaining === 0 ? "is-empty" : ""}">${escapeHtml(c.code.startsWith("SYS-PARISH-SLOT-") ? "Parish allocation" : c.code)} · ${c.remaining} left</span>`).join("");
   return `<div class="slot-meter ${slots.remaining === 0 ? "is-full" : ""}">
     <div class="line"><span><b>${escapeHtml(parishName)}</b></span>
     <span><b>${slots.remaining}</b> slot${slots.remaining === 1 ? "" : "s"} left · ${slots.used} of ${slots.total} used</span></div>
     <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="code-chips">${codeLines}</div></div>`;
+    </div>`;
 }
 
 function renderPerson(p) {

@@ -92,14 +92,27 @@ async function completeLogin(loginRequest) {
   }
 
   try {
-    const result = await loginRequest();
-    if (result?.requiresTwoFactor && result?.challengeId) {
-      pendingChallengeId = result.challengeId;
+    const rawResult = await loginRequest();
+    const result = unwrapLoginResponse(rawResult);
+    const challengeId = result?.challengeId || result?.challenge_id || result?.twoFactor?.challengeId;
+    const requiresTwoFactor = result?.requiresTwoFactor === true
+      || result?.requires_two_factor === true
+      || Boolean(challengeId && (result?.maskedEmail || result?.masked_email || result?.requiresTwoFactor !== false));
+    if (requiresTwoFactor && challengeId) {
+      pendingChallengeId = challengeId;
       if (form) form.hidden = true;
-      if (otpPanel) otpPanel.hidden = false;
+      if (otpPanel) {
+        otpPanel.hidden = false;
+        otpPanel.removeAttribute("hidden");
+        otpPanel.style.display = "block";
+      }
       const destination = $("otpDestination");
-      if (destination) destination.textContent = result.maskedEmail || "your registered email";
-      $("adminOtp")?.focus();
+      if (destination) destination.textContent = result.maskedEmail || result.masked_email || "your registered email";
+      const otpInput = $("adminOtp");
+      if (otpInput) {
+        otpInput.value = "";
+        otpInput.focus();
+      }
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitBtn.dataset.originalText || "Login"; }
       return;
     }
@@ -123,6 +136,20 @@ async function completeLogin(loginRequest) {
       submitBtn.textContent = submitBtn.dataset.originalText || "Login";
     }
   }
+}
+
+// Some hosting/proxy layers wrap successful JSON responses. Accept the
+// common wrappers while preserving the original participant response shape.
+function unwrapLoginResponse(payload) {
+  let value = payload;
+  for (let depth = 0; depth < 4; depth += 1) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) break;
+    if (value.requiresTwoFactor || value.requires_two_factor || value.challengeId || value.challenge_id || value.user) return value;
+    const next = value.data ?? value.result ?? value.payload;
+    if (!next || typeof next !== "object" || Array.isArray(next)) break;
+    value = next;
+  }
+  return value;
 }
 
 function redirectForRole(user) {

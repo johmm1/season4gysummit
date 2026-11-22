@@ -7,10 +7,24 @@ const { requireAuth, requireRole } = require("../middleware/auth");
 
 const router = Router();
 
+// Short-lived in-process cache keeps the registration dropdown responsive while
+// still reflecting structure changes quickly.
+const structureCache = new Map();
+const STRUCTURE_CACHE_TTL_MS = 30000;
+async function getCachedStructure(key, loader) {
+  const cached = structureCache.get(key);
+  if (cached && cached.expiresAt > Date.now()) return cached.value;
+  const value = await loader();
+  structureCache.set(key, { value, expiresAt: Date.now() + STRUCTURE_CACHE_TTL_MS });
+  return value;
+}
+function clearStructureCache() { structureCache.clear(); }
+
 router.get(
   "/presbyteries",
   asyncHandler(async (_req, res) => {
-    const items = await Presbytery.findAll({ order: [["name", "ASC"]] });
+    const items = await getCachedStructure("presbyteries", () => Presbytery.findAll({ attributes: ["id", "name"], order: [["name", "ASC"]], raw: true }));
+    res.set("Cache-Control", "public, max-age=30, stale-while-revalidate=60");
     res.json({ items });
   })
 );
@@ -19,10 +33,13 @@ router.get(
   "/parishes",
   asyncHandler(async (req, res) => {
     const presbyteryId = req.query.presbyteryId;
-    const items = await Parish.findAll({
+    const cacheKey = "parishes:" + (presbyteryId || "all");
+    const items = await getCachedStructure(cacheKey, () => Parish.findAll({
+      attributes: ["id", "name", "presbyteryId"],
       where: presbyteryId ? { presbyteryId } : {},
-      order: [["name", "ASC"]],
-    });
+      order: [["name", "ASC"]], raw: true,
+    }));
+    res.set("Cache-Control", "public, max-age=30, stale-while-revalidate=60");
     res.json({ items });
   })
 );
@@ -46,6 +63,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const body = z.object({ name: z.string().min(2).max(120) }).parse(req.body);
     const presbytery = await Presbytery.create(body);
+    clearStructureCache();
     res.status(201).json({ presbytery });
   })
 );
@@ -57,6 +75,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const body = z.object({ name: z.string().min(2).max(120), presbyteryId: z.coerce.number().int() }).parse(req.body);
     const parish = await Parish.create(body);
+    clearStructureCache();
     res.status(201).json({ parish });
   })
 );
@@ -153,6 +172,7 @@ router.patch(
     const oldName = parish.name;
     parish.name = name;
     await parish.save();
+    clearStructureCache();
 
     if (oldName !== name) {
       // Keep every sports team's display name and any fixtures that

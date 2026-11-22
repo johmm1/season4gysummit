@@ -25,8 +25,8 @@ const router = Router();
 
 const SESSION_COOKIE = "gys_session";
 const SESSION_COOKIE_OPTIONS = { httpOnly: true, secure: process.env.NODE_ENV !== "development", sameSite: "lax", path: "/", maxAge: 12 * 60 * 60 * 1000 };
-function issueSessionCookie(res, user) {
-  const token = signToken(user);
+function issueSessionCookie(res, user, { twoFactorVerified = false } = {}) {
+  const token = signToken(user, { twoFactorVerified });
   res.set("Cache-Control", "no-store");
   res.cookie(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
 }
@@ -266,7 +266,7 @@ router.post("/login/verify-2fa", otpLimiter, asyncHandler(async (req, res) => {
   user.lastLoginAt = new Date();
   await user.save();
   await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, twoFactor: true, ip: req.ip, userAgent: req.get("user-agent") });
-  issueSessionCookie(res, user);
+  issueSessionCookie(res, user, { twoFactorVerified: true });
   return res.json({ user });
 }));
 

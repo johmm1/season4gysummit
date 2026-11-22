@@ -232,7 +232,7 @@ router.post(
 
 const verifyAdminOtpSchema = z.object({
   challengeId: z.string().regex(/^[a-f0-9]{48}$/),
-  code: z.string().regex(/^\\d{6}$/),
+  code: z.string().regex(/^\d{6}$/),
 });
 router.post("/login/verify-2fa", otpLimiter, asyncHandler(async (req, res) => {
   const body = verifyAdminOtpSchema.parse(req.body);

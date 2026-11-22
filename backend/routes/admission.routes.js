@@ -92,15 +92,20 @@ const codeView = (c) => ({
 });
 
 async function parishSlots(parishName, transaction) {
-  const codes = (await codesForParish(parishName, transaction)).map(codeView);
-  const total = codes.reduce((n, c) => n + c.total, 0);
-  const used = codes.reduce((n, c) => n + c.used, 0);
+  const rows = await codesForParish(parishName, transaction);
+  const total = rows.reduce((n, row) => n + Number(row.totalSlots || 0), 0);
+  const parish = await Parish.findOne({ where: sequelize.where(sequelize.fn("lower", sequelize.col("name")), String(parishName || "").toLowerCase()), transaction });
+  const used = parish ? await Attendance.count({
+    where: { type: "CHECK_IN" },
+    include: [{ model: User, where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }],
+    transaction,
+  }) : 0;
   return {
-    configured: codes.length > 0,
-    codes,
-    total: codes.length ? total : null,
+    configured: rows.length > 0,
+    codes: rows.map((row) => ({ id: row.id, code: row.code.startsWith("SYS-PARISH-SLOT-") ? "Parish allocation" : row.code, total: row.totalSlots, used: 0, remaining: row.totalSlots })),
+    total: rows.length ? total : null,
     used,
-    remaining: codes.length ? Math.max(0, total - used) : null,
+    remaining: rows.length ? Math.max(0, total - used) : null,
   };
 }
 

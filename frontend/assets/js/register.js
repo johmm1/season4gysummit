@@ -43,8 +43,6 @@ async function loadPresbyteries() {
     showError(err.message || "Could not load the presbytery list.");
   }
 }
-await loadPresbyteries();
-
 $("presbytery")?.addEventListener("change", async (e) => {
   selectedPresbyteryId = e.target.value || null;
   const parishSelect = $("parish");
@@ -72,6 +70,10 @@ $("presbytery")?.addEventListener("change", async (e) => {
     showError(err.message || "Could not load parishes for that presbytery.");
   }
 });
+
+// Register the change handler before loading; the single-presbytery auto-select
+// dispatches a change event to load its parish options.
+await loadPresbyteries();
 
 $("parish")?.addEventListener("change", async (e) => {
   selectedParishId = e.target.value || null;

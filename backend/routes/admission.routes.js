@@ -97,7 +97,7 @@ async function parishSlots(parishName, transaction) {
   const parish = await Parish.findOne({ where: sequelize.where(sequelize.fn("lower", sequelize.col("name")), String(parishName || "").toLowerCase()), transaction });
   const used = parish ? await Attendance.count({
     where: { type: "CHECK_IN" },
-    include: [{ model: User, where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }],
+    include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }],
     transaction,
   }) : 0;
   return {
@@ -312,7 +312,7 @@ router.post("/:userId/admit", ...staff, asyncHandler(async (req, res) => {
     const parish = await Parish.findByPk(user.Parish.id, { transaction: t, lock: t.LOCK.UPDATE });
     const allocations = await GroupBankReference.findAll({ where: { parish: { [Op.iLike]: parish.name }, isActive: true }, transaction: t, lock: t.LOCK.UPDATE });
     const totalSlots = allocations.reduce((sum, row) => sum + Number(row.totalSlots || 0), 0);
-    const admitted = await Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }], transaction: t });
+    const admitted = await Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }], transaction: t });
     if (admitted >= totalSlots) throw new ApiError(409, "No admission slots remain for " + parish.name + ". Finance must add more slots before another participant can be admitted.");
     await Attendance.create({ userId: user.id, type: "CHECK_IN", label: label || "Admission desk", scannedById: req.auth.userId }, { transaction: t });
     await logAction(req.auth.userId, "ADMISSION_ADMIT", "user", user.id, { parishId: parish.id, admittedBefore: admitted, allocatedSlots: totalSlots });

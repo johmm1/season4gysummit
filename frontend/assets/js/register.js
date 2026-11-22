@@ -9,6 +9,19 @@ import { uploadFile } from "./fileUpload.js";
 
 let selectedPresbyteryId = null;
 let selectedParishId = null;
+const parishOptionsCache = new Map();
+const parishOptionsRequests = new Map();
+
+async function getParishOptions(presbyteryId) {
+  const key = String(presbyteryId);
+  if (parishOptionsCache.has(key)) return parishOptionsCache.get(key);
+  if (!parishOptionsRequests.has(key)) {
+    parishOptionsRequests.set(key, apiFetch(`/structure/parishes?presbyteryId=${encodeURIComponent(key)}`)
+      .then(({ items }) => { parishOptionsCache.set(key, items || []); return items || []; })
+      .finally(() => parishOptionsRequests.delete(key)));
+  }
+  return parishOptionsRequests.get(key);
+}
 
 // ---- Dynamic presbytery -> parish -> church loading ----
 async function loadPresbyteries() {
@@ -48,10 +61,12 @@ $("presbytery")?.addEventListener("change", async (e) => {
 
   parishSelect.innerHTML = `<option value="">Loading parishes...</option>`;
   try {
-    const { items } = await apiFetch(`/structure/parishes?presbyteryId=${selectedPresbyteryId}`);
+    const requestedPresbyteryId = selectedPresbyteryId;
+    const items = await getParishOptions(requestedPresbyteryId);
+    if (String(selectedPresbyteryId) !== String(requestedPresbyteryId)) return;
     parishSelect.innerHTML =
       `<option value="">Select Parish</option>` +
-      items.map((p) => `<option value="${p.id}">${p.name}</option>`).join("");
+      items.map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
   } catch (err) {
     parishSelect.innerHTML = `<option value="">Could not load parishes</option>`;
     showError(err.message || "Could not load parishes for that presbytery.");

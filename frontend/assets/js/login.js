@@ -45,6 +45,28 @@ async function handleGoogleCredential(response) {
 }
 
 const form = $("loginForm");
+const otpForm = $("otpForm");
+const otpPanel = $("otpPanel");
+let pendingChallengeId = null;
+
+otpForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const code = $("adminOtp")?.value.trim() || "";
+  if (!/^\d{6}$/.test(code) || !pendingChallengeId) {
+    showError("Enter the 6-digit code sent to your registered email.");
+    return;
+  }
+  await completeLogin(() => apiFetch("/auth/login/verify-2fa", {
+    method: "POST", body: { challengeId: pendingChallengeId, code },
+  }));
+});
+
+$("otpBackBtn")?.addEventListener("click", () => {
+  pendingChallengeId = null;
+  if (otpPanel) otpPanel.hidden = true;
+  if (form) form.hidden = false;
+  $("adminOtp").value = "";
+});
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const identifier = $("email").value.trim();
@@ -71,6 +93,16 @@ async function completeLogin(loginRequest) {
 
   try {
     const result = await loginRequest();
+    if (result?.requiresTwoFactor && result?.challengeId) {
+      pendingChallengeId = result.challengeId;
+      if (form) form.hidden = true;
+      if (otpPanel) otpPanel.hidden = false;
+      const destination = $("otpDestination");
+      if (destination) destination.textContent = result.maskedEmail || "your registered email";
+      $("adminOtp")?.focus();
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitBtn.dataset.originalText || "Login"; }
+      return;
+    }
     if (!result?.user?.id || !result?.user?.role) {
       throw new Error("The server did not return a complete login session. Please try again.");
     }
@@ -85,6 +117,7 @@ async function completeLogin(loginRequest) {
   } catch (err) {
     console.error("Login/session verification failed:", err);
     showError(err.message || "Login failed. Check your email/phone and password, then try again.");
+    if (otpForm && pendingChallengeId) $("adminOtp")?.focus();
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.textContent = submitBtn.dataset.originalText || "Login";

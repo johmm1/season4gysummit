@@ -6,7 +6,7 @@ const { z } = require("zod");
 const { Op } = require("sequelize");
 const rateLimit = require("express-rate-limit");
 const { OAuth2Client } = require("google-auth-library");
-const { sequelize, User, Registration, Presbytery, Parish, Church } = require("../models");
+const { sequelize, User, Registration, Presbytery, Parish, Church, SystemSetting, ADMIN_ROLES } = require("../models");
 const { signToken } = require("../services/jwtService");
 const { normalizePhone } = require("../services/phoneUtils");
 const { logAction } = require("../services/auditService");
@@ -25,8 +25,8 @@ const router = Router();
 
 const SESSION_COOKIE = "gys_session";
 const SESSION_COOKIE_OPTIONS = { httpOnly: true, secure: process.env.NODE_ENV !== "development", sameSite: "lax", path: "/", maxAge: 12 * 60 * 60 * 1000 };
-function issueSessionCookie(res, user) {
-  const token = signToken(user);
+function issueSessionCookie(res, user, { twoFactorVerified = false } = {}) {
+  const token = signToken(user, { twoFactorVerified });
   res.set("Cache-Control", "no-store");
   res.cookie(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
 }
@@ -42,6 +42,52 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many attempts. Please wait a few minutes and try again." },
 });
+
+// Admin sign-ins are password + email OTP. The challenge is persisted in
+// SystemSetting so it survives process restarts; only an HMAC of the code is stored.
+const otpLimiter = rateLimit({
+  windowMs: 15 * 60_000, limit: 10, standardHeaders: true, legacyHeaders: false,
+  message: { error: "Too many verification attempts. Please wait and try again." },
+});
+const OTP_TTL_MS = 5 * 60_000;
+const OTP_MAX_ATTEMPTS = 5;
+function otpDigest(code) {
+  return crypto.createHmac("sha256", process.env.JWT_SECRET).update(String(code)).digest("hex");
+}
+function safeDigestEqual(a, b) {
+  const left = Buffer.from(String(a || ""), "hex");
+  const right = Buffer.from(String(b || ""), "hex");
+  return left.length === right.length && left.length > 0 && crypto.timingSafeEqual(left, right);
+}
+function maskEmail(email) {
+  const [name, domain] = String(email || "").split("@");
+  if (!name || !domain) return "your registered email";
+  return `${name.slice(0, 1)}${"*".repeat(Math.max(2, Math.min(name.length - 1, 6)))}@${domain}`;
+}
+async function startAdminChallenge(user, req, res, via) {
+  if (!user.email) throw new ApiError(403, "This administrator account has no registered email. Contact the system owner.");
+  const code = String(crypto.randomInt(100000, 1000000));
+  const challengeId = crypto.randomBytes(24).toString("hex");
+  const key = `admin_login_2fa:${challengeId}`;
+  await SystemSetting.upsert({
+    key,
+    value: { userId: user.id, codeHash: otpDigest(code), expiresAt: new Date(Date.now() + OTP_TTL_MS).toISOString(), attempts: 0, via },
+  });
+  try {
+    await sendTransactionalEmail(
+      user.email,
+      "Y-Summit — Administrator sign-in code",
+      `Hello ${user.fullName},\n\nYour administrator sign-in verification code is: ${code}\n\nIt expires in 5 minutes and can be used once. If you did not attempt to sign in, you can ignore this email and consider changing your password.\n\nY-Summit Season 4 2026`
+    );
+  } catch (err) {
+    await SystemSetting.destroy({ where: { key } });
+    console.error("[admin-2fa] email delivery failed:", err.message);
+    throw new ApiError(503, "We couldn't send the verification code. Please try again later or contact the system owner.");
+  }
+  await logAction(user.id, "ADMIN_2FA_CODE_SENT", "auth", user.id, { via, ip: req.ip, userAgent: req.get("user-agent") });
+  return res.json({ requiresTwoFactor: true, challengeId, maskedEmail: maskEmail(user.email) });
+}
+
 
 // Several participants may share one email address (a chairperson or parent
 // registering youths who have no email of their own), so an email can match
@@ -160,6 +206,10 @@ router.post(
       throw new ApiError(403, "This account has been deactivated.");
     }
 
+    if (ADMIN_ROLES.includes(user.role)) {
+      return startAdminChallenge(user, req, res, "password");
+    }
+
     user.lastLoginAt = new Date();
     await user.save();
     await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, ip: req.ip, userAgent: req.get("user-agent") });
@@ -179,6 +229,47 @@ router.post(
 // token the password login does. If no account matches, it says so
 // plainly rather than silently creating an incomplete account that's
 // missing required registration fields.
+
+const verifyAdminOtpSchema = z.object({
+  challengeId: z.string().regex(/^[a-f0-9]{48}$/),
+  code: z.string().regex(/^\d{6}$/),
+});
+router.post("/login/verify-2fa", otpLimiter, asyncHandler(async (req, res) => {
+  const body = verifyAdminOtpSchema.parse(req.body);
+  const key = `admin_login_2fa:${body.challengeId}`;
+  const challenge = await SystemSetting.findByPk(key);
+  const data = challenge?.value;
+  if (!data || !data.userId || !data.expiresAt || new Date(data.expiresAt) <= new Date()) {
+    if (challenge) await challenge.destroy();
+    throw new ApiError(401, "This verification code has expired. Please sign in again.");
+  }
+  if (Number(data.attempts || 0) >= OTP_MAX_ATTEMPTS) {
+    await challenge.destroy();
+    throw new ApiError(429, "Too many incorrect codes. Please sign in again to request a new code.");
+  }
+  if (!safeDigestEqual(otpDigest(body.code), data.codeHash)) {
+    data.attempts = Number(data.attempts || 0) + 1;
+    if (data.attempts >= OTP_MAX_ATTEMPTS) await challenge.destroy();
+    else { challenge.value = data; await challenge.save(); }
+    await logAction(data.userId, "ADMIN_2FA_FAILED", "auth", data.userId, { attempts: data.attempts, ip: req.ip });
+    throw new ApiError(401, data.attempts >= OTP_MAX_ATTEMPTS
+      ? "Too many incorrect codes. Please sign in again to request a new code."
+      : "Incorrect verification code. Please try again.");
+  }
+
+  // Consume the challenge before issuing a session so the code cannot be replayed.
+  await challenge.destroy();
+  const user = await User.findByPk(data.userId);
+  if (!user || !user.isActive || !ADMIN_ROLES.includes(user.role)) {
+    throw new ApiError(403, "This administrator account is unavailable.");
+  }
+  user.lastLoginAt = new Date();
+  await user.save();
+  await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, twoFactor: true, ip: req.ip, userAgent: req.get("user-agent") });
+  issueSessionCookie(res, user, { twoFactorVerified: true });
+  return res.json({ user });
+}));
+
 const googleClient = process.env.GOOGLE_CLIENT_ID ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID) : null;
 
 const googleLoginSchema = z.object({ credential: z.string().min(20) });
@@ -220,6 +311,10 @@ router.post(
       await logAction(user.id, "LOGIN_FAILED", "auth", user.id, { reason: "account_deactivated", via: "google", ip: req.ip, userAgent: req.get("user-agent") });
       throw new ApiError(403, "This account has been deactivated.");
     }
+    if (ADMIN_ROLES.includes(user.role)) {
+      return startAdminChallenge(user, req, res, "google");
+    }
+
     user.lastLoginAt = new Date();
     await user.save();
     await logAction(user.id, "LOGIN", "auth", user.id, { role: user.role, via: "google", ip: req.ip, userAgent: req.get("user-agent") });

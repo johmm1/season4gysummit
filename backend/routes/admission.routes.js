@@ -218,29 +218,8 @@ router.post("/:userId/mark-paid", ...moneyStaff, asyncHandler(async (req, res) =
     let reg = await Registration.findOne({ where: { userId: user.id }, transaction: t, lock: t.LOCK.UPDATE });
     if (reg?.paidAt) throw new ApiError(409, "This participant is already marked as paid.");
 
-    // Lock this parish's codes so two desks cannot both take the last slot.
-    const codes = await codesForParish(user.Parish?.name, t, true);
-    const open = codes.filter((c) => c.usedSlots < c.totalSlots);
-
+    // Payment confirmation does not consume an admission slot. Capacity is checked at check-in.
     let chosen = null;
-    if (body.codeId) {
-      chosen = codes.find((c) => c.id === body.codeId);
-      if (!chosen) throw new ApiError(409, "That bank reference code does not belong to this participant's parish.");
-      if (chosen.usedSlots >= chosen.totalSlots) throw new ApiError(409, `Code ${chosen.code} has no slots left.`);
-    } else {
-      // Prefer the code the participant registered with, then any code with room.
-      const own = reg?.groupCode ? open.find((c) => c.code.toLowerCase() === reg.groupCode.toLowerCase()) : null;
-      chosen = own || open[0] || null;
-    }
-
-    if (!chosen) {
-      const canOverride = ["SUPER_ADMIN", "ADMIN"].includes(req.auth.role);
-      if (!(body.allowWithoutCode && canOverride)) {
-        throw new ApiError(409, codes.length
-          ? "All of this parish's bank reference slots are used. Increase the slots on the code first if more were approved."
-          : "This parish has no bank reference code with slots. Add one in the Parish slots tab first.");
-      }
-    }
 
     const general = await getForm("generalSettingsForm");
     const fee = general.registrationFee !== undefined && general.registrationFee !== ""
@@ -252,16 +231,10 @@ router.post("/:userId/mark-paid", ...moneyStaff, asyncHandler(async (req, res) =
     reg.amountPaid = amount;
     reg.paidAt = new Date();
     reg.paidById = req.auth.userId;
-    if (chosen) {
-      chosen.usedSlots += 1;
-      await chosen.save({ transaction: t });
-      reg.bankReferenceId = chosen.id;
-      if (!reg.groupCode) reg.groupCode = chosen.code;
-    }
     await reg.save({ transaction: t });
 
     await logAction(req.auth.userId, "ADMISSION_MARK_PAID", "registration", reg.id,
-      { userId: user.id, amount, code: chosen?.code || null });
+      { userId: user.id, amount, slotReservedAtPayment: false });
   });
 
   clearCache();
@@ -321,27 +294,26 @@ router.post("/:userId/dormitory", ...staff, asyncHandler(async (req, res) => {
 // Admit (check-in) — only once paid
 // ---------------------------------------------------------------------
 router.post("/:userId/admit", ...staff, asyncHandler(async (req, res) => {
-  const user = await User.findOne({
-    where: { id: req.params.userId, role: "PARTICIPANT" },
-    include: [{ model: Parish, attributes: ["name"] }, { model: Registration, as: "registration", attributes: ["status", "paidAt"] }],
+  await sequelize.transaction(async (t) => {
+    const user = await User.findOne({ where: { id: req.params.userId, role: "PARTICIPANT" },
+      include: [{ model: Parish, attributes: ["id", "name"] }, { model: Registration, as: "registration", attributes: ["status", "paidAt"] }],
+      transaction: t, lock: t.LOCK.UPDATE });
+    if (!user) throw new ApiError(404, "Participant not found.");
+    if (!user.registration?.paidAt) throw new ApiError(409, "Mark this participant as paid before admitting them.");
+    const label = String(req.body?.label || "").trim();
+    const previous = await Attendance.findOne({ where: { userId: user.id, type: "CHECK_IN" }, transaction: t });
+    if (previous && !label.toLowerCase().startsWith("re-entry")) throw new ApiError(409, "This participant has already been admitted.");
+    if (!user.Parish) throw new ApiError(409, "This participant has no parish assigned. Update their parish before admission.");
+    const parish = await Parish.findByPk(user.Parish.id, { transaction: t, lock: t.LOCK.UPDATE });
+    const allocations = await GroupBankReference.findAll({ where: { parish: { [Op.iLike]: parish.name }, isActive: true }, transaction: t, lock: t.LOCK.UPDATE });
+    const totalSlots = allocations.reduce((sum, row) => sum + Number(row.totalSlots || 0), 0);
+    const admitted = await Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }], transaction: t });
+    if (admitted >= totalSlots) throw new ApiError(409, "No admission slots remain for " + parish.name + ". Finance must add more slots before another participant can be admitted.");
+    await Attendance.create({ userId: user.id, type: "CHECK_IN", label: label || "Admission desk", scannedById: req.auth.userId }, { transaction: t });
+    await logAction(req.auth.userId, "ADMISSION_ADMIT", "user", user.id, { parishId: parish.id, admittedBefore: admitted, allocatedSlots: totalSlots });
   });
-  if (!user) throw new ApiError(404, "Participant not found.");
-  if (!user.registration?.paidAt) {
-    throw new ApiError(409, "Mark this participant as paid before admitting them.");
-  }
-  const label = String(req.body?.label || "").trim();
-  const previousCheckIn = await Attendance.findOne({ where: { userId: user.id, type: "CHECK_IN" } });
-  if (previousCheckIn && !label.toLowerCase().startsWith("re-entry")) {
-    throw new ApiError(409, "This participant has already been admitted.");
-  }
-  await Attendance.create({
-    userId: user.id,
-    type: "CHECK_IN",
-    label: label || "Admission desk",
-    scannedById: req.auth.userId,
-  });
-  await logAction(req.auth.userId, "ADMISSION_ADMIT", "user", user.id, {});
-  res.status(201).json({ participant: await describe(user.id) });
+  clearCache();
+  res.status(201).json({ participant: await describe(req.params.userId) });
 }));
 
 // ---------------------------------------------------------------------

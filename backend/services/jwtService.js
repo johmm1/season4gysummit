@@ -9,9 +9,9 @@ if (!JWT_SECRET) {
 // signed with an unintended algorithm during verification.
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "12h";
 
-function signToken(user) {
+function signToken(user, { twoFactorVerified = false } = {}) {
   return jwt.sign(
-    { sub: user.id, role: user.role, email: user.email },
+    { sub: user.id, role: user.role, email: user.email, admin2fa: Boolean(twoFactorVerified) },
     JWT_SECRET,
     { algorithm: "HS256", expiresIn: JWT_EXPIRES_IN }
   );

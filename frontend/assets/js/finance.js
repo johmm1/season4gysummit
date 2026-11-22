@@ -4,10 +4,8 @@ import { apiFetch, apiDownload, showError, showSuccess, escapeHtml, debounce, se
 
 // Maps parish name -> the id prefix used in finance.html's per-parish counters,
 // e.g. "Githunguri" -> githunguriRegistered/githunguriPaid/githunguriAdmitted.
-const PARISH_ID_PREFIXES = [
-  "githunguri", "gathaithi", "gathangari", "gathanji", "githiga",
-  "kagaa", "kahunira", "kamburu", "karuthi", "matuguta", "riara",
-];
+let parishSlotsCache = [];
+
 
 let parishesCache = null;
 
@@ -24,17 +22,18 @@ window.loadParish = async function loadParish(parishName) {
 
     const admitted = participants.filter((p) => p.attendances?.some((a) => a.type === "CHECK_IN")).length;
     const registered = participants.length;
-    const totalSlots = 50;
+    const slot = parishSlotsCache.find((item) => item.parishId === parish?.id);
+    const totalSlots = slot?.totalSlots || 0;
 
     setText("paidSlots", Math.max(0, registered - admitted));
     setText("registeredSlots", registered);
-    setText("availableSlots", Math.max(0, totalSlots - registered));
+    setText("availableSlots", Math.max(0, totalSlots - admitted));
     setText("admittedCount", admitted);
     setText("pendingCount", registered - admitted);
-    setText("capacityLabel", `${registered} / ${totalSlots}`);
+    setText("capacityLabel", `${admitted} / ${totalSlots} admitted`);
 
     const progress = $("capacityProgress");
-    if (progress) progress.style.width = `${Math.min(100, Math.round((registered / totalSlots) * 100))}%`;
+    if (progress) progress.style.width = `${Math.min(100, Math.round((admitted / totalSlots) * 100))}%`;
 
     renderTable(participants);
     document.getElementById("selectedParishSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -47,6 +46,191 @@ const admin = await requireAdminSession();
 if (admin) {
   wireLogoutButton();
   await loadOverview();
+  await loadParishSlots();
+  wireSlotManager();
+  await loadParticipants();
+  wireSearch();
+  wireAdmissionLookup();
+  await loadCertificateTemplates();
+  wireCertificateGeneration();
+}
+
+
+async function loadParishSlots() {
+  try {
+    const { items } = await apiFetch("/finance/parish-slots");
+    parishSlotsCache = items || [];
+    const select = $("slotParish");
+    if (select) {
+      const current = select.value;
+      select.innerHTML = parishSlotsCache.map((p) => `<option value="${p.parishId}">${escapeHtml(p.parish)}</option>`).join("");
+      if (current && parishSlotsCache.some((p) => String(p.parishId) === current)) select.value = current;
+      updateSlotInput();
+    }
+    const grid = $("parishCardsGrid");
+    if (grid) grid.innerHTML = parishSlotsCache.map((p) => {
+      const pct = p.totalSlots ? Math.min(100, Math.round((p.admitted / p.totalSlots) * 100)) : 0;
+      return `<button type="button" class="parish-card" data-parish-id="${p.parishId}" style="text-align:left;cursor:pointer">
+        <div class="card-header"><div class="church-icon"><i class="fa-solid fa-church"></i></div><span class="card-status">${p.remaining ? "ACTIVE" : "FULL"}</span></div>
+        <h3>${escapeHtml(p.parish)} Parish</h3>
+        <div class="card-stat"><span>Allocated slots</span><strong>${p.totalSlots}</strong></div>
+        <div class="card-stat"><span>Registered</span><strong>${p.registered}</strong></div>
+        <div class="card-stat"><span>Admitted</span><strong>${p.admitted}</strong></div>
+        <div class="card-stat"><span>Remaining admission slots</span><strong>${p.remaining}</strong></div>
+        <div class="card-progress"><div style="width:${pct}%"></div></div>
+      </button>`;
+    }).join("");
+    grid?.querySelectorAll("[data-parish-id]").forEach((card) => card.addEventListener("click", () => {
+      const p = parishSlotsCache.find((item) => String(item.parishId) === card.dataset.parishId);
+      if (p) window.loadParish(p.parish);
+    }));
+  } catch (err) { showError(err.message || "Could not load parish slot allocations."); }
+}
+
+function updateSlotInput() {
+  const p = parishSlotsCache.find((item) => String(item.parishId) === $("slotParish")?.value);
+  if ($("slotTotal") && p) $("slotTotal").value = p.totalSlots;
+}
+function wireSlotManager() {
+  $("slotParish")?.addEventListener("change", updateSlotInput);
+  $("parishSlotForm")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const parishId = $("slotParish")?.value;
+    const totalSlots = Number($("slotTotal")?.value);
+    if (!parishId || !Number.isInteger(totalSlots) || totalSlots < 0) return showError("Choose a parish and enter a valid slot allocation.");
+    const button = $("saveParishSlots");
+    button.disabled = true;
+    try {
+      await apiFetch("/finance/parish-slots/" + encodeURIComponent(parishId), { method: "PUT", body: { totalSlots } });
+      showSuccess("Parish admission slots saved.");
+      await loadParishSlots();
+    } catch (err) { showError(err.message || "Could not save parish slots."); }
+    finally { button.disabled = false; }
+  });
+}
+
+async function loadCertificateTemplates() {
+  const container = $("certificateTemplatePreviews");
+  if (!container) return;
+  try {
+    const { settings } = await apiFetch("/admin/settings");
+    const templates = settings.certificateTemplatesForm || {};
+    const entries = [
+      { label: "Participation", url: templates["participationTemplate__url"] },
+      { label: "Sports Winner", url: templates["winnerTemplate__url"] },
+    ];
+    container.innerHTML = entries.map((t) => `
+      <div class="certificate-template-card">
+        ${t.url
+          ? `<img src="${escapeHtml(t.url)}" alt="${escapeHtml(t.label)} template">`
+          : `<div class="no-template"><i class="fa-solid fa-image-slash"></i></div>`}
+        <div class="template-label">${escapeHtml(t.label)}${t.url ? "" : " — not uploaded yet"}</div>
+      </div>`).join("");
+  } catch (err) {
+    container.innerHTML = "<p>Could not load certificate templates.</p>";
+  }
+}
+
+function wireCertificateGeneration() {
+  $("generateParticipationCertsFinance")?.addEventListener("click", async () => {
+    const btn = $("generateParticipationCertsFinance");
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating…';
+    try {
+      const result = await apiFetch("/certificates/generate", { method: "POST", body: { type: "PARTICIPATION" } });
+      if (!result.eligible) {
+        showError("No confirmed participants were found. Check that registrations are marked CONFIRMED.");
+        return;
+      }
+      await apiDownload("/certificates/download-all?type=PARTICIPATION", "gys-summit-2026-participation-certificates.pdf");
+      showSuccess(result.issued + " new certificate(s) issued; PDF prepared for " + result.eligible + " confirmed participants.");
+    } catch (err) {
+      showError(err.message || "Could not generate certificates.");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = original;
+    }
+  });
+}
+
+
+async function fetchAllParticipants(filters = {}) {
+  const items = [];
+  let page = 1;
+  while (true) {
+    const params = new URLSearchParams({ ...filters, page: String(page), pageSize: "100" });
+    const result = await apiFetch(`/admin/participants?${params}`);
+    items.push(...result.items);
+    if (page >= result.totalPages || !result.items.length) break;
+    page += 1;
+  }
+  return items;
+}
+
+async function loadOverview() {
+  try {
+    const [summary, items] = await Promise.all([
+      apiFetch("/finance/summary"),
+      fetchAllParticipants(),
+    ]);
+
+    setText("overallRegistered", summary.registeredCount);
+    setText("overallPaid", summary.congregationCount);
+    setText("overallPending", summary.awaitingAdmission);
+    setText("overallAdmitted", summary.admittedCount);
+
+
+    await loadParishSlots();Summit Season 4 2026 — registration and admission management
+import { requireAdminSession, wireLogoutButton } from "./auth.js";
+import { apiFetch, apiDownload, showError, showSuccess, escapeHtml, debounce, setText, $ } from "./utils.js";
+
+// Maps parish name -> the id prefix used in finance.html's per-parish counters,
+// e.g. "Githunguri" -> githunguriRegistered/githunguriPaid/githunguriAdmitted.
+let parishSlotsCache = [];
+
+
+let parishesCache = null;
+
+window.loadParish = async function loadParish(parishName) {
+  setText("selectedParishName", `${parishName} Parish`);
+  try {
+    if (!parishesCache) {
+      const { items } = await apiFetch("/structure/parishes");
+      parishesCache = items;
+    }
+    const parish = parishesCache.find((p) => p.name.toLowerCase() === parishName.toLowerCase());
+
+    const participants = parish ? await fetchAllParticipants({ parishId: parish.id }) : [];
+
+    const admitted = participants.filter((p) => p.attendances?.some((a) => a.type === "CHECK_IN")).length;
+    const registered = participants.length;
+    const slot = parishSlotsCache.find((item) => item.parishId === parish?.id);
+    const totalSlots = slot?.totalSlots || 0;
+
+    setText("paidSlots", Math.max(0, registered - admitted));
+    setText("registeredSlots", registered);
+    setText("availableSlots", Math.max(0, totalSlots - admitted));
+    setText("admittedCount", admitted);
+    setText("pendingCount", registered - admitted);
+    setText("capacityLabel", `${admitted} / ${totalSlots} admitted`);
+
+    const progress = $("capacityProgress");
+    if (progress) progress.style.width = `${Math.min(100, Math.round((admitted / totalSlots) * 100))}%`;
+
+    renderTable(participants);
+    document.getElementById("selectedParishSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (err) {
+    showError(err.message || `Could not load details for ${parishName}.`);
+  }
+};
+
+const admin = await requireAdminSession();
+if (admin) {
+  wireLogoutButton();
+  await loadOverview();
+  await loadParishSlots();
+  wireSlotManager();
   await loadParticipants();
   wireSearch();
   wireAdmissionLookup();

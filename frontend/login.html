@@ -119,6 +119,20 @@ Login
 
 </form>
 
+<div id="otpPanel" class="login-card" hidden style="margin-top:18px;">
+  <h2 style="text-align:center;">Verify administrator sign-in</h2>
+  <p style="text-align:center;">A 6-digit security code was sent to <strong id="otpDestination">your registered email</strong>.</p>
+  <form id="otpForm">
+    <div class="input-group">
+      <label for="adminOtp">Verification code</label>
+      <input id="adminOtp" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" minlength="6" placeholder="Enter 6-digit code" required>
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:100%;">Verify and continue</button>
+  </form>
+  <button id="otpBackBtn" type="button" class="btn" style="width:100%;margin-top:10px;">Back to login</button>
+  <p style="font-size:12px;text-align:center;">The code expires after 5 minutes. Never share it with anyone.</p>
+</div>
+
 <p class="auth-subtitle" style="font-size:12px;line-height:1.5;margin-top:14px;">
   Activity notice: for account security and administration, the portal records login events and pages visited while you are signed in. These records are available only to authorised administrators.
 </p>

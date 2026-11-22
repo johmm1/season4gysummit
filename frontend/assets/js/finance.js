@@ -33,7 +33,7 @@ window.loadParish = async function loadParish(parishName) {
     setText("capacityLabel", `${admitted} / ${totalSlots} admitted`);
 
     const progress = $("capacityProgress");
-    if (progress) progress.style.width = `${Math.min(100, Math.round((admitted / totalSlots) * 100))}%`;
+    if (progress) progress.style.width = `${(totalSlots ? Math.min(100, Math.round((admitted / totalSlots) * 100)) : 0)}%`;
 
     renderTable(participants);
     document.getElementById("selectedParishSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -46,8 +46,8 @@ const admin = await requireAdminSession();
 if (admin) {
   wireLogoutButton();
   await loadOverview();
-  await loadParishSlots();
   wireSlotManager();
+  await loadParishSlots();
   await loadParticipants();
   wireSearch();
   wireAdmissionLookup();
@@ -170,157 +170,13 @@ async function fetchAllParticipants(filters = {}) {
 
 async function loadOverview() {
   try {
-    const [summary, items] = await Promise.all([
-      apiFetch("/finance/summary"),
-      fetchAllParticipants(),
-    ]);
-
-    setText("overallRegistered", summary.registeredCount);
-    setText("overallPaid", summary.congregationCount);
-    setText("overallPending", summary.awaitingAdmission);
-    setText("overallAdmitted", summary.admittedCount);
-
-
-    await loadParishSlots();Summit Season 4 2026 — registration and admission management
-import { requireAdminSession, wireLogoutButton } from "./auth.js";
-import { apiFetch, apiDownload, showError, showSuccess, escapeHtml, debounce, setText, $ } from "./utils.js";
-
-// Maps parish name -> the id prefix used in finance.html's per-parish counters,
-// e.g. "Githunguri" -> githunguriRegistered/githunguriPaid/githunguriAdmitted.
-let parishSlotsCache = [];
-
-
-let parishesCache = null;
-
-window.loadParish = async function loadParish(parishName) {
-  setText("selectedParishName", `${parishName} Parish`);
-  try {
-    if (!parishesCache) {
-      const { items } = await apiFetch("/structure/parishes");
-      parishesCache = items;
-    }
-    const parish = parishesCache.find((p) => p.name.toLowerCase() === parishName.toLowerCase());
-
-    const participants = parish ? await fetchAllParticipants({ parishId: parish.id }) : [];
-
-    const admitted = participants.filter((p) => p.attendances?.some((a) => a.type === "CHECK_IN")).length;
-    const registered = participants.length;
-    const slot = parishSlotsCache.find((item) => item.parishId === parish?.id);
-    const totalSlots = slot?.totalSlots || 0;
-
-    setText("paidSlots", Math.max(0, registered - admitted));
-    setText("registeredSlots", registered);
-    setText("availableSlots", Math.max(0, totalSlots - admitted));
-    setText("admittedCount", admitted);
-    setText("pendingCount", registered - admitted);
-    setText("capacityLabel", `${admitted} / ${totalSlots} admitted`);
-
-    const progress = $("capacityProgress");
-    if (progress) progress.style.width = `${Math.min(100, Math.round((admitted / totalSlots) * 100))}%`;
-
-    renderTable(participants);
-    document.getElementById("selectedParishSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch (err) {
-    showError(err.message || `Could not load details for ${parishName}.`);
-  }
-};
-
-const admin = await requireAdminSession();
-if (admin) {
-  wireLogoutButton();
-  await loadOverview();
-  await loadParishSlots();
-  wireSlotManager();
-  await loadParticipants();
-  wireSearch();
-  wireAdmissionLookup();
-  await loadCertificateTemplates();
-  wireCertificateGeneration();
+    const summary = await apiFetch('/finance/summary');
+    setText('overallRegistered', summary.registeredCount);
+    setText('overallPaid', summary.congregationCount);
+    setText('overallPending', summary.awaitingAdmission);
+    setText('overallAdmitted', summary.admittedCount);
+  } catch (err) { showError(err.message || 'Could not load registration and admission overview.'); }
 }
-
-async function loadCertificateTemplates() {
-  const container = $("certificateTemplatePreviews");
-  if (!container) return;
-  try {
-    const { settings } = await apiFetch("/admin/settings");
-    const templates = settings.certificateTemplatesForm || {};
-    const entries = [
-      { label: "Participation", url: templates["participationTemplate__url"] },
-      { label: "Sports Winner", url: templates["winnerTemplate__url"] },
-    ];
-    container.innerHTML = entries.map((t) => `
-      <div class="certificate-template-card">
-        ${t.url
-          ? `<img src="${escapeHtml(t.url)}" alt="${escapeHtml(t.label)} template">`
-          : `<div class="no-template"><i class="fa-solid fa-image-slash"></i></div>`}
-        <div class="template-label">${escapeHtml(t.label)}${t.url ? "" : " — not uploaded yet"}</div>
-      </div>`).join("");
-  } catch (err) {
-    container.innerHTML = "<p>Could not load certificate templates.</p>";
-  }
-}
-
-function wireCertificateGeneration() {
-  $("generateParticipationCertsFinance")?.addEventListener("click", async () => {
-    const btn = $("generateParticipationCertsFinance");
-    const original = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating…';
-    try {
-      const result = await apiFetch("/certificates/generate", { method: "POST", body: { type: "PARTICIPATION" } });
-      if (!result.eligible) {
-        showError("No confirmed participants were found. Check that registrations are marked CONFIRMED.");
-        return;
-      }
-      await apiDownload("/certificates/download-all?type=PARTICIPATION", "gys-summit-2026-participation-certificates.pdf");
-      showSuccess(result.issued + " new certificate(s) issued; PDF prepared for " + result.eligible + " confirmed participants.");
-    } catch (err) {
-      showError(err.message || "Could not generate certificates.");
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = original;
-    }
-  });
-}
-
-
-async function fetchAllParticipants(filters = {}) {
-  const items = [];
-  let page = 1;
-  while (true) {
-    const params = new URLSearchParams({ ...filters, page: String(page), pageSize: "100" });
-    const result = await apiFetch(`/admin/participants?${params}`);
-    items.push(...result.items);
-    if (page >= result.totalPages || !result.items.length) break;
-    page += 1;
-  }
-  return items;
-}
-
-async function loadOverview() {
-  try {
-    const [summary, items] = await Promise.all([
-      apiFetch("/finance/summary"),
-      fetchAllParticipants(),
-    ]);
-
-    setText("overallRegistered", summary.registeredCount);
-    setText("overallPaid", summary.congregationCount);
-    setText("overallPending", summary.awaitingAdmission);
-    setText("overallAdmitted", summary.admittedCount);
-
-
-    for (const prefix of PARISH_ID_PREFIXES) {
-      const matches = items.filter((i) => (i.Parish?.name || "").toLowerCase().includes(prefix));
-      setText(`${prefix}Registered`, matches.length);
-      setText(`${prefix}Paid`, matches.length - matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
-      setText(`${prefix}Admitted`, matches.filter((i) => i.attendances?.some((a) => a.type === "CHECK_IN")).length);
-    }
-  } catch (err) {
-    showError(err.message || "Could not load registration and admission overview.");
-  }
-}
-
 async function loadParticipants(search) {
   try {
     const params = new URLSearchParams({ pageSize: "50" });

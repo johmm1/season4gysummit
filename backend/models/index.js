@@ -64,7 +64,7 @@ const User = sequelize.define("User", {
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
   lastLoginAt: { type: DataTypes.DATE, allowNull: true },
 }, {
-  indexes: [{ fields: ["role"] }, { fields: ["presbyteryId"] }],
+  indexes: [{ fields: ["role"] }, { fields: ["presbyteryId"] }, { fields: ["role", "parishId"] }],
 });
 
 // Never serialize credential material into API responses. User instances are
@@ -162,7 +162,7 @@ const Attendance = sequelize.define("Attendance", {
   label: { type: DataTypes.STRING(120), allowNull: true },
   scannedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
 }, {
-  indexes: [{ fields: ["type"] }, { fields: ["scannedAt"] }],
+  indexes: [{ fields: ["type"] }, { fields: ["scannedAt"] }, { fields: ["type", "userId"] }],
 });
 
 const Announcement = sequelize.define("Announcement", {

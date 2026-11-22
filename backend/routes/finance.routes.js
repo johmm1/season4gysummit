@@ -15,16 +15,11 @@ router.get("/parish-slots", asyncHandler(async (_req, res) => {
   const [parishes, allocations, registeredRows, admittedRows] = await Promise.all([
     Parish.findAll({ attributes: ["id", "name"], order: [["name", "ASC"]], raw: true }),
     GroupBankReference.findAll({ where: { code: { [Op.like]: "SYS-PARISH-SLOT-%" }, isActive: true }, attributes: ["code", "totalSlots"], raw: true }),
-    User.findAll({
-      attributes: ["parishId", [sequelize.fn("COUNT", sequelize.col("id")), "count"]],
-      where: { role: "PARTICIPANT", parishId: { [Op.ne]: null } },
-      group: ["parishId"], raw: true,
-    }),
+    User.findAll({ attributes: ["parishId", [sequelize.fn("COUNT", sequelize.col("id")), "count"]], where: { role: "PARTICIPANT", parishId: { [Op.ne]: null } }, group: ["parishId"], raw: true }),
     Attendance.findAll({
       attributes: [[sequelize.col("user.parishId"), "parishId"], [sequelize.fn("COUNT", sequelize.fn("DISTINCT", sequelize.col("Attendance.userId"))), "count"]],
       include: [{ model: User, as: "user", attributes: [], where: { role: "PARTICIPANT" } }],
-      where: { type: "CHECK_IN" },
-      group: ["user.parishId"], raw: true,
+      where: { type: "CHECK_IN" }, group: ["user.parishId"], raw: true,
     }),
   ]);
   const allocationByParish = new Map(allocations.map((row) => [Number(row.code.slice("SYS-PARISH-SLOT-".length)), Number(row.totalSlots || 0)]));
@@ -39,4 +34,76 @@ router.get("/parish-slots", asyncHandler(async (_req, res) => {
   res.set("Cache-Control", "private, max-age=15, stale-while-revalidate=30");
   res.json({ items });
 }));
+router.put("/parish-slots/:parishId", asyncHandler(async (req, res) => {
+  const parishId = Number(req.params.parishId);
+  const { totalSlots } = require("zod").z.object({ totalSlots: require("zod").z.coerce.number().int().min(0).max(100000) }).parse(req.body || {});
+  const parish = await Parish.findByPk(parishId);
+  if (!parish) return res.status(404).json({ error: "Parish not found." });
+  const key = slotKey(parish.id);
+  const [admitted, existing] = await Promise.all([
+    Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId }, attributes: [] }] }),
+    GroupBankReference.findOne({ where: { code: key } }),
+  ]);
+  if (totalSlots < admitted) return res.status(409).json({ error: "Allocation cannot be lower than the number already admitted (" + admitted + ")." });
+  if (existing) await existing.update({ parish: parish.name, totalSlots, usedSlots: 0, isActive: true });
+  else await GroupBankReference.create({ code: key, parish: parish.name, totalSlots, usedSlots: 0, isActive: true });
+  res.json({ ok: true, parishId, totalSlots });
+}));
+router.get("/summary", asyncHandler(async (_req, res) => {
+  const [registeredCount, admittedCount, byTicketType, congregationCount] = await Promise.all([
+    User.count({ where: { role: "PARTICIPANT" } }),
+    Attendance.count({ where: { type: "CHECK_IN" }, distinct: true, col: "userId" }),
+    Registration.findAll({
+      attributes: ["ticketType", [Registration.sequelize.fn("COUNT", "*"), "count"]],
+      group: ["ticketType"],
+    }),
+    Church.count(),
+  ]);
+  res.json({
+    registeredCount,
+    admittedCount,
+    congregationCount,
+    awaitingAdmission: Math.max(0, registeredCount - admittedCount),
+    byTicketType: byTicketType.map((item) => ({ ticketType: item.ticketType, count: Number(item.get("count")) })),
+  });
+}));
 
+router.get("/export", asyncHandler(async (_req, res) => {
+  const participants = await User.findAll({
+    where: { role: "PARTICIPANT" },
+    include: [
+      { model: Registration, as: "registration" },
+      { model: Attendance, as: "attendances", where: { type: "CHECK_IN" }, required: false },
+      { model: Parish },
+      { model: Church },
+    ],
+    order: [["createdAt", "ASC"]],
+  });
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Registrations");
+  sheet.columns = [
+    { header: "Registered", key: "date", width: 22 },
+    { header: "Participant", key: "name", width: 28 },
+    { header: "Email", key: "email", width: 30 },
+    { header: "Phone", key: "phone", width: 18 },
+    { header: "Parish", key: "parish", width: 22 },
+    { header: "Church", key: "church", width: 22 },
+    { header: "Admission Status", key: "admission", width: 18 },
+  ];
+  for (const user of participants) sheet.addRow({
+    date: user.createdAt?.toISOString?.() || "",
+    name: user.fullName,
+    email: user.email,
+    phone: user.phone,
+    parish: user.Parish?.name || "",
+    church: user.Church?.name || "",
+    admission: user.attendances?.length ? "CHECKED IN" : "NOT CHECKED IN",
+  });
+  sheet.getRow(1).font = { bold: true };
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  res.setHeader("Content-Disposition", 'attachment; filename="y-summit-2026-registrations.xlsx"');
+  await workbook.xlsx.write(res);
+  res.end();
+}));
+
+module.exports = router;

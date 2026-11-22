@@ -103,7 +103,7 @@ async function openPerson(id) {
 function slotMeter(slots, parishName) {
   if (!slots.configured) {
     return `<div class="slot-meter is-full"><div class="line"><span><b>${escapeHtml(parishName || "No parish recorded")}</b></span>
-      <span>No bank reference code with slots for this parish</span></div></div>`;
+      <span>No admission slots have been allocated to this parish yet</span></div></div>`;
   }
   const pct = slots.total ? Math.min(100, Math.round((slots.used / slots.total) * 100)) : 100;
   const codeLines = slots.codes.map((c) =>

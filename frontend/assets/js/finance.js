@@ -10,6 +10,7 @@ let parishSlotsCache = [];
 let parishesCache = null;
 
 window.loadParish = async function loadParish(parishName) {
+  $("selectedParishSection")?.removeAttribute("hidden");
   setText("selectedParishName", `${parishName} Parish`);
   try {
     if (!parishesCache) {

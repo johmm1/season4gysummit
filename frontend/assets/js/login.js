@@ -52,7 +52,7 @@ let pendingChallengeId = null;
 otpForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const code = $("adminOtp")?.value.trim() || "";
-  if (!/^\\d{6}$/.test(code) || !pendingChallengeId) {
+  if (!/^\d{6}$/.test(code) || !pendingChallengeId) {
     showError("Enter the 6-digit code sent to your registered email.");
     return;
   }

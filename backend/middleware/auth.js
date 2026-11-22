@@ -48,6 +48,10 @@ async function requireAuth(req, res, next) {
     const user = await User.findByPk(payload.sub);
     if (!user) return res.status(401).json({ error: "No account found for this session" });
     if (!user.isActive) return res.status(403).json({ error: "Account has been deactivated" });
+    // Invalidate pre-2FA admin sessions and reject any admin token not minted after OTP verification.
+    if (ADMIN_ROLES.includes(user.role) && payload.admin2fa !== true) {
+      return res.status(401).json({ error: "Administrator verification required. Please sign in again." });
+    }
 
     req.auth = { userId: user.id, role: user.role, email: user.email };
     req.currentUser = user;

@@ -13,12 +13,12 @@ const slotKey = (parishId) => "SYS-PARISH-SLOT-" + parishId;
 router.get("/parish-slots", asyncHandler(async (_req, res) => {
   const parishes = await Parish.findAll({ order: [["name", "ASC"]] });
   const items = await Promise.all(parishes.map(async (parish) => {
-    const allocations = await GroupBankReference.findAll({ where: { parish: { [Op.iLike]: parish.name }, isActive: true } });
+    const allocation = await GroupBankReference.findOne({ where: { code: slotKey(parish.id), isActive: true } });
     const [registered, admitted] = await Promise.all([
       User.count({ where: { role: "PARTICIPANT", parishId: parish.id } }),
       Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }] }),
     ]);
-    const totalSlots = allocations.reduce((sum, row) => sum + Number(row.totalSlots || 0), 0);
+    const totalSlots = Number(allocation?.totalSlots || 0);
     return { parishId: parish.id, parish: parish.name, totalSlots, registered, admitted, remaining: Math.max(0, totalSlots - admitted) };
   }));
   res.json({ items });

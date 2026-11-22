@@ -78,7 +78,7 @@ async function codesForParish(parishName, transaction, lock = false) {
   const key = normParish(parishName);
   if (!key) return [];
   const rows = await GroupBankReference.findAll({
-    where: { isActive: true },
+    where: { isActive: true, code: { [Op.like]: "SYS-PARISH-SLOT-%" } },
     order: [["code", "ASC"]],
     transaction,
     ...(lock && transaction ? { lock: transaction.LOCK.UPDATE } : {}),
@@ -310,7 +310,7 @@ router.post("/:userId/admit", ...staff, asyncHandler(async (req, res) => {
     if (previous && !label.toLowerCase().startsWith("re-entry")) throw new ApiError(409, "This participant has already been admitted.");
     if (!user.Parish) throw new ApiError(409, "This participant has no parish assigned. Update their parish before admission.");
     const parish = await Parish.findByPk(user.Parish.id, { transaction: t, lock: t.LOCK.UPDATE });
-    const allocations = await GroupBankReference.findAll({ where: { parish: { [Op.iLike]: parish.name }, isActive: true }, transaction: t, lock: t.LOCK.UPDATE });
+    const allocations = await GroupBankReference.findAll({ where: { code: { [Op.like]: "SYS-PARISH-SLOT-" + parish.id }, parish: parish.name, isActive: true }, transaction: t, lock: t.LOCK.UPDATE });
     const totalSlots = allocations.reduce((sum, row) => sum + Number(row.totalSlots || 0), 0);
     const admitted = await Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }], transaction: t });
     if (admitted >= totalSlots) throw new ApiError(409, "No admission slots remain for " + parish.name + ". Finance must add more slots before another participant can be admitted.");

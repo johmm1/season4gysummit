@@ -16,7 +16,7 @@ router.get("/parish-slots", asyncHandler(async (_req, res) => {
     const allocations = await GroupBankReference.findAll({ where: { parish: { [Op.iLike]: parish.name }, isActive: true } });
     const [registered, admitted] = await Promise.all([
       User.count({ where: { role: "PARTICIPANT", parishId: parish.id } }),
-      Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }] }),
+      Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId: parish.id }, attributes: [] }] }),
     ]);
     const totalSlots = allocations.reduce((sum, row) => sum + Number(row.totalSlots || 0), 0);
     return { parishId: parish.id, parish: parish.name, totalSlots, registered, admitted, remaining: Math.max(0, totalSlots - admitted) };
@@ -30,7 +30,7 @@ router.put("/parish-slots/:parishId", asyncHandler(async (req, res) => {
   if (!parish) return res.status(404).json({ error: "Parish not found." });
   const key = slotKey(parish.id);
   const [admitted, existing] = await Promise.all([
-    Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, where: { role: "PARTICIPANT", parishId }, attributes: [] }] }),
+    Attendance.count({ where: { type: "CHECK_IN" }, include: [{ model: User, as: "user", where: { role: "PARTICIPANT", parishId }, attributes: [] }] }),
     GroupBankReference.findOne({ where: { code: key } }),
   ]);
   if (totalSlots < admitted) return res.status(409).json({ error: "Allocation cannot be lower than the number already admitted (" + admitted + ")." });

@@ -321,7 +321,7 @@ router.post("/:userId/admit", ...staff, asyncHandler(async (req, res) => {
 // ---------------------------------------------------------------------
 router.get("/codes", ...staff, asyncHandler(async (_req, res) => {
   const [codes, parishes] = await Promise.all([
-    GroupBankReference.findAll({ order: [["parish", "ASC"], ["code", "ASC"]] }),
+    GroupBankReference.findAll({ where: { code: { [Op.notLike]: "SYS-PARISH-SLOT-%" } }, order: [["parish", "ASC"], ["code", "ASC"]] }),
     Parish.findAll({ attributes: ["id", "name"], order: [["name", "ASC"]] }),
   ]);
   const summary = parishes.map((p) => {

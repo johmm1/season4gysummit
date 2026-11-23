@@ -153,6 +153,15 @@ const ROUND_TAG = { GROUP: "Group", SEMI: "Semi-final", FINAL: "Final" };
 const stripSport = (t) => String(t || "").replace(/\s+(Football|Volleyball|Dance|Folk Song)\s*$/i, "");
 const isMine = (text) => myParish && String(text || "").toLowerCase().includes(myParish);
 
+function fixtureStageLabel(f) {
+  if (f.bracketSlot === "THIRD") return "Third-place";
+  if (f.round === "QUARTER") return "Cross-pool";
+  if (f.round === "GROUP") return f.category === "Football" ? `Pool ${f.group || ""}`.trim() : `Group ${f.group || ""}`.trim();
+  if (f.round === "SEMI") return "Semi-final";
+  if (f.round === "FINAL") return "Final";
+  return "";
+}
+
 function fixturesBlock(it, date) {
   if (!it.fixtures) return "";
   const list = (scheduleByDate.get(date) || []).filter((f) => it.fixtures.includes(f.category));
@@ -163,7 +172,8 @@ function fixturesBlock(it, date) {
     .map((f) => {
       const judged = !f.teamAway;
       const who = judged ? stripSport(f.teamHome) || "To be decided" : `${stripSport(f.teamHome) || "TBD"} vs ${stripSport(f.teamAway) || "TBD"}`;
-      const tag = `${f.category} · ${f.round === "GROUP" && judged ? "Heat" : ROUND_TAG[f.round] || ""}${f.group ? " " + f.group : ""}${f.round === "FINAL" && judged ? " (Grand Final)" : ""}`.trim();
+      const stage = fixtureStageLabel(f) || (judged ? "Performance" : "Fixture");
+      const tag = `${f.category} · ${stage}${f.round === "FINAL" && judged ? " (Grand Final)" : ""}`.trim();
       const score = !judged && f.status === "COMPLETED" && f.scoreHome != null ? ` <strong>${f.scoreHome} – ${f.scoreAway}</strong>` : "";
       return `<li class="pg-fx ${isMine(`${f.teamHome} ${f.teamAway}`) ? "mine" : ""}">
         <span class="pg-fx-time">${escapeHtml(displayTime(f.time))}</span>
@@ -184,8 +194,8 @@ async function loadFixtures() {
     const { days } = await apiFetch("/sports/schedule");
     scheduleByDate = new Map(days.map((d) => [d.date, d.events]));
     renderDay();
-  } catch {
-    /* the programme still works without the live fixtures */
+  } catch (err) {
+    console.warn("Live programme fixtures could not be refreshed:", err);
   }
 }
 
@@ -372,5 +382,10 @@ if (user) {
   if (photo && user.avatarUrl) photo.src = user.avatarUrl;
   myParish = (user.Parish?.name || "").toLowerCase();
   init();
-  loadFixtures();
+  await loadFixtures();
+  // Keep the programme in sync when Sports Admin regenerates or edits fixtures.
+  window.setInterval(loadFixtures, 30000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) loadFixtures();
+  });
 }

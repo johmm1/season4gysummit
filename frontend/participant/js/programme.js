@@ -30,7 +30,7 @@ const FILTERS = [
 
 const state = { dayId: 1, filter: "all" };
 let scheduleByDate = new Map(); // "YYYY-MM-DD" -> fixtures from GET /sports/schedule
-let myParish = "";
+let scheduleLoadError = "";\nlet myParish = "";
 
 /* ------------------------------------------------------------------ */
 /* Time helpers (all in the summit's own time zone, Nairobi)           */

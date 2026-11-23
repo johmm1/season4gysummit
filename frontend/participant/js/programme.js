@@ -30,7 +30,8 @@ const FILTERS = [
 
 const state = { dayId: 1, filter: "all" };
 let scheduleByDate = new Map(); // "YYYY-MM-DD" -> fixtures from GET /sports/schedule
-let scheduleLoadError = "";\nlet myParish = "";
+let scheduleLoadError = "";
+let myParish = "";
 
 /* ------------------------------------------------------------------ */
 /* Time helpers (all in the summit's own time zone, Nairobi)           */
@@ -163,6 +164,8 @@ function fixtureStageLabel(f) {
 }
 
 function fixturesBlock(it, date) {
+  // All daily fixtures are rendered once in the dedicated live panel.
+  return "";
   if (!it.fixtures) return "";
   const list = (scheduleByDate.get(date) || []).filter((f) => it.fixtures.includes(f.category));
   if (!list.length) {
@@ -189,13 +192,43 @@ function fixturesBlock(it, date) {
   </details>`;
 }
 
+function renderLiveFixtures(day) {
+  const panel = $("liveFixturesPanel");
+  if (!panel) return;
+  const fixtures = scheduleByDate.get(day.date) || [];
+  if (scheduleLoadError) {
+    panel.innerHTML = `<section class="pg-live-fixtures-card"><h3><i class="fa-solid fa-futbol"></i> Live Sports Fixtures</h3><p class="pg-fixtures-empty"><i class="fa-solid fa-triangle-exclamation"></i> Fixtures could not load. Refresh the page or try again shortly. <small>${escapeHtml(scheduleLoadError)}</small></p></section>`;
+    return;
+  }
+  if (!fixtures.length) {
+    panel.innerHTML = `<section class="pg-live-fixtures-card"><h3><i class="fa-solid fa-futbol"></i> Live Sports Fixtures</h3><p class="pg-fixtures-empty">No fixtures are currently published for ${escapeHtml(day.weekday)}, ${escapeHtml(fmtShort(day.date))}.</p></section>`;
+    return;
+  }
+  const rows = fixtures.map((f) => {
+    const judged = !f.teamAway;
+    const teams = judged ? (stripSport(f.teamHome) || "To be decided") : `${stripSport(f.teamHome) || "TBD"} vs ${stripSport(f.teamAway) || "TBD"}`;
+    const stage = fixtureStageLabel(f) || (judged ? "Performance" : "Fixture");
+    const score = !judged && f.status === "COMPLETED" && f.scoreHome != null ? ` <strong>${f.scoreHome} – ${f.scoreAway}</strong>` : "";
+    return `<li class="pg-fx ${isMine(`${f.teamHome} ${f.teamAway}`) ? "mine" : ""}">
+      <span class="pg-fx-time">${escapeHtml(displayTime(f.time))}</span>
+      <span class="pg-fx-main"><small>${escapeHtml(f.category)} · ${escapeHtml(stage)}</small><br>${escapeHtml(teams)}${score}</span>
+      <span class="pg-fx-venue">${escapeHtml(f.venue || "Venue TBC")}</span>
+    </li>`;
+  }).join("");
+  panel.innerHTML = `<section class="pg-live-fixtures-card"><h3><i class="fa-solid fa-futbol"></i> Live Sports Fixtures <span>${fixtures.length} scheduled</span></h3><ul class="pg-fx-list">${rows}</ul></section>`;
+}
+
 async function loadFixtures() {
   try {
-    const { days } = await apiFetch("/sports/schedule");
-    scheduleByDate = new Map(days.map((d) => [d.date, d.events]));
+    const payload = await apiFetch("/sports/schedule");
+    const days = Array.isArray(payload?.days) ? payload.days : [];
+    scheduleByDate = new Map(days.map((d) => [d.date, Array.isArray(d.events) ? d.events : []]));
+    scheduleLoadError = "";
     renderDay();
   } catch (err) {
+    scheduleLoadError = err?.message || "Schedule request failed";
     console.warn("Live programme fixtures could not be refreshed:", err);
+    renderDay();
   }
 }
 
@@ -253,6 +286,7 @@ function itemCard(it, st, date) {
 
 function renderDay() {
   const day = DAYS.find((d) => d.id === state.dayId) || DAYS[0];
+  renderLiveFixtures(day);
   const now = nowInSummitTz();
   const states = itemStates(day, now);
   const filter = FILTERS.find((f) => f.id === state.filter) || FILTERS[0];

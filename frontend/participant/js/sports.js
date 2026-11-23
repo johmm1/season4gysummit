@@ -265,6 +265,8 @@ function renderBracket(events) {
     setText(`${prefix}Away`, e?.teamAway ? `${e.teamAway}${e.scoreAway != null ? ` (${e.scoreAway})` : ""}` : "TBD");
   }
   const third = bySlot.THIRD;
+  const thirdPlaceBracket = $("thirdPlaceBracket");
+  if (thirdPlaceBracket) thirdPlaceBracket.style.display = third ? "" : "none";
   setText("thirdHome", third?.teamHome || "Loser SF1");
   setText("thirdAway", third?.teamAway || "Loser SF2");
   const final = bySlot.F;

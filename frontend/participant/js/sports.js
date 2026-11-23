@@ -15,6 +15,29 @@ function eat(startsAt) {
 }
 const shortDate = (date) => new Date(`${date}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 const stripSport = (team) => String(team || "").replace(/\s+(Football|Volleyball|Dance|Folk Song)\s*$/i, "");
+
+function stageLabel(event) {
+  if (event.bracketSlot === "THIRD") return "Third-place";
+  if (event.round === "QUARTER") return "Cross-pool";
+  if (event.round === "GROUP") {
+    if (event.category === "Football") return `Pool ${event.group || ""}`.trim();
+    if (JUDGED.has(event.category)) return `Heat ${event.group || ""}`.trim();
+    return event.group ? `Group ${event.group}` : "Group stage";
+  }
+  if (event.round === "SEMI") return "Semi-final";
+  if (event.round === "FINAL") return "Final";
+  return "";
+}
+
+function updateGroupFilterLabels() {
+  const filter = $("groupFilter");
+  if (!filter) return;
+  const label = activeSport === "Football" ? "Pool" : "Group";
+  if (filter.options[0]) filter.options[0].textContent = activeSport === "Football" ? "All Pools" : "All Groups";
+  [...filter.options].slice(1).forEach((option) => {
+    option.textContent = `${label} ${option.value}`;
+  });
+}
 let activeSport = "Football";
 let timetableDays = [];
 let activeTimetableDay = null;
@@ -44,6 +67,7 @@ function wireSportTabs() {
       document.querySelectorAll(".sport-tab").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       activeSport = SPORT_NAMES[btn.dataset.sport] || btn.dataset.sport;
+      updateGroupFilterLabels();
       applyFilters();
       renderStandings(allEvents);
       renderBracket(allEvents);
@@ -106,7 +130,7 @@ function applyFilters() {
   const filtered = allEvents.filter((e) => {
     if (activeSport && e.category !== activeSport) return false;
     if (round && round !== "all") {
-      const wanted = round === "group" ? "GROUP" : round === "semi" ? "SEMI" : round === "final" ? "FINAL" : null;
+      const wanted = round === "group" ? "GROUP" : round === "quarter" ? "QUARTER" : round === "semi" ? "SEMI" : round === "final" ? "FINAL" : null;
       if (wanted && e.round !== wanted) return false;
     }
     if (search) {
@@ -134,7 +158,7 @@ function renderFixtures(events) {
       const statusClass = e.status === "COMPLETED" ? "badge-success" : e.status === "ONGOING" ? "badge-danger" : e.status === "CANCELLED" ? "badge-outline" : "badge-warning";
       const judged = JUDGED.has(e.category);
       // Judged performances have one team: show the heat / final instead of "vs TBD".
-      const roundTag = e.round === "FINAL" ? "Grand Final" : e.group ? `Heat ${e.group}` : "";
+      const roundTag = stageLabel(e);
       const home = escapeHtml(stripSport(e.teamHome) || "TBD");
       const middle = judged ? "·" : "VS";
       const away = judged ? escapeHtml(roundTag) : escapeHtml(stripSport(e.teamAway) || "TBD");
@@ -143,7 +167,7 @@ function renderFixtures(events) {
       <tr class="${mine(`${e.teamHome} ${e.teamAway}`) ? "mine" : ""}">
         <td>${escapeHtml(shortDate(date))}</td>
         <td>${escapeHtml(displayTime(time))}</td>
-        <td>${home}</td>
+        <td><small class="fixture-stage">${escapeHtml(roundTag)}</small><br>${home}</td>
         <td>${middle}</td>
         <td>${away}${score}</td>
         <td>${escapeHtml(e.venue)}</td>
@@ -195,6 +219,7 @@ function renderStandings(events) {
   if (card) card.style.display = judged ? "none" : "";
   if (judged) return;
 
+  updateGroupFilterLabels();
   const groupFilter = $("groupFilter")?.value;
   // Server-side tables use the win/draw points set in Sports settings.
   const tables = groupTables.filter((g) => g.type === "table" && g.category === activeSport && (!groupFilter || groupFilter === "all" || g.group === groupFilter));
@@ -212,7 +237,7 @@ function renderStandings(events) {
       (t, i) => `
       <tr class="${mine(t.team) ? "mine" : ""}">
         <td>${i + 1}</td>
-        <td>${escapeHtml(stripSport(t.team))} <small>(Group ${escapeHtml(t.group)})</small></td>
+        <td>${escapeHtml(stripSport(t.team))} <small>(${activeSport === "Football" ? "Pool" : "Group"} ${escapeHtml(t.group)})</small></td>
         <td>${t.played}</td>
         <td>${t.won}</td>
         <td>${t.drawn}</td>
@@ -239,6 +264,9 @@ function renderBracket(events) {
     setText(`${prefix}Home`, e?.teamHome ? `${e.teamHome}${e.scoreHome != null ? ` (${e.scoreHome})` : ""}` : "TBD");
     setText(`${prefix}Away`, e?.teamAway ? `${e.teamAway}${e.scoreAway != null ? ` (${e.scoreAway})` : ""}` : "TBD");
   }
+  const third = bySlot.THIRD;
+  setText("thirdHome", third?.teamHome || "Loser SF1");
+  setText("thirdAway", third?.teamAway || "Loser SF2");
   const final = bySlot.F;
   if (final?.status === "COMPLETED" && final.scoreHome != null && final.scoreAway != null) {
     const winner = final.scoreHome > final.scoreAway ? final.teamHome : final.scoreAway > final.scoreHome ? final.teamAway : null;
@@ -332,7 +360,7 @@ function renderTimetableList() {
     .map((e) => {
       const who = e.teamAway ? `${e.teamHome || "TBD"} vs ${e.teamAway}` : e.teamHome || e.name;
       const score = e.status === "COMPLETED" && e.scoreHome !== null ? ` <strong>${e.scoreHome} - ${e.scoreAway}</strong>` : "";
-      const tag = `${e.category}${e.round ? " · " + roundTag[e.round] : ""}${e.group ? " " + e.group : ""}`;
+      const tag = `${e.category}${stageLabel(e) ? " · " + stageLabel(e) : ""}`;
       return `<div class="timetable-row ${mine(`${e.teamHome} ${e.teamAway}`) ? "mine" : ""}">
         <span class="tt-time">${escapeHtml(displayTime(e.time))}</span>
         <span class="tt-main"><small>${escapeHtml(tag)}</small><br>${escapeHtml(who)}${score}</span>
@@ -351,7 +379,8 @@ function renderGroups(groups) {
         g.type === "heat"
           ? g.teams.map((t) => `<li class="${mine(t.team) ? "mine" : ""}">${escapeHtml(t.team)}${t.average !== null ? ` <small>${Number(t.average).toFixed(1)}</small>` : ""}</li>`).join("")
           : g.teams.map((t) => `<li class="${mine(t.team) ? "mine" : ""}">${escapeHtml(t.team)} <small>${t.played} P · ${t.points} pts</small></li>`).join("");
-      return `<div class="group-card"><h5>${escapeHtml(g.category)} · ${g.type === "heat" ? "Heat" : "Group"} ${escapeHtml(g.group)}</h5><ol>${rows}</ol></div>`;
+      const groupLabel = g.type === "heat" ? "Heat" : g.category === "Football" ? "Pool" : "Group";
+      return `<div class="group-card"><h5>${escapeHtml(g.category)} · ${groupLabel} ${escapeHtml(g.group)}</h5><ol>${rows}</ol></div>`;
     })
     .join("");
 }
